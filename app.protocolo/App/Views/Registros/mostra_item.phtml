@@ -1,0 +1,217 @@
+<?php
+
+use App\Helpers\View;
+
+?>
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h5 class="page-header">Cadastro</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-cogs fa-fw"></i> Formulário de cadastro
+                    </div>
+                    <div id="resultado"></div>
+                    <form action="<?= $this->view->controller; ?>registra" method="post" id="form">
+                        <div class="alerta-item" style="display: none;">
+                            <div class="alert alert-warning" role="alert">
+                                <div class="listItem"></div>
+                                <strong>Você deseja continuar com essa solicitação?</strong><br>
+                                <button class="btn btn-success btn-item-yes">
+                                    <i class="fa fa-check"></i> Sim
+                                </button>
+                                <span class="btn btn-danger btn-item-no">
+                                    <i class="fa fa-ban"></i> Não
+                                </span>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="biddings_id" value="<?= $this->view->resultLicitacao['id'] ?>">
+                        <input type="hidden" name="suppliers_id" value="<?= $this->view->result[0]['suppliers_id'] ?>">
+                        <input type="hidden" name="omName" id="omName" value="<?= $this->view->resultOm['name'] ?>">
+                        <input type="hidden" name="modality" value="2">
+                        <input type="hidden" name="om" value="<?= $this->view->userLoggedIn['oms_id'] ?>">
+                        <input type="hidden" name="cnpj" value="<?= $this->view->result[0]['cnpj']; ?>">
+                        <input type="hidden" name="supplier" value="<?= $this->view->result[0]['supplier_id']; ?>">
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Pregão</label>
+                                        <select name="supplier" id="supplier" class="form-control" required>
+                                            <option>
+                                                05003/2021 - PESCADO
+                                            </option>
+                                            <option>
+                                                05007/2021
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Número do Documento</label>
+                                        <input type="text" id="document_number" name="document_number" placeholder="Número do Documento" class="form-control" maxlength="10" autocomplete="off" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Empresa</label>
+                                        <select name="supplier" id="supplier" class="form-control supplier" required>
+                                            <?php foreach ($this->view->resultFornecedor as $key => $value) : ?>
+                                                <option value="<?= $value['id']; ?>">
+                                                    <?= $value['name']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Objeto Resumido</label>
+                                        <input type="text" id="summary_object" name="summary_object" placeholder="Número do Documento Resultante (Ex.: NE, NF, OB, PF)" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>CNPJ/CPF</label>
+                                        <input type="text" id="cpfcnpj" name="cnpj" placeholder="CNPJ ou CPF do Fornecedor" class="form-control" maxlength="24" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select name="status" id="status" class="form-control" required>
+                                            <?php foreach ($this->view->resultStatus as $key => $value) : ?>
+                                                <option value="<?= $value['id']; ?>">
+                                                    <?= $value['name']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <span class="btn btn-success btn-save">
+                                        <i class="fa fa-check"></i> Salvar Registro
+                                    </span>
+                                    <span class="btn btn-warning btn-back">
+                                        <i class="fa fa-arrow-left"></i> Voltar
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th width="8%">Quantidade</th>
+                                    <th>Item</th>
+                                    <th>Valor Unitário</th>
+                                    <th width="20%">Quantidade Disponível</th>
+                                    <th>UF</th>
+                                    <th>Nome</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($this->view->result as $value) : ?>
+                                    <tr>
+                                        <td>
+                                            <input type="hidden" name="ids[]" value="<?= $value['id']; ?>">
+                                            <input type="hidden" id="valueItem" class="valueItem" name="valueItem[]" value="<?= $value['value']; ?>">
+                                            <input type="hidden" id="qtdAvailable" class="qtdAvailable" name="qtdAvailable[]" value="<?= $value['quantity_available']; ?>">
+                                            <input type="hidden" id="itemName" class="itemName" name="itemName[]" value="<?= $value['name']; ?>">
+                                            <input type="text" name="quantity[]" id="quantity" class="form-control">
+                                        </td>
+                                        <td><?= $value['number']; ?></td>
+                                        <td><?= View::floatToMoney($value['value']) ?></td>
+                                        <td><?= View::floatToMoney($value['quantity_available'], ''); ?></td>
+                                        <td><?= $value['uf']; ?></td>
+                                        <td><?= $value['name']; ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.btn-back').click(function() {
+        window.history.back()
+    });
+    $('.btn-save').click(function() {
+        var total = 0;
+        var ItensPedidos = [];
+        $('.listItem').html("");
+        $('input[name="quantity[]"]').each(function() {
+            if ($(this).val() != '') {
+                var quantity = parseFloat($(this).val());
+                var price = parseFloat($(this).closest("td").find("input.valueItem:hidden").val());
+                var qtdAvailable = parseFloat($(this).closest("td").find("input.qtdAvailable:hidden").val());
+                var name = $(this).closest("td").find("input.itemName:hidden").val();
+
+                var subTot = (quantity * price);
+                total += subTot;
+
+                if (qtdAvailable <= quantity) {
+                    ItensPedidos.push({
+                        "name": name,
+                        "available": qtdAvailable,
+                        "quantity": quantity
+                    })
+                }
+            }
+            $(this).prop("disabled", true);
+        });
+        if (ItensPedidos.length > 0) {
+            for (let i = 0; i < ItensPedidos.length; i++) {
+                addItemList(ItensPedidos[i].name, ItensPedidos[i].available, ItensPedidos[i].quantity);
+            }
+        } else {
+            $('.listItem').append("Todos os itens solicitados possuem saldo disponíveis para o pedido.");
+        }
+
+        $('#valorTotal').html('R$ ' + total.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        }));
+        $(this).hide()
+        $('.alerta-item').show()
+    });
+    $('.btn-item-no').click(function() {
+        $('.alerta-item').hide()
+    });
+    $('.btn-item-yes').click(function() {
+        $('input[name="quantity[]"]').each(function() {
+            $(this).prop("disabled", false);
+        });
+        $('.alerta-item').hide()
+        $('.btn-save').show()
+    });
+
+    $(document).ready(function() {
+        $("select.supplier").change(function() {
+            var id = $(this).children("option:selected").val();
+            $.ajax({
+                type: "GET",
+                url: `http://localhost/app/protocolo/fornecedor/findById/id/${id}`,
+                dataType: 'json',
+            }).done(function(res) {
+                $("#cpfcnpj").val(res.cnpj);
+                console.log(res);
+            });
+        });
+    });
+
+    function addItemList(name, available, requested) {
+        var html = `A quantidade de ${name} <strong>disponível</strong> atualmente é de <strong>${available}</strong>.<br>A quantidade <strong>solicitada</strong> é de <strong>${requested}</strong>.<br><br>`;
+        $('.listItem').append(html);
+    }
+</script>

@@ -1,0 +1,56 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Histórico do Documento Protocolado</h3>
+                <i class="fa fa-list"></i> <?= $this->view->title; ?><br>
+                <a href="<?= $this->view->controller; ?>status/id/<?= $this->view->result[0]['registerId']; ?>" class="btn btn-info">
+                    <i class="fa fa-plus-square"></i> Adicionar Status
+                </a>
+                <a href="<?=$this->view->controller;?>protocolado/om/<?= $this->view->result[0]['oms_id'];?>" class="btn btn-warning pull-right"><i class="fa fa-arrow-left"></i> Voltar</a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Tipo</th>
+                            <th>Valor (R$)</th>
+                            <th>OM</th>
+                            <th>Status</th>
+                            <th>Observação</th>
+                            <th>Nº Doc</th>
+                            <th>Data/Hora</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($this->view->result as $value) : ?>
+                            <tr>
+                                <td><?= $value['document_number']; ?></td>
+                                <td><?= $value['modality']; ?></td>
+                                <td><?= 'R$ ' . number_format($value['document_value'], 2, ',', '.'); ?></td>
+                                <td><?= $value['naval_indicative']; ?></td>
+                                <td><?= $value['statusName']; ?></td>
+                                <td><?= $value['observation']; ?></td>
+                                <td><?= $value['resulting_document']; ?></td>
+                                <td><?= date('d-m-Y H:i:s', strtotime($value['created_at'])); ?></td>
+                                <td>
+                                    <a onclick="
+                                        confirmar('Deseja REMOVER este registro?', 
+                                        '<?= $this->view->controller; ?>eliminarStatus/id/<?= $value['historicId']; ?>')" 
+                                        class="btn btn-danger">
+                                        <i class="fa fa-trash"></i> Eliminar
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->

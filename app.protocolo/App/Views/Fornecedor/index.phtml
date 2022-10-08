@@ -1,0 +1,105 @@
+<?php
+
+use App\Helpers\Pagination;
+use App\Helpers\View;
+
+$busca = $this->getParam('busca');
+$busca = $busca ? '/busca/' . $busca : '';
+
+$pagination = Pagination::make($this, function ($btn, $controllerName) use ($busca) {
+    return [
+        'previous' => "{$controllerName}ver/pagina/{$btn['previous']}" . $busca,
+        'next' => "{$controllerName}ver/pagina/{$btn['next']}" . $busca,
+        'current' => "{$controllerName}ver/pagina/" . Pagination::CURRENT_PAGE . $busca
+    ];
+});
+
+?>
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Fornecedores</h3>
+                <i class="fa fa-list"></i> <?= $this->view->title; ?>
+                <div class="row">
+                    <div class="col-md-12">
+                        <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                            <a href="<?= $this->view->controller; ?>novo/" class="btn btn-info">
+                                <i class="fa fa-plus-circle"></i> Novo Registro
+                            </a>
+                        <?php endif ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7">
+                        <?= $pagination; ?>
+                    </div>
+                    <div class="col-lg-5">
+                        <form action="#" class="search-form" onsubmit="return false">
+                            <div class="input-group search-input-box">
+                                <input type="text" class="form-control" id="search-input" placeholder="Nome ou CNPJ/CPF">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-secondary" id="search-button" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CNPJ/CPF</th>
+                            <th>Dados</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($this->view->result as $value) : ?>
+                            <tr>
+                                <td><?= View::limitString($value['name'], 35); ?></td>
+                                <td><?= $value['cnpj']; ?></td>
+                                <td><?= View::limitString($value['details'], 35); ?></td>
+                                <td>
+                                    <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                        <a href="<?= $this->view->controller; ?>editar/id/<?= $value['id']; ?>" class="btn btn-success btn-sm">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a onclick="confirmar('Deseja REMOVER este registro?', '<?= $this->view->controller; ?>eliminar/id/<?= $value['id']; ?>')" class="btn btn-danger btn-sm">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <?= $pagination; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#search-button').click(function() {
+        btnSearch();
+    });
+    $('#search-input').keypress(function(event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            btnSearch();
+        }
+    });
+
+    function btnSearch() {
+        var searchInput = $('#search-input');
+        var searchValue = searchInput.val();
+        var url = 'fornecedor/ver/';
+        if (searchValue && url) {
+            window.location = url + 'busca/' + searchValue;
+        } else {
+            searchInput.focus();
+        }
+    }
+</script>

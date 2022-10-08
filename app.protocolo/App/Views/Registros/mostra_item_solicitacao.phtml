@@ -1,0 +1,179 @@
+<?php
+
+use App\Helpers\Pagination;
+use App\Helpers\View;
+use App\Config\Configurations as cfg;
+use App\Helpers\Utils;
+
+$idlista = $this->getParam('idlista');
+
+$pagination = Pagination::make($this, function ($btn, $controllerName) use ($idlista) {
+    return [
+        'previous' => "{$controllerName}detalhar/idlista/{$idlista}/pagina/{$btn['previous']}",
+        'next' => "{$controllerName}detalhar/idlista/{$idlista}/pagina/{$btn['next']}",
+        'current' => "{$controllerName}detalhar/idlista/{$idlista}/pagina/" . Pagination::CURRENT_PAGE
+    ];
+});
+
+?>
+<div class="modal fade" id="modalSuppliersDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Informações do Fornecedor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <strong>
+                    Nome:
+                </strong>
+                <?= $this->view->resultSolicitacao['suppliers_name']; ?>
+                <br>
+                <strong>
+                    CNPJ:
+                </strong>
+                <?= $this->view->resultSolicitacao['suppliers_cnpj']; ?>
+                <br>
+                <strong>
+                    CNAE:
+                </strong>
+                <?= $this->view->resultSolicitacao['cnae']; ?>
+                <br>
+                <strong>
+                    Dados:
+                </strong>
+                <br>
+                <?= $this->view->resultSolicitacao['suppliers_details']; ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h5>Itens da Solicitação</h5>
+                <div class="alert alert-info" role="alert">
+                    Documento: <strong><?= $this->view->resultSolicitacao['document_number']; ?></strong><br>
+                    Órgão Responsável pela Licitação: <strong><?= $this->view->resultLicitacao['uasg']; ?> - <?= $this->view->resultLicitacao['uasg_name']; ?></strong><br>
+                    Fornecedor:
+                    <strong>
+                        <?= $this->view->resultSolicitacao['suppliers_cnpj']; ?>
+                        - <?= $this->view->resultSolicitacao['suppliers_name']; ?>
+                    </strong>
+                    (<a href="#" class="text-danger" data-toggle="modal" data-target="#modalSuppliersDetails">
+                        mais detalhes
+                    </a>)
+                    <br>
+                    OM:
+                    <strong>
+                        <?= $this->view->resultSolicitacao['naval_indicative']; ?>
+                    </strong>
+                    <br>
+                    Modalidade:
+                    <strong>
+                        <?= $this->view->resultSolicitacao['modality']; ?>
+                    </strong>
+                    <br>
+                    Enquadramento:
+                    <strong>
+                        <?= $this->view->resultSolicitacao['credit']; ?>
+                    </strong>
+                    <br>
+                    Natureza da Despesa:
+                    <strong>
+                        <?= $this->view->resultSolicitacao['natureExpense']; ?>
+                    </strong>
+                    <br>
+                    SubItem:
+                    <strong>
+                        <?= $this->view->resultSolicitacao['sub_item']; ?>
+                    </strong>
+                    <br>
+                    Artigo:
+                    <strong>
+                        <?= $this->view->resultSolicitacao['article']; ?>
+                    </strong>
+                    <br>
+                    Incisivo:
+                    <strong>
+                        <?= $this->view->resultSolicitacao['incisive']; ?>
+                    </strong>
+                </div>
+                <a href="<?= $this->view->controller; ?>" class="btn btn-warning pull-right">
+                    <i class="fa fa-arrow-left"></i> Voltar
+                </a>
+                <?php if (count($this->view->result) > 0): ?>
+                <div class="row" style="margin-bottom: 10px; margin-top: 10px;">
+                    <div class="col-md-12">
+                        <i class="fa fa-list"></i> <?= $this->view->title; ?>
+                    </div>
+                </div>
+                <?= $pagination; ?>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Solicitado</th>
+                            <th>UF</th>
+                            <th>Nome</th>
+                            <th>Valor (R$)</th>
+                            <th>Subtotal (R$)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $total = 0;
+                        $btnDelete = (count($this->view->result) > 1 ? true : false);
+                        foreach ($this->view->result as $value) :
+                            $total += $value['value'] * $value['quantity'];
+                        ?>
+                            <tr>
+                                <td><?= $value['number'] ?: '-'; ?></td>
+                                <td><?= Utils::floatToMoney($value['quantity'], ''); ?></td>
+                                <td><?= $value['uf']; ?></td>
+                                <td><?= $value['name']; ?></td>
+                                <td><?= Utils::floatToMoney($value['value']); ?></td>
+                                <td><?= Utils::floatToMoney(($value['value'] * $value['quantity'])); ?></td>
+                                <td>
+                                    <?php if ((!in_array($this->view->userLoggedIn['level'], [1, 2]))) : ?>
+                                        <a href="<?= $this->view->controller; ?>editar/id/<?= $value['id']; ?>/idlista/<?= $this->view->idlista; ?>" class="btn btn-success btn-sm">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <?php if ($btnDelete) : ?>
+                                            <a onclick="confirmar('Deseja REMOVER este registro?', '<?= $this->view->controller; ?>eliminaritem/id/<?= $value['id']; ?>/idlista/<?= $this->view->idlista; ?>')" class="btn btn-danger btn-sm">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th class="text-right" colspan="5">Total (R$)</th>
+                            <td class="text-left">
+                                <?= Utils::floatToMoney($total); ?>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <?= $pagination; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .btn-pre-solemp {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+</style>

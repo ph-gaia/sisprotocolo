@@ -1,0 +1,102 @@
+<?php
+
+use App\Helpers\Pagination;
+use App\Helpers\View;
+use App\Helpers\Utils;
+
+$pagination = Pagination::make($this);
+
+?>
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Crédito Disponível</h3>
+                <i class="fa fa-list"></i> <?= $this->view->title; ?>
+                <div class="row">
+                    <div class="col-md-12">
+                        <?php if (in_array($this->view->userLoggedIn['level'], [1,2])) : ?>
+                            <a href="<?= $this->view->controller; ?>novo/" class="btn btn-info">
+                                <i class="fa fa-plus-circle"></i> Novo Registro
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7">
+                        <?= $pagination; ?>
+                    </div>
+                    <div class="col-lg-5">
+                        <form action="#" class="search-form" onsubmit="return false">
+                            <div class="input-group search-input-box">
+                                <input type="text" class="form-control search-input" placeholder="OM">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-secondary search-button" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>OM</th>
+                            <th>Nota</th>
+                            <th>Valor</th>
+                            <?php if (in_array($this->view->userLoggedIn['level'], [1,2])) : ?>
+                            <th>Saldo Comprometido</th>
+                            <?php endif; ?>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($this->view->result as $value) : ?>
+                            <tr>
+                                <td><?= $value['naval_indicative']; ?></td>
+                                <td><?= $value['credit_note']; ?></td>
+                                <td><?= Utils::floatToMoney($value['value']); ?></td>
+                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                <td><?= Utils::floatToMoney($value['credito_comprometido']); ?></td>
+                                <?php endif; ?>
+                                <td>
+                                    <a href="<?= $this->view->controller; ?>detalhar/id/<?= $value['id']; ?>" class="btn btn-success btn-sm">
+                                        <i class="fa fa-list"></i>
+                                    </a>
+                                    <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                        <a onclick="confirmar('Deseja REMOVER este registro?', '<?= $this->view->controller; ?>eliminar/id/<?= $value['id']; ?>')" class="btn btn-danger btn-sm">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <?= $pagination; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.search-button').click(function() {
+        btnSearch();
+    });
+    $('.search-input').keypress(function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13') {
+            btnSearch();
+        }
+    });
+    function btnSearch() {
+        var searchInput = $('.search-input');
+        var searchValue = searchInput.val();
+        var url = 'credito/ver/';
+        if (searchValue && url) {
+            window.location = url + 'busca/' + searchValue;
+        } else {
+            searchInput.focus();
+        }
+    }
+</script>

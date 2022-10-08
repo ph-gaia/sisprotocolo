@@ -1,0 +1,23 @@
+{
+    "name": "phbsis/protocolo",
+    "description": "Sistema de protocolo de documentos",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4",
+        "respect/validation": "1.1.29",
+        "h4cc/wkhtmltopdf-amd64": "0.12.4",
+        "knplabs/knp-snappy": "0.4.3"
+    },
+    "authors": [
+        {
+            "name": "Edson Monteiro",
+            "email": "bruno.monteirodg@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "HTR": "vendor",
+            "App": "./"
+        }
+    }
+}
