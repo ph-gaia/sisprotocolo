@@ -68,6 +68,7 @@ use App\Helpers\View;
                                     <div class="form-group">
                                         <label>Empresa</label>
                                         <select name="supplier" id="supplier" class="form-control supplier" required>
+                                            <option value="">Selecione uma empresa</option>
                                             <?php foreach ($this->view->resultFornecedor as $key => $value) : ?>
                                                 <option value="<?= $value['id']; ?>">
                                                     <?= $value['name']; ?>
@@ -109,10 +110,10 @@ use App\Helpers\View;
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Incisivo</label>
+                                        <label>Inciso</label>
                                         <select name="incisive" id="incisive" class="form-control" required>
                                             <option value="1">I</option>
-                                            <option value="2">II</option>
+                                            <option value="2" selected>II</option>
                                         </select>
                                     </div>
 

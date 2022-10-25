@@ -47,7 +47,7 @@ class OmModel extends CRUD
         return $this->findAll();
     }
 
-    public function paginator($pagina)
+    public function paginator($pagina, $user = null)
     {
         /*
          * Preparando as diretrizes da consulta
@@ -58,10 +58,16 @@ class OmModel extends CRUD
             'pagina' => $pagina,
             'maxResult' => 20,
             // USAR QUANDO FOR PARA DEMONSTRAR O RESULTADO DE UMA PESQUISA
-            'orderBy' => 'naval_indicative ASC',
-            'where' => 'isActive = ?',
-            'bindValue' => [0 => 1]
+            'orderBy' => 'naval_indicative ASC'
         ];
+
+        if (isset($user) && $user['level'] == 2) {
+            $dados['where'] = "id = :omsId and isActive = :active";
+            $dados['bindValue'] = [
+                ':omsId' => $user['oms_id'],
+                ':active' => 1
+            ];
+        }
 
         // Instacia o Helper que auxilia na paginação de páginas
         $paginator = new Paginator($dados);

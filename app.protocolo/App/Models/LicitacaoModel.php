@@ -152,7 +152,7 @@ class LicitacaoModel extends CRUD
 
     public function removerRegistro($id)
     {
-        $stmt = $this->pdo->prepare("DELETE FROM biddings_items_oms WHERE biddings_id = ?");
+        $stmt = $this->pdo->prepare("DELETE FROM biddings_items_oms WHERE id = ?");
         if ($stmt->execute([$id])) {
             parent::remover($id);
             header('Location: ' . cfg::DEFAULT_URI . 'licitacao/ver/');

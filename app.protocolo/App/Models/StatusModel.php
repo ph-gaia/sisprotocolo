@@ -133,7 +133,7 @@ class StatusModel extends CRUD
     public function remover($id)
     {
         $dados = [
-            'trash' => 1
+            'isActive' => 0
         ];
 
         if (parent::editar($dados, $id)) {

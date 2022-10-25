@@ -146,15 +146,18 @@ class RegistrosModel extends CRUD
                 'nature_expense_id' => $this->getNatureExpense(),
                 'suppliers_id' => $this->getSupplier(),
                 'modality_id' => $this->getModality(),
-                'cnae' => 12356,
+                'cnae' => $this->getCnae(),
+                'credit_id' => null,
+                'article' => null,
+                'sub_item' => null,
+                'number_arp' => null,
+                'item_arp' => null,
+                'incisive' => null,
+                'summary_object' => null,
                 'credit_id' => $this->getCredit(),
                 'article' => $this->getArticle(),
                 'sub_item' => $this->getSubItem(),
-                'number_arp' => $this->getNumerArp(),
-                'item_arp' => $this->getItemArp(),
                 'incisive' => $this->getIncisive(),
-                'summary_object' => $this->getSummaryObject(),
-                'bidding_process_number' => $this->getBiddingProcessNumber(),
                 'document_number' => $this->getDocNumber(),
                 'document_value' => $this->getDocumentValue(),
                 'status_id' => $this->getStatus(),
@@ -383,10 +386,12 @@ class RegistrosModel extends CRUD
         $this->setIncisive(filter_input(INPUT_POST, 'incisive'));
         $this->setStatus(filter_input(INPUT_POST, 'status'));
         $this->setItemsList($this->buildItemsBiddings(filter_input_array(INPUT_POST)));
-        $this->setBiddingsId(filter_var($value['biddings_id'], FILTER_VALIDATE_INT));
+        $this->setBiddingsId(filter_input(INPUT_POST, 'biddings_id'));
 
         // Inicia a Validação dos dados
-        $this->validaItemsList();
+        if ($this->getModality() == 2) {
+            $this->validaItemsList();
+        }
         $this->validaValorPedido();
         $this->validateId();
         $this->validateNumber();

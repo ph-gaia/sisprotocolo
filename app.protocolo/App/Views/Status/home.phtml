@@ -5,9 +5,11 @@
             <div class="col-lg-12">
                 <h3>Status</h3>
                 <i class="fa fa-list"></i> <?=$this->view->title;?><br>
+                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                 <a href="<?=$this->view->controller;?>novo/" class="btn btn-info">
                     <i class="fa fa-asterisk"></i> Novo Registro
                 </a>
+                <?php endif ?>
                 <br><br>
                 <?php if ($this->view->result) : ?>
                 <table class="table">
@@ -24,6 +26,7 @@
                             <td><?=$value['name'];?></td> 
                             <td><?=$value['description'];?></td> 
                             <td>
+                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                                 <a href="<?=$this->view->controller;?>editar/id/<?=$value['id'];?>" class="btn btn-success">
                                     <i class="fa fa-edit"></i> Editar
                                 </a>
@@ -32,6 +35,7 @@
                                    class="btn btn-danger">
                                     <i class="fa fa-trash"></i> Eliminar
                                 </a>
+                                <?php endif ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>

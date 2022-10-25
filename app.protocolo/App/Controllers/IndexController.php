@@ -53,7 +53,7 @@ class IndexController extends Controller implements CtrlInterface
         // instancia o Model Om
         $omModel = new Om;
         // inicia a paginação da página
-        $omModel->paginator($this->getParam('pagina'));
+        $omModel->paginator($this->getParam('pagina'), $this->view->userLoggedIn);
         // alimenta os dados de Om na camada de View
         $this->view->result = $omModel->getResultPaginator();
         $this->view->btn = $omModel->getNavePaginator();

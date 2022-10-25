@@ -13,9 +13,11 @@ $pagination = Pagination::make($this);
             <div class="col-lg-12">
                 <h3>Usuários Cadastrados</h3>
                 <i class="fa fa-list"></i> <?= $this->view->title; ?><br>
+                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                 <a href="<?= $this->view->controller; ?>novo/" class="btn btn-info">
                     <i class="fa fa-asterisk"></i> Novo Registro
                 </a>
+                <?php endif ?>
                 <div class="row">
                     <div class="col-md-7">
                         <?= $pagination; ?>
@@ -55,12 +57,14 @@ $pagination = Pagination::make($this);
                                 <td><?= View::humanDate($value['created_at']); ?></td>
                                 <td><?= View::humanDate($value['updated_at']); ?></td>
                                 <td>
+                                    <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                                     <a href="<?= $this->view->controller; ?>editar/id/<?= $value['id']; ?>" class="btn btn-success">
                                         <i class="fa fa-edit"></i> Editar
                                     </a>
                                     <a onclick="confirmar('Deseja REMOVER este registro?', '<?= $this->view->controller; ?>eliminar/id/<?= $value['id']; ?>')" class="btn btn-danger">
                                         <i class="fa fa-trash"></i> Eliminar
                                     </a>
+                                    <?php endif ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

@@ -96,6 +96,21 @@ class FornecedorModel extends CRUD
         }
     }
 
+    public function findAllBybiddingId(int $biddingId): array
+    {
+        $query = ""
+            . " SELECT "
+            . "     suppliers.* "
+            . " FROM "
+            . "     suppliers "
+            . " INNER JOIN "
+            . "     biddings_items as items ON "
+            . "     items.suppliers_id = suppliers.id "
+            . " WHERE "
+            . "     items.biddings_id = {$biddingId} ";
+        return $this->pdo->query($query)->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function removerRegistro($id)
     {
         if (parent::remover($id)) {

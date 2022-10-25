@@ -34,12 +34,14 @@
                                 <li>
                                     <a href="registros/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
                                 </li>
+                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                                 <li>
                                     <a href="registros/novo/"><i class="fa fa-plus-circle fa-fw"></i> Dispensa de Licitação</a>
                                 </li>
                                 <li>
                                     <a href="registros/pregao/"><i class="fa fa-gavel fa-fw"></i> Pregão Eletrônico</a>
                                 </li>
+                                <?php endif; ?>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -118,9 +120,11 @@
                                 <li>
                                     <a href="status/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
                                 </li>
+                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                                 <li>
                                     <a href="status/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
                                 </li>
+                                <?php endif; ?>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -131,9 +135,11 @@
                                 <li>
                                     <a href="naturezaDespesa/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
                                 </li>
+                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                                 <li>
                                     <a href="naturezaDespesa/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
                                 </li>
+                                <?php endif; ?>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -144,13 +150,15 @@
                                 <li>
                                     <a href="licitacao/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
                                 </li>
+                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                                 <li>
                                     <a href="licitacao/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
                                 </li>
+                                <?php endif; ?>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-
+                        <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                         <li>
                             <a href="#"><i class="fa fa-university"></i> OM<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -163,15 +171,18 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        <?php endif; ?>
                         <li>
                             <a href="#"><i class="fa fa-users"></i> Usuários<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="acesso/"><i class="fa fa-cogs fa-fw"></i> Gerenciar Usuários</a>
                                 </li>
+                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                                 <li>
                                     <a href="acesso/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
                                 </li>
+                                <?php endif; ?>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>

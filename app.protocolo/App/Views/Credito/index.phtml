@@ -15,7 +15,7 @@ $pagination = Pagination::make($this);
                 <i class="fa fa-list"></i> <?= $this->view->title; ?>
                 <div class="row">
                     <div class="col-md-12">
-                        <?php if (in_array($this->view->userLoggedIn['level'], [1,2])) : ?>
+                        <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                             <a href="<?= $this->view->controller; ?>novo/" class="btn btn-info">
                                 <i class="fa fa-plus-circle"></i> Novo Registro
                             </a>
@@ -45,7 +45,7 @@ $pagination = Pagination::make($this);
                             <th>OM</th>
                             <th>Nota</th>
                             <th>Valor</th>
-                            <?php if (in_array($this->view->userLoggedIn['level'], [1,2])) : ?>
+                            <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                             <th>Saldo Comprometido</th>
                             <?php endif; ?>
                             <th></th>
