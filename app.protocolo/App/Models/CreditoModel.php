@@ -132,7 +132,7 @@ class CreditoModel extends CRUD
             . "     registers.oms_id = :omId "
             . "     AND registers.credit_id = :creditId "
             . "     AND registers.modality_id = :modalityId "
-            . "     AND (suppliers.cnpj = `:cnpj` OR registers.cnae = `:cnae`); ");
+            . "     AND (registers.cnpj = :cnpj OR registers.cnae = :cnae); ");
 
         $stmt->execute([
             ':omId' => $omId,

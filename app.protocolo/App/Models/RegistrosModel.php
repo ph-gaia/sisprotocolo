@@ -385,14 +385,18 @@ class RegistrosModel extends CRUD
         $this->setModality(filter_input(INPUT_POST, 'modality'));
         $this->setIncisive(filter_input(INPUT_POST, 'incisive'));
         $this->setStatus(filter_input(INPUT_POST, 'status'));
-        $this->setItemsList($this->buildItemsBiddings(filter_input_array(INPUT_POST)));
+        $this->setItemsList($this->buildItemsBiddings($value));
         $this->setBiddingsId(filter_input(INPUT_POST, 'biddings_id'));
 
         // Inicia a Validação dos dados
+        if ($this->getModality() == 1) {
+            $this->setDocumentValue(filter_input(INPUT_POST, 'document_value', FILTER_SANITIZE_SPECIAL_CHARS));
+            $this->setDocumentValue(Utils::moneyToFloat($this->getDocumentValue()));
+        }
         if ($this->getModality() == 2) {
             $this->validaItemsList();
+            $this->validaValorPedido();
         }
-        $this->validaValorPedido();
         $this->validateId();
         $this->validateNumber();
         $this->validateOm();

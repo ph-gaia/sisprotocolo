@@ -66,16 +66,11 @@
                         <li>
                             <a href="#"><i class="fa fa-credit-card"></i> Relatórios<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
+                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                                 <li>
-                                    <a href="credito/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
+                                    <a href="relatorio/"><i class="fa fa-cogs fa-fw"></i> Controle Subelemento</a>
                                 </li>
-                                <li>
-                                    <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
-                                    <a class="collapse-item" href="credito/novo/">
-                                        <i class="fa fa-plus-circle"></i> Novo Registro
-                                    </a>
-                                    <?php endif; ?>
-                                </li>
+                                <?php endif; ?>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
