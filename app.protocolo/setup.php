@@ -27,7 +27,6 @@ new class ($argv)
             $this->buildCommands($args);
             // init the flow execution
             $this->changeConstants($this->commandGenerateKey(), $this->commandWithKey());
-            $this->changePathAutoload();
             $this->createDataBase();
             $this->changeAdminUser();
             $this->changeAccessModeOfDirectoryUpload();
@@ -222,7 +221,7 @@ new class ($argv)
             $username = 'administrador';
             $password = (new \HTR\Helpers\Criptografia\Criptografia())->passHash($username . cfg::STR_SALT);
             $sql = ""
-                . " UPDATE `users` SET "
+                . " UPDATE `sisprotocolo`.`users_login` SET "
                 . " username='{$username}', password='{$password}', change_password=1 "
                 . " WHERE id = 1; ";
             $this->connectDatabase()->exec($sql);
