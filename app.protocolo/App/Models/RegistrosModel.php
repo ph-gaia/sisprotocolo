@@ -67,6 +67,35 @@ class RegistrosModel extends CRUD
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+    public function consultaMultiplosParametros($omId, $modalidade, $enquadramento, $naturezaDespesa, $subItem)
+    {
+        $stmt = $this->pdo->prepare(""
+            . " SELECT "
+            . "     registers.*, "
+            . "     IFNULL(SUM(registers.document_value), 0) as registers_value, "
+            . "     IFNULL(credit.value, (SELECT credit.value FROM credit WHERE id = :creditId and oms_id = :omId)) as credit_value,  "
+            . "     oms.naval_indicative "
+            . " FROM registers "
+            . " INNER JOIN credit ON credit.id = registers.credit_id "
+            . " INNER JOIN oms ON oms.id = registers.oms_id "
+            . " WHERE "
+            . "     registers.oms_id = :omId "
+            . "     OR registers.modality_id = :modalityId "
+            . "     OR registers.credit_id = :creditId "
+            . "     OR registers.nature_expense_id = :natureExpense "
+            . "     OR registers.sub_item = :subItem; ");
+
+        $stmt->execute([
+            ':omId' => $omId,
+            ':modalityId' => $modalidade,
+            ':creditId' => $enquadramento,
+            ':natureExpense' => $naturezaDespesa,
+            ':subItem' => $subItem,
+        ]);
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function paginator($pagina, $om)
     {
         $innerJoin = " INNER JOIN modality ON modality.id = registers.modality_id";

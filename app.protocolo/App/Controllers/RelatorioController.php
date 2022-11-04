@@ -17,6 +17,7 @@ use App\Models\ModalityModel;
 use App\Models\NatureExpenseModel;
 use App\Models\OmModel;
 use App\Models\ProcessTypeModel;
+use App\Models\RegistrosModel;
 use App\Models\StatusModel;
 
 class RelatorioController extends Controller implements CtrlInterface
@@ -87,22 +88,12 @@ class RelatorioController extends Controller implements CtrlInterface
         $cnae = '';
 
         if ($enquadramento == 1) {
-            $this->view->result = (new CreditoModel())->saldoComprometidoLei1(
+            $this->view->result = (new RegistrosModel())->consultaMultiplosParametros(
                 $om,
                 $modalidade,
                 $enquadramento,
                 $naturezaDespesa,
                 $subItem
-            );
-        }
-
-        if ($enquadramento == 2) {
-            $this->view->result = (new CreditoModel())->saldoComprometidoLei2(
-                $om,
-                $modalidade,
-                $enquadramento,
-                $cnpj,
-                $cnae
             );
         }
 
