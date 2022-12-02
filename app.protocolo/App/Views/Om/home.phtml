@@ -1,3 +1,11 @@
+<?php
+
+use App\Helpers\Pagination;
+use App\Helpers\View;
+
+$pagination = Pagination::make($this);
+
+?>
 <!-- Page Content -->
 <div id="page-wrapper">
     <div class="container-fluid">
@@ -10,7 +18,23 @@
                     <i class="fa fa-asterisk"></i> Novo Registro
                 </a>
                 <?php endif ?>
-                <br><br>
+                <div class="row">
+                    <div class="col-md-7">
+                        <?= $pagination; ?>
+                    </div>
+                    <div class="col-lg-5">
+                        <form action="#" class="search-form" onsubmit="return false">
+                            <div class="input-group search-input-box">
+                                <input type="text" class="form-control search-input" placeholder="Nome ou OM">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-secondary search-button" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 <?php if ($this->view->result) : ?>
                     <table class="table">
                         <thead>
@@ -66,3 +90,24 @@
     <!-- /.container-fluid -->
 </div>
 <!-- /#page-wrapper -->
+<script>
+    $('.search-button').click(function() {
+        btnSearch();
+    });
+    $('.search-input').keypress(function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13') {
+            btnSearch();
+        }
+    });
+    function btnSearch() {
+        var searchInput = $('.search-input');
+        var searchValue = searchInput.val();
+        var url = 'om/visualizar/';
+        if (searchValue && url) {
+            window.location = url + 'busca/' + searchValue;
+        } else {
+            searchInput.focus();
+        }
+    }
+</script>

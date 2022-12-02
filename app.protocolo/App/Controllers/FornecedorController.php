@@ -35,7 +35,7 @@ class FornecedorController extends Controller implements CtrlInterface
 
     public function editarAction()
     {
-        $this->view->userLoggedIn = $this->access->authenticAccess([1]);
+        $this->view->userLoggedIn = $this->access->authenticAccess([1,2]);
         $model = new FornecedorModel();
         $this->view->title = 'Editando Registro';
         $this->view->result = $model->findById($this->getParam('id'));

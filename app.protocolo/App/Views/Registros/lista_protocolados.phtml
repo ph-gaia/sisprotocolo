@@ -30,9 +30,11 @@
                                     <a href="<?= $this->view->controller; ?>historico/id/<?= $value['id']; ?>" class="btn btn-success">
                                         <i class="fa fa-eye"></i> Histórico do Documento
                                     </a>
+                                    <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                                     <a href="<?= $this->view->controller; ?>status/id/<?= $value['id']; ?>" class="btn btn-info">
                                         <i class="fa fa-plus-square"></i> Adicionar Status
                                     </a>
+                                    <?php endif ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

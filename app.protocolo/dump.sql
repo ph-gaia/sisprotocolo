@@ -354,6 +354,7 @@ CREATE TABLE `registers` (
   `sub_item` int(11) DEFAULT NULL,
   `article` int(11) DEFAULT NULL,
   `incisive` int(11) DEFAULT NULL,
+  `observation` varchar(250) DEFAULT NULL,
   `cnae` varchar(30) DEFAULT NULL,
   `cnpj` varchar(20) DEFAULT NULL,
   `status_id` int(11) NOT NULL,

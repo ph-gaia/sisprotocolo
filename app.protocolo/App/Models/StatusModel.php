@@ -50,7 +50,7 @@ class StatusModel extends CRUD
         return $this->findAll();
     }
 
-    public function paginator($pagina)
+    public function paginator($pagina, $busca = null)
     {
         /*
          * Preparando as diretrizes da consulta
@@ -65,6 +65,13 @@ class StatusModel extends CRUD
             'where' => 'isActive = ?',
             'bindValue' => [0 => 1]
         ];
+
+        if ($busca) {
+            $dados['where'] = " "
+                . " status.name LIKE :seach "
+                . " OR status.description LIKE :seach ";
+            $dados['bindValue'][':seach'] = '%' . $busca . '%';
+        }
 
         // Instacia o Helper que auxilia na paginação de páginas
         $paginator = new Paginator($dados);

@@ -53,7 +53,8 @@ class CnaeController extends Controller implements CtrlInterface
         // instancia o Model Default deste controller
         $defaultModel = new $this->modelPath;
         // faz a requisição dos registros do banco de dados
-        $defaultModel->paginator($this->getParam('pagina'));
+        $this->view->busca = $this->getParam('busca');
+        $defaultModel->paginator($this->getParam('pagina'), $this->view->busca);
         // alimenta a camada de Views com os resultados obtidos
         $this->view->result = $defaultModel->getResultPaginator();
         // faz a requisiçao dos links de navegaçao da paginaçao

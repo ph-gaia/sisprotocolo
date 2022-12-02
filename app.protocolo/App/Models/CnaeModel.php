@@ -41,7 +41,7 @@ class CnaeModel extends CRUD
         return $this->findAll();
     }
 
-    public function paginator($pagina)
+    public function paginator($pagina, $busca = null)
     {
         /*
          * Preparando as diretrizes da consulta
@@ -56,6 +56,13 @@ class CnaeModel extends CRUD
             'where' => 'isActive = ?',
             'bindValue' => [0 => 1]
         ];
+
+        if ($busca) {
+            $dados['where'] = " "
+                . " cnae.name LIKE :seach "
+                . " OR cnae.description LIKE :seach ";
+            $dados['bindValue'][':seach'] = '%' . $busca . '%';
+        }
 
         // Instacia o Helper que auxilia na paginação de páginas
         $paginator = new Paginator($dados);

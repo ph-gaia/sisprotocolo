@@ -75,7 +75,7 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) use ($idl
                                     </span>
                                 </td>
                                 <td>
-                                    <?php if (in_array($this->view->userLoggedIn['level'], [1, 2])) : ?>
+                                    <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                                         <a href="<?= $this->view->controller; ?>editar/id/<?= $value['id']; ?>/idlista/<?= $this->view->idlista; ?>" class="btn btn-success btn-sm">
                                             <i class="fa fa-edit"></i>
                                         </a>

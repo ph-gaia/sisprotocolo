@@ -37,7 +37,7 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) use ($bus
                     <div class="col-lg-5">
                         <form action="#" class="search-form" onsubmit="return false">
                             <div class="input-group search-input-box">
-                                <input type="text" class="form-control" id="search-input" placeholder="Nome ou CNPJ/CPF">
+                                <input type="text" class="form-control" id="search-input" placeholder="Nome">
                                 <span class="input-group-btn">
                                     <button class="btn btn-secondary" id="search-button" type="button">
                                         <i class="fa fa-search"></i>
@@ -63,10 +63,10 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) use ($bus
                                 <td><?= $value['cnpj']; ?></td>
                                 <td><?= View::limitString($value['details'], 35); ?></td>
                                 <td>
+                                    <a href="<?= $this->view->controller; ?>editar/id/<?= $value['id']; ?>" class="btn btn-success btn-sm">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
                                     <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
-                                        <a href="<?= $this->view->controller; ?>editar/id/<?= $value['id']; ?>" class="btn btn-success btn-sm">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
                                         <a onclick="confirmar('Deseja REMOVER este registro?', '<?= $this->view->controller; ?>eliminar/id/<?= $value['id']; ?>')" class="btn btn-danger btn-sm">
                                             <i class="fa fa-trash"></i>
                                         </a>

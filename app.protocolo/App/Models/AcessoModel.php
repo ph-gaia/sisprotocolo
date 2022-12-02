@@ -35,7 +35,7 @@ class AcessoModel extends CRUD
         return $this->findAll();
     }
 
-    public function paginator($pagina, $busca = null)
+    public function paginator($pagina, $busca = null, $user = null)
     {
         $innerJoin = " INNER JOIN oms ON users_login.oms_id = oms.id";
         $dados = [
@@ -48,10 +48,18 @@ class AcessoModel extends CRUD
             //'bindValue' => [0 => '%MONTEIRO%']
         ];
 
+        if (isset($user) && $user['level'] == 2) {
+            $dados['where'] = "users_login.id = :Id and users_login.isActive = :active";
+            $dados['bindValue'] = [
+                ':Id' => $user['id'],
+                ':active' => 1
+            ];
+        }
+
         if ($busca) {
             $dados['where'] = " "
-                . " users_login.name LIKE :seach"
-                . " OR oms.naval_indicative LIKE :seach";
+                . " users_login.name LIKE :seach "
+                . " OR oms.naval_indicative LIKE :seach ";
             $dados['bindValue'][':seach'] = '%' . $busca . '%';
         }
 

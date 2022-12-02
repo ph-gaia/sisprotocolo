@@ -107,7 +107,7 @@ class AcessoController extends Controller implements CtrlInterface
         $this->view->title = 'Lista de Todos os Usuários';
 
         $this->view->busca = $this->getParam('busca');
-        $model->paginator($this->getParam('pagina'));
+        $model->paginator($this->getParam('pagina'), $this->view->busca, $this->view->userLoggedIn);
         $this->view->result = $model->getResultadoPaginator();
         $this->view->btn = $model->getNavePaginator();
 
@@ -128,7 +128,7 @@ class AcessoController extends Controller implements CtrlInterface
     {
         // Inicia a proteção das páginas com permissão de acesso apenas para
         // usuários autenticados com o nível 1 e 2.
-        $this->access->authenticAccess([1, 2]);
+        $this->access->authenticAccess([1]);
         // Instanciando o Model padrão usado.
         $model = new $this->modelPath();
         $model->editarRegistro();

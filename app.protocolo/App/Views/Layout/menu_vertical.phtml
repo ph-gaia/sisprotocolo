@@ -1,29 +1,6 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <!-- formulário de busca -->
-                                <script>
-                                    function goSearch() {
-                                        var searchBy = document.buscar.searchBy.value;
-                                        if (searchBy) {
-                                            window.location = '<?= App\Config\Configurations::DEFAULT_URI; ?>buscar/visualizar/busca/' + searchBy;
-                                        }
-                                        return false;
-                                    }
-                                </script>
-                                <form action="" name="buscar" onsubmit="javascript: return goSearch()">
-                                    <input type="text" class="form-control" name="searchBy" placeholder="Buscar...">
-                                    <!-- <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </span> -->
-                                </form>
-                            </div>
-                            <!-- /input-group -->
-                        </li>
                         <li>
                             <a href="<?= App\Config\Configurations::DEFAULT_URI ?>"><i class="fa fa-square"></i> Início</a>
                         </li>

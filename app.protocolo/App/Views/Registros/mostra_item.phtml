@@ -51,7 +51,7 @@ use App\Helpers\View;
                         <input type="hidden" name="supplier" value="<?= $this->view->result[0]['supplier_id']; ?>">
 
                         <div class="panel-body">
-                            <div class="row">
+                        <div class="row">
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Pregão</label>
@@ -60,11 +60,6 @@ use App\Helpers\View;
                                                 <?= $this->view->resultLicitacao['number']; ?> - <strong><?= $this->view->resultLicitacao['description']; ?>
                                             </option>
                                         </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Número do Documento</label>
-                                        <input type="text" id="document_number" name="document_number" placeholder="Número do Documento" class="form-control" maxlength="10" autocomplete="off" required>
                                     </div>
                                 </div>
 
@@ -80,11 +75,6 @@ use App\Helpers\View;
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-
-                                    <div class="form-group">
-                                        <label>Objeto Resumido</label>
-                                        <input type="text" id="summary_object" name="summary_object" placeholder="Número do Documento Resultante (Ex.: NE, NF, OB, PF)" class="form-control" required>
-                                    </div>
                                 </div>
 
                                 <div class="col-lg-4">
@@ -92,6 +82,24 @@ use App\Helpers\View;
                                         <label>CNPJ/CPF</label>
                                         <input type="text" id="cpfcnpj" name="cnpj" placeholder="CNPJ ou CPF do Fornecedor" class="form-control" maxlength="24" required>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Número do Documento</label>
+                                        <input type="text" id="document_number" name="document_number" placeholder="Número do Documento" class="form-control" maxlength="10" autocomplete="off" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Objeto Resumido</label>
+                                        <input type="text" id="summary_object" name="summary_object" placeholder="Número do Documento Resultante (Ex.: NE, NF, OB, PF)" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Status</label>
                                         <select name="status" id="status" class="form-control" required>
@@ -101,6 +109,17 @@ use App\Helpers\View;
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Observações</label>
+                                        <input type="text" 
+                                            name="observation"
+                                            id="observation"
+                                            placeholder="Observações"
+                                            class="form-control"/>
                                     </div>
                                 </div>
                             </div>

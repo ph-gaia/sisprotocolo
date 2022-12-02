@@ -47,7 +47,7 @@ class OmModel extends CRUD
         return $this->findAll();
     }
 
-    public function paginator($pagina, $user = null)
+    public function paginator($pagina, $user = null, $busca = null)
     {
         /*
          * Preparando as diretrizes da consulta
@@ -67,6 +67,13 @@ class OmModel extends CRUD
                 ':omsId' => $user['oms_id'],
                 ':active' => 1
             ];
+        }
+
+        if ($busca) {
+            $dados['where'] = " "
+                . " oms.name LIKE :seach "
+                . " OR oms.naval_indicative LIKE :seach ";
+            $dados['bindValue'][':seach'] = '%' . $busca . '%';
         }
 
         // Instacia o Helper que auxilia na paginação de páginas

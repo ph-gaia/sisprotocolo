@@ -42,6 +42,7 @@ $pagination = Pagination::make($this);
                             <th>Nome</th>
                             <th>OM</th>
                             <th>Nível</th>
+                            <th>Ativo</th>
                             <th>Criado</th>
                             <th>Alterado</th>
                             <th></th>
@@ -54,6 +55,11 @@ $pagination = Pagination::make($this);
                                 <td><?= $value['name']; ?></td>
                                 <td><?= $value['naval_indicative']; ?></td>
                                 <td><?= $value['level']; ?></td>
+                                <td>
+                                    <span class='label label-<?= $value['isActive'] == 1 ? 'success' : 'danger'; ?>'>
+                                        <?= $value['isActive'] == 1 ? 'Sim' : 'Não'; ?>
+                                    </span>
+                                </td>
                                 <td><?= View::humanDate($value['created_at']); ?></td>
                                 <td><?= View::humanDate($value['updated_at']); ?></td>
                                 <td>
@@ -94,7 +100,7 @@ $pagination = Pagination::make($this);
     function btnSearch() {
         var searchInput = $('.search-input');
         var searchValue = searchInput.val();
-        var url = 'acesso/ver/';
+        var url = 'acesso/visualizar/';
         if (searchValue && url) {
             window.location = url + 'busca/' + searchValue;
         } else {

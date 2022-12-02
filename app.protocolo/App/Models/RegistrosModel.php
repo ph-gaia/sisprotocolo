@@ -187,6 +187,7 @@ class RegistrosModel extends CRUD
                 'article' => $this->getArticle(),
                 'sub_item' => $this->getSubItem(),
                 'incisive' => $this->getIncisive(),
+                'observation' => $this->getObservation(),
                 'document_number' => $this->getDocNumber(),
                 'document_value' => $this->getDocumentValue(),
                 'status_id' => $this->getStatus(),
@@ -211,6 +212,7 @@ class RegistrosModel extends CRUD
                 'number_arp' => null,
                 'item_arp' => null,
                 'incisive' => null,
+                'observation' => $this->getObservation(),
                 'summary_object' => $this->getSummaryObject(),
                 'bidding_process_number' => null,
                 'document_number' => $this->getDocNumber(),
@@ -414,6 +416,7 @@ class RegistrosModel extends CRUD
         $this->setModality(filter_input(INPUT_POST, 'modality'));
         $this->setIncisive(filter_input(INPUT_POST, 'incisive'));
         $this->setStatus(filter_input(INPUT_POST, 'status'));
+        $this->setObservation(filter_input(INPUT_POST, 'observation'));
         $this->setItemsList($this->buildItemsBiddings($value));
         $this->setBiddingsId(filter_input(INPUT_POST, 'biddings_id'));
 
