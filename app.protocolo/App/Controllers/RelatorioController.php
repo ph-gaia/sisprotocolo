@@ -84,16 +84,16 @@ class RelatorioController extends Controller implements CtrlInterface
         $modalidade = $this->getParam('modality');
         $enquadramento = $this->getParam('enquadramento');
         $naturezaDespesa = $this->getParam('natureExpense');
-        $cnpj = '';
-        $cnae = '';
+        $cnae = $this->getParam('cnae');
 
-        if ($enquadramento == 1) {
+        if ($modalidade == 1 && $enquadramento == 2) {
             $this->view->result = (new RegistrosModel())->consultaMultiplosParametros(
                 $om,
                 $modalidade,
                 $enquadramento,
                 $naturezaDespesa,
-                $subItem
+                $subItem,
+                $cnae
             );
         }
 

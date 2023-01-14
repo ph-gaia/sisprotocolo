@@ -67,7 +67,7 @@ class RegistrosModel extends CRUD
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function consultaMultiplosParametros($omId, $modalidade, $enquadramento, $naturezaDespesa, $subItem)
+    public function consultaMultiplosParametros($omId, $modalidade, $enquadramento, $naturezaDespesa, $subItem, $cnae)
     {
         $stmt = $this->pdo->prepare(""
             . " SELECT "
@@ -80,17 +80,16 @@ class RegistrosModel extends CRUD
             . " INNER JOIN oms ON oms.id = registers.oms_id "
             . " WHERE "
             . "     registers.oms_id = :omId "
-            . "     OR registers.modality_id = :modalityId "
-            . "     OR registers.credit_id = :creditId "
-            . "     OR registers.nature_expense_id = :natureExpense "
-            . "     OR registers.sub_item = :subItem; ");
+            . "     AND registers.credit_id = :creditId "
+            . "     AND registers.cnae = :cnae ");
 
         $stmt->execute([
             ':omId' => $omId,
-            ':modalityId' => $modalidade,
+            // ':modalityId' => $modalidade,
             ':creditId' => $enquadramento,
-            ':natureExpense' => $naturezaDespesa,
-            ':subItem' => $subItem,
+            // ':natureExpense' => $naturezaDespesa,
+            // ':subItem' => $subItem,
+            ':cnae' => $cnae
         ]);
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -166,8 +165,10 @@ class RegistrosModel extends CRUD
         $this->notDuplicate();
 
         if ($this->getModality() == 1) {
-            // valida regras de enquadramento
-            $this->validaCredito();
+            // valida se estiver usando a Lei nº 14.133/2021
+            if ($this->getCredit() == 2) {
+                $this->validaCredito();
+            }
 
             $dados = [
                 'oms_id' => $this->getOm(),
@@ -176,7 +177,6 @@ class RegistrosModel extends CRUD
                 'suppliers_id' => $this->getSupplier(),
                 'modality_id' => $this->getModality(),
                 'cnae' => $this->getCnae(),
-                'credit_id' => null,
                 'article' => null,
                 'sub_item' => null,
                 'number_arp' => null,
@@ -287,25 +287,11 @@ class RegistrosModel extends CRUD
 
     public function validaCredito()
     {
-        if ($this->getCredit() == 1) {
-            $credito = (new CreditoModel())->saldoComprometidoLei1(
-                $this->getOm(),
-                $this->getModality(),
-                $this->getCredit(),
-                $this->getNatureExpense(),
-                $this->getSubItem()
-            );
-        }
-
-        if ($this->getCredit() == 2) {
-            $credito = (new CreditoModel())->saldoComprometidoLei2(
-                $this->getOm(),
-                $this->getModality(),
-                $this->getCredit(),
-                $this->getCnpj(),
-                $this->getCnae()
-            );
-        }
+        $credito = (new CreditoModel())->saldoComprometidoLei2(
+            $this->getOm(),
+            $this->getCredit(),
+            $this->getCnae()
+        );
 
         if ($this->getDocumentValue() > ($credito['credit_value'] - $credito['registers_value'])) {
             msg::showMsg("O Documento " . $this->getDocNumber() . " possui o valor superior ao saldo disponível no crédito para essa configuração", "danger");
@@ -402,8 +388,8 @@ class RegistrosModel extends CRUD
         // Seta todos os valores
         $this->setId(filter_input(INPUT_POST, 'id'));
         $this->setOm(filter_input(INPUT_POST, 'om'));
-        $this->setNatureExpense(filter_input(INPUT_POST, 'natureExpense'));
-        $this->setSubItem(filter_input(INPUT_POST, 'subItem'));
+        $this->setNatureExpense(filter_input(INPUT_POST, 'nature_expense'));
+        $this->setSubItem(filter_input(INPUT_POST, 'sub_item'));
         $this->setSupplier(filter_input(INPUT_POST, 'supplier'));
         $this->setCnpj(filter_input(INPUT_POST, 'cnpj'));
         $this->setCnae(filter_input(INPUT_POST, 'cnae'));
@@ -429,16 +415,10 @@ class RegistrosModel extends CRUD
             $this->validaItemsList();
             $this->validaValorPedido();
         }
-        $this->validateId();
+        // $this->validateId();
         $this->validateNumber();
         $this->validateOm();
         $this->validaFornecedor();
-    }
-
-    private function setId($value)
-    {
-        $this->id = $value ?: time();
-        return $this;
     }
 
     private function validaQuantity($value)

@@ -94,33 +94,7 @@ class CreditoModel extends CRUD
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function saldoComprometidoLei1($omId, $modalidade, $enquadramento, $naturezaDespesa, $subItem)
-    {
-        $stmt = $this->pdo->prepare(""
-            . " SELECT "
-            . "     IFNULL(SUM(registers.document_value), 0) as registers_value, "
-            . "     IFNULL(credit.value, (SELECT credit.value FROM credit WHERE id = :creditId and oms_id = :omId)) as credit_value  "
-            . " FROM registers "
-            . " INNER JOIN credit ON credit.id = registers.credit_id "
-            . " WHERE "
-            . "     registers.oms_id = :omId "
-            . "     AND registers.modality_id = :modalityId "
-            . "     AND registers.credit_id = :creditId "
-            . "     AND registers.nature_expense_id = :natureExpense "
-            . "     AND registers.sub_item = :subItem; ");
-
-        $stmt->execute([
-            ':omId' => $omId,
-            ':modalityId' => $modalidade,
-            ':creditId' => $enquadramento,
-            ':natureExpense' => $naturezaDespesa,
-            ':subItem' => $subItem,
-        ]);
-
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
-    }
-
-    public function saldoComprometidoLei2($omId, $modalidade, $enquadramento, $cnpj, $cnae)
+    public function saldoComprometidoLei2($omId, $enquadramento, $cnae)
     {
         $stmt = $this->pdo->prepare(""
             . " SELECT "
@@ -131,14 +105,11 @@ class CreditoModel extends CRUD
             . " WHERE "
             . "     registers.oms_id = :omId "
             . "     AND registers.credit_id = :creditId "
-            . "     AND registers.modality_id = :modalityId "
-            . "     AND (registers.cnpj = :cnpj OR registers.cnae = :cnae); ");
+            . "     AND registers.cnae = :cnae; ");
 
         $stmt->execute([
             ':omId' => $omId,
             ':creditId' => $enquadramento,
-            ':modalityId' => $modalidade,
-            ':cnpj' => $cnpj,
             ':cnae' => $cnae,
         ]);
 

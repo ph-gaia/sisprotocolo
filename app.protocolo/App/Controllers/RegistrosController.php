@@ -107,11 +107,26 @@ class RegistrosController extends Controller implements CtrlInterface
 
     public function pregaoAction()
     {
-        $licitacao = new LicitacaoModel();
+        $this->view->userLoggedIn = $this->access->setRedirect('solicitacao/')
+            ->clearAccessList()
+            ->authenticAccess([1, 2]);
         $this->view->title = ' Licitações';
-        $licitacao->paginator($this->getParam('pagina'), date("Y-m-d", time()), $this->view->userLoggedIn['oms_id']);
-        $this->view->result = $licitacao->getResultadoPaginator();
-        $this->view->btn = $licitacao->getNavePaginator();
+
+        $fornecedorModel = new FornecedorModel;
+        $licitacao = new LicitacaoModel();
+        $omModel = new Om;
+        if ($this->view->userLoggedIn['level'] == 1) {
+            $this->view->resultOm = $omModel->findActive();
+            $this->view->resultLicitacao = $licitacao->findActive(date("Y-m-d", time()));
+        } else {
+            $this->view->resultOm[] = (new OmModel())->findById($this->view->userLoggedIn['oms_id']);
+            $this->view->resultLicitacao = $licitacao->findActive(date("Y-m-d", time()), $this->view->userLoggedIn['oms_id']);
+        }
+
+        if ($this->getParam('idlista')) {
+            $this->view->resultFornecedor = $fornecedorModel->findAllBybiddingId($this->getParam('idlista'));
+        }
+
         $this->render('mostra_licitacao_disponivel');
     }
 
@@ -119,23 +134,27 @@ class RegistrosController extends Controller implements CtrlInterface
     {
         $this->view->userLoggedIn = $this->access->setRedirect('solicitacao/')
             ->clearAccessList()
-            ->authenticAccess([1,2]);
+            ->authenticAccess([1, 2]);
 
         $this->view->title = 'Lista dos Itens da Licitação';
-        $item = new ItemModel();
-        $this->view->result = $item->findByIdlista($this->getParam('idlista'), $this->view->userLoggedIn['oms_id']);
-        $licitacao = new LicitacaoModel();
         $fornecedorModel = new FornecedorModel;
-        $this->view->resultFornecedor = $fornecedorModel->findAllBybiddingId($this->getParam('idlista'));
+        $licitacao = new LicitacaoModel();
+        $item = new ItemModel();
+        $omModel = new Om;
+
+        $this->view->resultOm = $omModel->findById($this->getParam('om'));
         $this->view->resultLicitacao = $licitacao->findById($this->getParam('idlista'));
+        $this->view->resultFornecedor = $fornecedorModel->findById($this->getParam('supplier'));
         $this->view->resultStatus = (new Status())->findActive();
-        $this->view->resultOm = (new OmModel())->findById($this->view->userLoggedIn['oms_id']);
+
+        $this->view->result = $item->findByIdlista($this->getParam('idlista'), $this->getParam('om'), $this->getParam('supplier'));
+
         $this->render('mostra_item');
     }
 
     public function detalharAction()
     {
-        $this->view->userLoggedIn = $this->access->authenticAccess([1,2]);
+        $this->view->userLoggedIn = $this->access->authenticAccess([1, 2]);
         $model = new RegistrosModel();
         $licitacao = new LicitacaoModel();
         $solicitacaoItem = new RegistrosItemModel();

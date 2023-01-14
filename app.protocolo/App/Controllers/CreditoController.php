@@ -95,32 +95,19 @@ class CreditoController extends Controller implements CtrlInterface
 
     public function findSaldoComprometidoAction()
     {
-        $om = $this->getParam('om');
-        $subItem = $this->getParam('subItem');
-        $empresa = $this->getParam('supplier');
-        $incisivo = $this->getParam('incisive');
-        $modalidade = $this->getParam('modality');
         $enquadramento = $this->getParam('enquadramento');
-        $naturezaDespesa = $this->getParam('natureExpense');
-        $cnpj = $this->getParam('natureExpense');
-        $cnae = $this->getParam('natureExpense');
+        $cnae = $this->getParam('cnae');
+        $om = $this->getParam('om');
 
-        if ($enquadramento == 1) {
-            $result = (new CreditoModel())->saldoComprometidoLei1(
-                $om,
-                $modalidade,
-                $enquadramento,
-                $naturezaDespesa,
-                $subItem
-            );
-        }
+        $obj = new \stdClass();
+        $obj->credit_value = 0;
+        $obj->registers_value = 0;
+        $result = $obj;
 
         if ($enquadramento == 2) {
             $result = (new CreditoModel())->saldoComprometidoLei2(
                 $om,
-                $modalidade,
                 $enquadramento,
-                $cnpj,
                 $cnae
             );
         }

@@ -119,9 +119,11 @@ class ItemController extends Controller implements CtrlInterface
 
     public function adicionaromAction()
     {
-        $id = $this->getParam('idlista');
+        $this->view->userLoggedIn = $this->access->authenticAccess([1,2]);
+        $idlista = $this->getParam('idlista');
+        $id = $this->getParam('id');
         if ($id) {
-            $result = (new LicitacaoModel())->fetchOmOut((int) $id);
+            $result = (new LicitacaoModel())->fetchOmOut((int) $idlista, (int) $id);
             if (count($result)) {
                 $this->view->title = 'Adicionar nova OM';
                 $this->view->result = $result;

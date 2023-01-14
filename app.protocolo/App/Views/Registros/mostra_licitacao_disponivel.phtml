@@ -4,12 +4,12 @@ use App\Helpers\Pagination;
 use App\Helpers\View;
 
 $pagination = Pagination::make($this, function ($btn, $controllerName) {
-        return [
-            'previous' => "{$controllerName}novo/pagina/{$btn['previous']}",
-            'next' => "{$controllerName}novo/pagina/{$btn['next']}",
-            'current' => "{$controllerName}novo/pagina/" . Pagination::CURRENT_PAGE
-        ];
-    });
+    return [
+        'previous' => "{$controllerName}novo/pagina/{$btn['previous']}",
+        'next' => "{$controllerName}novo/pagina/{$btn['next']}",
+        'current' => "{$controllerName}novo/pagina/" . Pagination::CURRENT_PAGE
+    ];
+});
 
 ?>
 <div id="page-wrapper">
@@ -19,48 +19,89 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) {
                 <h5>Solicitações </h5>
                 <i class="fa fa-list"></i> <?= $this->view->title; ?>
 
-                <div class="row">
-                    <div class="col-md-7">
-                        <?= $pagination; ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-cogs fa-fw"></i> Formulário de cadastro
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Pregão</label>
+                                    <select name="idList" id="idList" class="form-control">
+                                        <?php foreach ($this->view->resultLicitacao as $value) : ?>
+                                            <option value="<?= $value['id']; ?>" <?= $value['id'] == $this->getParam('idlista') ? 'selected' : '' ?>>
+                                                <?= $value['number']; ?> - <strong><?= $value['description']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>OMAp</label>
+                                    <select name="om" id="om" class="form-control" required>
+                                        <option value="">Selecione a OM</option>
+                                        <?php foreach ($this->view->resultOm as $key => $value) : ?>
+                                            <option value="<?= $value['id'] ?>" <?= $value['id'] == $this->getParam('om') ? 'selected' : '' ?>>
+                                                <?= $value['naval_indicative']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Empresa</label>
+                                    <select name="supplier" id="supplier" class="form-control supplier" required>
+                                        <option value="">Selecione uma empresa</option>
+                                        <?php foreach ($this->view->resultFornecedor as $key => $value) : ?>
+                                            <option value="<?= $value['id']; ?>">
+                                                <?= $value['name']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-1" style="margin-top: 25px;">
+                                <button class="btn btn-danger btn-apply-clean">
+                                    <i class="fa fa-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Número</th>
-                            <th>Descrição</th>
-                            <th>UASG</th>
-                            <th>Órgão</th>
-                            <th>Validade</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($this->view->result as $value): ?>
-                            <tr class="table-licitacao" data-id="<?= $value['id']; ?>">
-                                <td><?= $value['number']; ?></td>
-                                <td><?= $value['description']; ?></td>
-                                <td><?= $value['uasg']; ?></td>
-                                <td><?= $value['uasg_name']; ?></td>
-                                <td>
-                                    <span class="label label-danger">
-                                        <?= View::humanDate($value['validate']); ?>
-                                    </span>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <?= $pagination; ?>
             </div>
         </div>
     </div>
 </div>
 <script>
-    $('.table-licitacao').click(function link() {
-        var id = this.dataset.id;
+    $(document).ready(function() {
+        var btnApplyClear = $('.btn-apply-clean');
+
+        btnApplyClear.click(function() {
+            window.location = 'registros/pregao/';
+        });
+    });
+    $('#om').change(function link() {
+        var id = $('#idList').val();
+        var selectOm = $('#om').val();
         if (id) {
-            window.location = '<?= $this->view->controller; ?>item/idlista/' + id;
+            window.location = '<?= $this->view->controller; ?>pregao/idlista/' + id + '/om/' + selectOm;
+        }
+    });
+
+    $('#supplier').change(function link() {
+        var id = $('#idList').val();
+        var selectOm = $('#om').val();
+        var selectSupplier = $('#supplier').val();
+        if (id && selectOm && selectSupplier) {
+            window.location = '<?= $this->view->controller; ?>item/idlista/' + id + '/om/' + selectOm + '/supplier/' + selectSupplier;
         }
     });
 </script>

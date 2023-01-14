@@ -283,7 +283,7 @@ class ItemModel extends CRUD
         }
     }
 
-    public function findByIdlista($idlista, $omsId)
+    public function findByIdlista($idlista, $omsId, $supplierId)
     {
         $stmt = $this->pdo->prepare(
             "SELECT `biddings_items`.*, `suppliers`.`cnpj`, `suppliers`.`name` AS supplier,
@@ -292,10 +292,10 @@ class ItemModel extends CRUD
             FROM `biddings_items` 
             INNER JOIN `suppliers` ON `biddings_items`.`suppliers_id` = `suppliers`.`id` 
             INNER JOIN `biddings_items_oms` ON `biddings_items_oms`.`biddings_items_id` = `biddings_items`.`id` 
-            WHERE `biddings_items`.`biddings_id` = ? AND `biddings_items_oms`.`oms_id` = ? AND `biddings_items`.`active` = 'yes'
+            WHERE `biddings_items`.`biddings_id` = ? AND `biddings_items_oms`.`oms_id` = ? AND `suppliers`.`id` = ? AND `biddings_items`.`active` = 'yes'
             ORDER BY `biddings_items`.`number` ASC"
         );
-        $stmt->execute([$idlista, $omsId]);
+        $stmt->execute([$idlista, $omsId, $supplierId]);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 

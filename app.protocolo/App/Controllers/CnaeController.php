@@ -126,4 +126,11 @@ class CnaeController extends Controller implements CtrlInterface
         // requisia a edição dos dados
         $defaultModel->remover($this->getParam('id'));
     }
+
+    public function findCnaeAction()
+    {
+        $defaultModel = new $this->modelPath;
+        $result = $defaultModel->findActive();
+        echo json_encode($result);
+    }
 }

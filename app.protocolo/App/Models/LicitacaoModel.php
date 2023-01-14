@@ -43,19 +43,43 @@ class LicitacaoModel extends CRUD
             $dados['bindValue'] = [':date' => $dateLimit];
         }
 
-        $paginator = new Paginator($dados);
-        $this->resultadoPaginator = $paginator->getResultado();
-        $this->navPaginator = $paginator->getNaveBtn();
+        $this->paginator = new Paginator($dados);
     }
 
     public function getResultadoPaginator()
     {
-        return $this->resultadoPaginator;
+        return $this->paginator->getResultado();
     }
 
     public function getNavePaginator()
     {
-        return $this->navPaginator;
+        return $this->paginator->getNaveBtn();
+    }
+
+    public function findActive($dateLimit, $omId = null)
+    {
+        $query = "
+            SELECT
+                biddings.*
+            FROM biddings
+            INNER JOIN biddings_items as items 
+                ON biddings.id = items.biddings_id
+            INNER JOIN biddings_items_oms as itemOm 
+                ON items.id = itemOm.biddings_items_id
+            WHERE biddings.validate >= '" . $dateLimit . "'";
+
+        $where = "";
+        if ($omId != null) {
+            $where = " AND itemOm.oms_id = :omId ";
+        }
+
+        $orderBy = " GROUP BY biddings.id";
+
+        $stmt = $this->pdo->prepare($query . $where . $orderBy);
+        $stmt->execute([
+            ':omId' => $omId,
+        ]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function listaPorFornecedor($idLita)
@@ -166,7 +190,7 @@ class LicitacaoModel extends CRUD
         return $result;
     }
 
-    public function fetchOmOut(int $id)
+    public function fetchOmOut(int $id, $itemId)
     {
         $result = [];
         $omCount = count((new OmModel())->findAll());
@@ -185,7 +209,7 @@ class LicitacaoModel extends CRUD
                 . "         ON bol.biddings_items_id = item.id "
                 . "     INNER JOIN oms "
                 . "         ON oms.id = bol.oms_id "
-                . "     WHERE item.biddings_id = {$id} "
+                . "     WHERE item.biddings_id = {$id} AND item.id = {$itemId} "
                 . " ) AND oms.isActive = 1"
                 . " ORDER BY oms.name";
             $result = $this->pdo->query($query)->fetchAll(\PDO::FETCH_ASSOC);

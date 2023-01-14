@@ -57,7 +57,7 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) use ($idl
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h5>Itens da Solicitação</h5>
+                <h5>Detalhe da Solicitação</h5>
                 <div class="alert alert-info" role="alert">
                     Documento: <strong><?= $this->view->resultSolicitacao['document_number']; ?></strong><br>
                     Órgão Responsável pela Licitação: <strong><?= $this->view->resultLicitacao['uasg']; ?> - <?= $this->view->resultLicitacao['uasg_name']; ?></strong><br>
@@ -93,6 +93,11 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) use ($idl
                     SubItem:
                     <strong>
                         <?= $this->view->resultSolicitacao['sub_item']; ?>
+                    </strong>
+                    <br>
+                    Valor do documento:
+                    <strong>
+                        <?= Utils::normalizeFloat($this->view->resultSolicitacao['document_value']); ?>
                     </strong>
                     <br>
                     Artigo:
