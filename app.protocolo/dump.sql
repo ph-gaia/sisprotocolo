@@ -45,16 +45,6 @@ CREATE TABLE `sisprotocolo`.`biddings` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `biddings`
---
-
-LOCK TABLES `sisprotocolo`.`biddings` WRITE;
-/*!40000 ALTER TABLE `biddings` DISABLE KEYS */;
-INSERT INTO `sisprotocolo`.`biddings` VALUES (1,'05003/2020',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO','PESCADO','2022-08-02','2020-03-25'),(2,'05017/2019',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO','EMBUTIDOS','2022-03-10','2020-03-30'),(3,'05006/2020',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO','DIVERSOS','2022-12-14','2020-04-01'),(4,'05016/2019',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO','LATICÍNIOS','2023-01-22','2020-04-01'),(5,'05031/2019',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO','PÃO','2022-06-16','2020-04-30'),(6,'05002/2021',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO','ÁGUA','2022-05-28','2020-07-06'),(7,'05007/2020',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO','HORTIFRUTIGRANJEIROS','2022-09-10','2020-07-24'),(8,'05011/2020',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO','IOGURTE','2023-07-15','2020-07-24'),(9,'05005/2020',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO ','LATICÍNIOS','2023-01-29','2021-02-01'),(10,'00026/2020',771000,'DIRETORIA DE ABASTECIMENTO DA MARINHA','DIVERSOS','2023-02-02','2021-03-09'),(11,'05004/2020',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO ','EMBUTIDOS','2023-03-10','2021-03-17'),(12,'05018/2020',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO','PÃO ','2023-04-29','2021-04-26'),(13,'05007/2021',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO','HORTIFRUTEGRANJEIROS','2023-06-17','2021-06-22'),(14,'05003/2021',771300,'CENTRO DE OBTENÇÃO DA MARINHA NO RIO DE JANEIRO','PESCADO','2023-08-19','2021-08-26');
-/*!40000 ALTER TABLE `biddings` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `biddings_items`
 --
 
@@ -79,16 +69,6 @@ CREATE TABLE `sisprotocolo`.`biddings_items` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `biddings_items`
---
-
-LOCK TABLES `sisprotocolo`.`biddings_items` WRITE;
-/*!40000 ALTER TABLE `biddings_items` DISABLE KEYS */;
-INSERT INTO `sisprotocolo`.`biddings_items` VALUES (1,14,52,2,'ABÓBORA PESCOÇO OU BRANCA','KG',1.37,'yes'),(2,14,1,5,'Pao Doce','UN',1.50,'yes');
-/*!40000 ALTER TABLE `biddings_items` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `biddings_items_oms`
 --
 
@@ -108,16 +88,6 @@ CREATE TABLE `sisprotocolo`.`biddings_items_oms` (
   CONSTRAINT `fk_biddings_items_has_oms_oms1` FOREIGN KEY (`oms_id`) REFERENCES `oms` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `biddings_items_oms`
---
-
-LOCK TABLES `sisprotocolo`.`biddings_items_oms` WRITE;
-/*!40000 ALTER TABLE `biddings_items_oms` DISABLE KEYS */;
-INSERT INTO `sisprotocolo`.`biddings_items_oms` VALUES (1,1,1,100.000,65.000),(2,1,2,80.000,100.000),(3,1,3,90.000,100.000),(4,2,1,40.000,25.000),(5,2,3,20.000,30.000),(6,2,5,30.000,65.000),(7,2,7,10.000,15.000);
-/*!40000 ALTER TABLE `biddings_items_oms` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `cnae`
