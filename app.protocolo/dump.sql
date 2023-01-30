@@ -12,8 +12,7 @@ USE `sisprotocolo` ;
 
 
 DROP TABLE IF EXISTS `sisprotocolo`.`biddings`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`biddings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `number` varchar(10) NOT NULL,
@@ -33,8 +32,7 @@ COMMENT='Licitações do sistema';
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`biddings_items`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`biddings_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `biddings_id` int(11) NOT NULL,
@@ -58,8 +56,7 @@ COMMENT='Itens das Licitações Registradas no Sistema';
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`biddings_items_oms`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`biddings_items_oms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `biddings_items_id` int(11) NOT NULL,
@@ -79,8 +76,7 @@ CREATE TABLE `sisprotocolo`.`biddings_items_oms` (
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`cnae`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`cnae` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL,
@@ -105,8 +101,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`credit`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`credit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `oms_id` int(11) NOT NULL,
@@ -136,8 +131,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`credit_historic`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`credit_historic` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `operation_type` varchar(20) NOT NULL DEFAULT 'CREDITO',
@@ -166,8 +160,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`historic_status_registers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`historic_status_registers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `registers_id` int(11) NOT NULL,
@@ -200,8 +193,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`modality`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`modality` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -225,8 +217,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`nature_expense`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`nature_expense` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL,
@@ -250,8 +241,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`oms`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`oms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
@@ -276,8 +266,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`process_type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`process_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
@@ -301,8 +290,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`registers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`registers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `document_number` varchar(20) NOT NULL,
@@ -350,8 +338,7 @@ CREATE TABLE `sisprotocolo`.`registers` (
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`registers_items`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`registers_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `registers_id` int(11) NOT NULL,
@@ -373,8 +360,7 @@ COMMENT='Items das solicitações';
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`status`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
@@ -399,8 +385,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`suppliers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`suppliers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
@@ -416,8 +401,7 @@ COMMENT='Fornecedores';
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`users_login`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `sisprotocolo`.`users_login` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(88) NOT NULL,
