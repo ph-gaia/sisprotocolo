@@ -1,20 +1,3 @@
--- MySQL dump 10.13  Distrib 8.0.23, for Linux (x86_64)
---
--- Host: localhost    Database: sisprotocolo
--- ------------------------------------------------------
--- Server version	8.0.16
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
 --
 -- Table structure for table `biddings`
 --
@@ -41,7 +24,8 @@ CREATE TABLE `sisprotocolo`.`biddings` (
   `created_at` date NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `number_UNIQUE` (`number`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Licitações do sistema';
+) ENGINE=InnoDB
+COMMENT='Licitações do sistema';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,7 +49,8 @@ CREATE TABLE `sisprotocolo`.`biddings_items` (
   KEY `fk_biddings_items_suppliers1_idx` (`suppliers_id`),
   CONSTRAINT `fk_biddings_items_biddings1` FOREIGN KEY (`biddings_id`) REFERENCES `biddings` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_biddings_items_suppliers1` FOREIGN KEY (`suppliers_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Itens das Licitações Registradas no Sistema';
+) ENGINE=InnoDB
+COMMENT='Itens das Licitações Registradas no Sistema';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -86,7 +71,7 @@ CREATE TABLE `sisprotocolo`.`biddings_items_oms` (
   KEY `fk_biddings_items_has_oms_items_idx` (`biddings_items_id`),
   CONSTRAINT `fk_biddings_items_has_oms_biddings1` FOREIGN KEY (`biddings_items_id`) REFERENCES `biddings_items` (`id`),
   CONSTRAINT `fk_biddings_items_has_oms_oms1` FOREIGN KEY (`oms_id`) REFERENCES `oms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +87,7 @@ CREATE TABLE `sisprotocolo`.`cnae` (
   `description` varchar(60) NOT NULL,
   `isActive` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=981 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,7 +118,7 @@ CREATE TABLE `sisprotocolo`.`credit` (
   PRIMARY KEY (`id`),
   KEY `fk_credit_oms_idx` (`oms_id`),
   CONSTRAINT `fk_credit_oms` FOREIGN KEY (`oms_id`) REFERENCES `oms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -163,7 +148,7 @@ CREATE TABLE `sisprotocolo`.`credit_historic` (
   PRIMARY KEY (`id`),
   KEY `fk_credit_historic_credit1_idx` (`credit_id`),
   CONSTRAINT `fk_credit_historic_credit1` FOREIGN KEY (`credit_id`) REFERENCES `credit` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -197,7 +182,7 @@ CREATE TABLE `sisprotocolo`.`historic_status_registers` (
   KEY `fk_historic_status_registers_2_idx` (`users_id`),
   CONSTRAINT `fk_historic_status_registers_1` FOREIGN KEY (`registers_id`) REFERENCES `registers` (`id`),
   CONSTRAINT `fk_historic_status_registers_2` FOREIGN KEY (`users_id`) REFERENCES `users_login` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -222,7 +207,7 @@ CREATE TABLE `sisprotocolo`.`modality` (
   `name` varchar(50) NOT NULL,
   `isActive` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -247,7 +232,7 @@ CREATE TABLE `sisprotocolo`.`nature_expense` (
   `name` varchar(60) NOT NULL,
   `isActive` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -273,7 +258,7 @@ CREATE TABLE `sisprotocolo`.`oms` (
   `naval_indicative` varchar(6) DEFAULT NULL,
   `isActive` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -298,7 +283,7 @@ CREATE TABLE `sisprotocolo`.`process_type` (
   `name` varchar(40) NOT NULL,
   `isActive` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -357,7 +342,7 @@ CREATE TABLE `sisprotocolo`.`registers` (
   CONSTRAINT `fk_registers_oms` FOREIGN KEY (`oms_id`) REFERENCES `oms` (`id`),
   CONSTRAINT `fk_registers_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`),
   CONSTRAINT `fk_registers_suppliers1` FOREIGN KEY (`suppliers_id`) REFERENCES `suppliers` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -379,7 +364,8 @@ CREATE TABLE `sisprotocolo`.`registers_items` (
   PRIMARY KEY (`id`),
   KEY `fk_requests_items_registers_idx` (`registers_id`),
   CONSTRAINT `fk_requests_items_registers` FOREIGN KEY (`registers_id`) REFERENCES `registers` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='Items das solicitações';
+) ENGINE=InnoDB
+COMMENT='Items das solicitações';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -395,7 +381,7 @@ CREATE TABLE `sisprotocolo`.`status` (
   `description` varchar(60) DEFAULT NULL,
   `isActive` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -421,7 +407,8 @@ CREATE TABLE `sisprotocolo`.`suppliers` (
   `cnpj` varchar(18) DEFAULT NULL,
   `details` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=210 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Fornecedores';
+) ENGINE=InnoDB 
+COMMENT='Fornecedores';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -446,7 +433,7 @@ CREATE TABLE `sisprotocolo`.`users_login` (
   PRIMARY KEY (`id`),
   KEY `fk_users_login_oms_idx` (`oms_id`),
   CONSTRAINT `fk_users_login_oms` FOREIGN KEY (`oms_id`) REFERENCES `oms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -459,13 +446,3 @@ INSERT INTO `sisprotocolo`.`users_login` VALUES (1,'administrator','$2y$11$gQNC3
 /*!40000 ALTER TABLE `users_login` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2022-07-28  5:59:26
