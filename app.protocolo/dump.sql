@@ -1,20 +1,3 @@
--- MySQL dump 10.13  Distrib 8.0.23, for Linux (x86_64)
---
--- Host: localhost    Database: sisprotocolo
--- ------------------------------------------------------
--- Server version	8.0.16
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
 --
 -- Table structure for table `biddings`
 --
@@ -27,10 +10,25 @@ DROP SCHEMA IF EXISTS `sisprotocolo` ;
 CREATE SCHEMA IF NOT EXISTS `sisprotocolo` DEFAULT CHARACTER SET utf8 ;
 USE `sisprotocolo` ;
 
+--
+-- Table structure for table `suppliers`
+--
 
-DROP TABLE IF EXISTS `sisprotocolo`.`biddings`;
+DROP TABLE IF EXISTS `sisprotocolo`.`suppliers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sisprotocolo`.`suppliers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `cnpj` varchar(18) DEFAULT NULL,
+  `details` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB 
+COMMENT='Fornecedores';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+DROP TABLE IF EXISTS `sisprotocolo`.`biddings`;
 CREATE TABLE `sisprotocolo`.`biddings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `number` varchar(10) NOT NULL,
@@ -41,16 +39,12 @@ CREATE TABLE `sisprotocolo`.`biddings` (
   `created_at` date NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `number_UNIQUE` (`number`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Licitações do sistema';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+);
 --
 -- Table structure for table `biddings_items`
 --
 
 DROP TABLE IF EXISTS `sisprotocolo`.`biddings_items`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sisprotocolo`.`biddings_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `biddings_id` int(11) NOT NULL,
@@ -65,8 +59,33 @@ CREATE TABLE `sisprotocolo`.`biddings_items` (
   KEY `fk_biddings_items_suppliers1_idx` (`suppliers_id`),
   CONSTRAINT `fk_biddings_items_biddings1` FOREIGN KEY (`biddings_id`) REFERENCES `biddings` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_biddings_items_suppliers1` FOREIGN KEY (`suppliers_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Itens das Licitações Registradas no Sistema';
+);
+
+--
+-- Table structure for table `oms`
+--
+
+DROP TABLE IF EXISTS `sisprotocolo`.`oms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sisprotocolo`.`oms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `naval_indicative` varchar(6) DEFAULT NULL,
+  `isActive` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `oms`
+--
+
+LOCK TABLES `sisprotocolo`.`oms` WRITE;
+/*!40000 ALTER TABLE `oms` DISABLE KEYS */;
+INSERT INTO `sisprotocolo`.`oms` VALUES (1,'OM PADRAO','OMPADR',1);
+/*!40000 ALTER TABLE `oms` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `biddings_items_oms`
@@ -86,7 +105,7 @@ CREATE TABLE `sisprotocolo`.`biddings_items_oms` (
   KEY `fk_biddings_items_has_oms_items_idx` (`biddings_items_id`),
   CONSTRAINT `fk_biddings_items_has_oms_biddings1` FOREIGN KEY (`biddings_items_id`) REFERENCES `biddings_items` (`id`),
   CONSTRAINT `fk_biddings_items_has_oms_oms1` FOREIGN KEY (`oms_id`) REFERENCES `oms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +121,7 @@ CREATE TABLE `sisprotocolo`.`cnae` (
   `description` varchar(60) NOT NULL,
   `isActive` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=981 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,8 +152,7 @@ CREATE TABLE `sisprotocolo`.`credit` (
   PRIMARY KEY (`id`),
   KEY `fk_credit_oms_idx` (`oms_id`),
   CONSTRAINT `fk_credit_oms` FOREIGN KEY (`oms_id`) REFERENCES `oms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `credit`
@@ -163,8 +181,7 @@ CREATE TABLE `sisprotocolo`.`credit_historic` (
   PRIMARY KEY (`id`),
   KEY `fk_credit_historic_credit1_idx` (`credit_id`),
   CONSTRAINT `fk_credit_historic_credit1` FOREIGN KEY (`credit_id`) REFERENCES `credit` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `credit_historic`
@@ -174,40 +191,6 @@ LOCK TABLES `sisprotocolo`.`credit_historic` WRITE;
 /*!40000 ALTER TABLE `credit_historic` DISABLE KEYS */;
 INSERT INTO `sisprotocolo`.`credit_historic` VALUES (2,'CREDITO',17600.00,'CREDITO','2022-07-19 00:00:00',1),(3,'CREDITO',50000.00,'CREDITO NOVO','2022-07-19 00:00:00',2),(6,'DEBITO',5000.00,'DÉBITO DE R$ 5.000,00; REFERENTE AO DOCUMENTO 123456789','2022-07-19 23:17:54',1),(7,'DEBITO',5000.00,'DÉBITO DE R$ 5.000,00; REFERENTE AO DOCUMENTO 405923','2022-07-22 22:02:33',1);
 /*!40000 ALTER TABLE `credit_historic` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `historic_status_registers`
---
-
-DROP TABLE IF EXISTS `sisprotocolo`.`historic_status_registers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sisprotocolo`.`historic_status_registers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `registers_id` int(11) NOT NULL,
-  `users_id` int(11) NOT NULL,
-  `status_id` int(11) NOT NULL,
-  `resulting_document` varchar(30) DEFAULT NULL,
-  `user_name` varchar(50) NOT NULL,
-  `date_action` datetime NOT NULL,
-  `observation` text,
-  PRIMARY KEY (`id`),
-  KEY `fk_historic_status_registers_1_idx` (`registers_id`),
-  KEY `fk_historic_status_registers_2_idx` (`users_id`),
-  CONSTRAINT `fk_historic_status_registers_1` FOREIGN KEY (`registers_id`) REFERENCES `registers` (`id`),
-  CONSTRAINT `fk_historic_status_registers_2` FOREIGN KEY (`users_id`) REFERENCES `users_login` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `historic_status_registers`
---
-
-LOCK TABLES `sisprotocolo`.`historic_status_registers` WRITE;
-/*!40000 ALTER TABLE `historic_status_registers` DISABLE KEYS */;
-INSERT INTO `sisprotocolo`.`historic_status_registers` VALUES (1,4,1,18,NULL,'Administrator','2022-07-19 20:17:54',NULL),(2,4,1,7,'515646856','Administrator','2022-07-19 20:52:35',NULL),(3,4,1,4,'187498/2022','Administrator','2022-07-19 20:53:11',NULL),(4,5,1,18,'405923','Administrator','2022-07-22 19:02:33',NULL),(5,7,1,18,'4567898','Administrator','2022-07-23 11:57:37',NULL),(6,10,1,6,'54186','Administrator','2022-07-26 22:54:20',NULL),(7,11,1,21,'603050','Administrator','2022-07-26 22:55:31',NULL),(8,11,1,3,'---','Administrator','2022-07-26 23:06:25','Observação');
-/*!40000 ALTER TABLE `historic_status_registers` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -222,8 +205,7 @@ CREATE TABLE `sisprotocolo`.`modality` (
   `name` varchar(50) NOT NULL,
   `isActive` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `modality`
@@ -247,8 +229,7 @@ CREATE TABLE `sisprotocolo`.`nature_expense` (
   `name` varchar(60) NOT NULL,
   `isActive` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `nature_expense`
@@ -258,32 +239,6 @@ LOCK TABLES `sisprotocolo`.`nature_expense` WRITE;
 /*!40000 ALTER TABLE `nature_expense` DISABLE KEYS */;
 INSERT INTO `sisprotocolo`.`nature_expense` VALUES (1,'339030 - Material Comum',1);
 /*!40000 ALTER TABLE `nature_expense` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `oms`
---
-
-DROP TABLE IF EXISTS `sisprotocolo`.`oms`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sisprotocolo`.`oms` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
-  `naval_indicative` varchar(6) DEFAULT NULL,
-  `isActive` tinyint(4) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `oms`
---
-
-LOCK TABLES `sisprotocolo`.`oms` WRITE;
-/*!40000 ALTER TABLE `oms` DISABLE KEYS */;
-INSERT INTO `sisprotocolo`.`oms` VALUES (1,'OM PADRAO','OMPADR',1);
-/*!40000 ALTER TABLE `oms` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -298,8 +253,7 @@ CREATE TABLE `sisprotocolo`.`process_type` (
   `name` varchar(40) NOT NULL,
   `isActive` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `process_type`
@@ -310,6 +264,60 @@ LOCK TABLES `sisprotocolo`.`process_type` WRITE;
 INSERT INTO `sisprotocolo`.`process_type` VALUES (1,'SOLEMP',1),(2,'Dispensa Eletrônica',1);
 /*!40000 ALTER TABLE `process_type` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `status`
+--
+
+DROP TABLE IF EXISTS `sisprotocolo`.`status`;
+CREATE TABLE `sisprotocolo`.`status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(40) NOT NULL,
+  `description` varchar(60) DEFAULT NULL,
+  `isActive` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+--
+-- Dumping data for table `status`
+--
+LOCK TABLES `sisprotocolo`.`status` WRITE;
+/*!40000 ALTER TABLE `status` DISABLE KEYS */;
+INSERT INTO `sisprotocolo`.`status` VALUES (1,'PROT. OBT.','PROTOCOLADO NA OBTENÇÃO',1),(2,'PROT. EXE.','PROTOCOLADO NA EXECUÇÃO',1),(3,'ENV. EXE.','ENVIADO PARA EXECUÇÃO',1),(4,'EMPENHADO','DATA EM QUE O DOCUMENTO FOI EMPENHADO',1),(5,'DEV. OBT','DEVOLVIDO À OBTENÇÃO',1),(6,'DEV. EXE.','DEVOLVIDO À EXECUÇÃO FINANCEIRA',1),(7,'ASSINADO','DATA EM QUE O DOCUMENTO FOI ASSINADO',1),(8,'ENV. NE OM','NOTA DE EMPENHO ENVIADO PARA A OM DE ORIGEM',1),(9,'DEV. OM','DEVOLVIDO À OM DE ORIGEM',1),(10,'NF ENT. EXE.','DATA DE ENTREGA DA NOTA FISCAL NA EXECUÇÃO FINANCEIRA',1),(11,'NR DA NF','NÚMERO DA NOTA FISCAL',1),(12,'NF LIQ.','NOTA FISCAL LIQUIDADA',1),(13,'NF SOL. REC.','SOLICITAÇÃO DE RECURSO PARA PAGAMENTO',1),(14,'NR DA PF','NÚMERO DA PROGRAMAÇÃO FINANCEIRA',1),(15,'NF PAGA','NOTA FISCAL PAGA',1),(16,'NR DA OB','NÚMERO DA ORDEM BANCÁRIA',1),(17,'NR DA NE','NÚMERO DA NOTA DE EMPENHO',1),(18,'ASS. CP.','DATA DA ASSINATURA DA CP',1),(19,'ENT. SECOM','DATA DE ENTRADA NA SECOM - CeIMBe',1),(20,'ENT. POSTAL','DATA DE ENTREGA NA POSTAL',1),(21,'ENT. OPERADOR','DATA DE ENTREGA PARA O OPERADOR SIAFI',1),(22,'PARA ASS.','DOCUMENTO ENVIADO PARA ASSINATURA',1);
+/*!40000 ALTER TABLE `status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users_login`
+--
+
+DROP TABLE IF EXISTS `sisprotocolo`.`users_login`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sisprotocolo`.`users_login` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(88) NOT NULL,
+  `password` varchar(60) NOT NULL,
+  `name` varchar(13) NOT NULL,
+  `email` varchar(108) DEFAULT NULL,
+  `level` tinyint(4) NOT NULL,
+  `change_password` tinyint(4) DEFAULT '1',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `isActive` tinyint(4) DEFAULT NULL,
+  `oms_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_users_login_oms_idx` (`oms_id`),
+  CONSTRAINT `fk_users_login_oms` FOREIGN KEY (`oms_id`) REFERENCES `oms` (`id`)
+) ENGINE=InnoDB;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users_login`
+--
+/*!40000 ALTER TABLE `users_login` DISABLE KEYS */;
+INSERT INTO `sisprotocolo`.`users_login` VALUES (1,'administrator','$2y$11$gQNC3HGp7t5/Bd7xSY/D0.82OOaEUv2zxSoQeP5TMSNhySs1zAOf6','Administrator','admin1@test.com',1,1,'2022-06-15 00:00:00','2022-07-26 10:30:49',1,1);
+
 
 --
 -- Table structure for table `registers`
@@ -357,7 +365,7 @@ CREATE TABLE `sisprotocolo`.`registers` (
   CONSTRAINT `fk_registers_oms` FOREIGN KEY (`oms_id`) REFERENCES `oms` (`id`),
   CONSTRAINT `fk_registers_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`),
   CONSTRAINT `fk_registers_suppliers1` FOREIGN KEY (`suppliers_id`) REFERENCES `suppliers` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -379,93 +387,29 @@ CREATE TABLE `sisprotocolo`.`registers_items` (
   PRIMARY KEY (`id`),
   KEY `fk_requests_items_registers_idx` (`registers_id`),
   CONSTRAINT `fk_requests_items_registers` FOREIGN KEY (`registers_id`) REFERENCES `registers` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='Items das solicitações';
+) ENGINE=InnoDB
+COMMENT='Items das solicitações';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `status`
+-- Table structure for table `historic_status_registers`
 --
 
-DROP TABLE IF EXISTS `sisprotocolo`.`status`;
+DROP TABLE IF EXISTS `sisprotocolo`.`historic_status_registers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sisprotocolo`.`status` (
+CREATE TABLE `sisprotocolo`.`historic_status_registers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(40) NOT NULL,
-  `description` varchar(60) DEFAULT NULL,
-  `isActive` tinyint(4) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `status`
---
-
-LOCK TABLES `sisprotocolo`.`status` WRITE;
-/*!40000 ALTER TABLE `status` DISABLE KEYS */;
-INSERT INTO `sisprotocolo`.`status` VALUES (1,'PROT. OBT.','PROTOCOLADO NA OBTENÇÃO',1),(2,'PROT. EXE.','PROTOCOLADO NA EXECUÇÃO',1),(3,'ENV. EXE.','ENVIADO PARA EXECUÇÃO',1),(4,'EMPENHADO','DATA EM QUE O DOCUMENTO FOI EMPENHADO',1),(5,'DEV. OBT','DEVOLVIDO À OBTENÇÃO',1),(6,'DEV. EXE.','DEVOLVIDO À EXECUÇÃO FINANCEIRA',1),(7,'ASSINADO','DATA EM QUE O DOCUMENTO FOI ASSINADO',1),(8,'ENV. NE OM','NOTA DE EMPENHO ENVIADO PARA A OM DE ORIGEM',1),(9,'DEV. OM','DEVOLVIDO À OM DE ORIGEM',1),(10,'NF ENT. EXE.','DATA DE ENTREGA DA NOTA FISCAL NA EXECUÇÃO FINANCEIRA',1),(11,'NR DA NF','NÚMERO DA NOTA FISCAL',1),(12,'NF LIQ.','NOTA FISCAL LIQUIDADA',1),(13,'NF SOL. REC.','SOLICITAÇÃO DE RECURSO PARA PAGAMENTO',1),(14,'NR DA PF','NÚMERO DA PROGRAMAÇÃO FINANCEIRA',1),(15,'NF PAGA','NOTA FISCAL PAGA',1),(16,'NR DA OB','NÚMERO DA ORDEM BANCÁRIA',1),(17,'NR DA NE','NÚMERO DA NOTA DE EMPENHO',1),(18,'ASS. CP.','DATA DA ASSINATURA DA CP',1),(19,'ENT. SECOM','DATA DE ENTRADA NA SECOM - CeIMBe',1),(20,'ENT. POSTAL','DATA DE ENTREGA NA POSTAL',1),(21,'ENT. OPERADOR','DATA DE ENTREGA PARA O OPERADOR SIAFI',1),(22,'PARA ASS.','DOCUMENTO ENVIADO PARA ASSINATURA',1);
-/*!40000 ALTER TABLE `status` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `suppliers`
---
-
-DROP TABLE IF EXISTS `sisprotocolo`.`suppliers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sisprotocolo`.`suppliers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `cnpj` varchar(18) DEFAULT NULL,
-  `details` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=210 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Fornecedores';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `users_login`
---
-
-DROP TABLE IF EXISTS `sisprotocolo`.`users_login`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sisprotocolo`.`users_login` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(88) NOT NULL,
-  `password` varchar(60) NOT NULL,
-  `name` varchar(13) NOT NULL,
-  `email` varchar(108) DEFAULT NULL,
-  `level` tinyint(4) NOT NULL,
-  `change_password` tinyint(4) DEFAULT '1',
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `isActive` tinyint(4) DEFAULT NULL,
-  `oms_id` int(11) NOT NULL,
+  `registers_id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  `status_id` int(11) NOT NULL,
+  `resulting_document` varchar(30) DEFAULT NULL,
+  `user_name` varchar(50) NOT NULL,
+  `date_action` datetime NOT NULL,
+  `observation` text,
   PRIMARY KEY (`id`),
-  KEY `fk_users_login_oms_idx` (`oms_id`),
-  CONSTRAINT `fk_users_login_oms` FOREIGN KEY (`oms_id`) REFERENCES `oms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users_login`
---
-
-LOCK TABLES `sisprotocolo`.`users_login` WRITE;
-/*!40000 ALTER TABLE `users_login` DISABLE KEYS */;
-INSERT INTO `sisprotocolo`.`users_login` VALUES (1,'administrator','$2y$11$gQNC3HGp7t5/Bd7xSY/D0.82OOaEUv2zxSoQeP5TMSNhySs1zAOf6','Administrator','admin1@test.com',1,1,'2022-06-15 00:00:00','2022-07-26 10:30:49',1,1);
-/*!40000 ALTER TABLE `users_login` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2022-07-28  5:59:26
+  KEY `fk_historic_status_registers_1_idx` (`registers_id`),
+  KEY `fk_historic_status_registers_2_idx` (`users_id`),
+  CONSTRAINT `fk_historic_status_registers_1` FOREIGN KEY (`registers_id`) REFERENCES `registers` (`id`),
+  CONSTRAINT `fk_historic_status_registers_2` FOREIGN KEY (`users_id`) REFERENCES `users_login` (`id`)
+) ENGINE=InnoDB;
