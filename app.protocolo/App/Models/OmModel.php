@@ -58,7 +58,9 @@ class OmModel extends CRUD
             'pagina' => $pagina,
             'maxResult' => 20,
             // USAR QUANDO FOR PARA DEMONSTRAR O RESULTADO DE UMA PESQUISA
-            'orderBy' => 'naval_indicative ASC'
+            'orderBy' => 'naval_indicative ASC',
+            'where' => 'isActive = :active',
+            'bindValue' => [':active' => 1]
         ];
 
         if (isset($user) && $user['level'] == 2) {

@@ -244,7 +244,7 @@ class RegistrosModel extends CRUD
                 $lastId,
                 $this->getUserId(),
                 $this->getStatus(),
-                null,
+                $this->getObservation(),
                 $this->getDocNumber()
             );
 
@@ -349,11 +349,11 @@ class RegistrosModel extends CRUD
     private function notDuplicateStatus()
     {
         $stmt = $this->pdo->prepare("SELECT * FROM historic_status_registers "
-            . "WHERE registers_id != ? AND status_id = ?");
+            . "WHERE registers_id = ? AND status_id = ?");
         $stmt->bindValue(1, $this->getId());
         $stmt->bindValue(2, $this->getStatus());
         $stmt->execute();
-        if (!$stmt->fetch(\PDO::FETCH_ASSOC)) {
+        if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
             msg::showMsg('Já existe um registro com esse status', 'warning');
         }
     }

@@ -99,8 +99,8 @@ class RegistrosItemModel extends CRUD
                 'delivered' => $dadosItem['quantity'],
                 'value' => $value['value']
             ];
-            parent::novo($dados);
             (new LicitacaoListaOmsModel())->atualizaQtdDisponivel($idItem, $omId, $dadosItem['quantity']);
+            parent::novo($dados);
         }
     }
 
