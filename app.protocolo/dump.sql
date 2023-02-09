@@ -329,7 +329,7 @@ DROP TABLE IF EXISTS `sisprotocolo`.`registers`;
 CREATE TABLE `sisprotocolo`.`registers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `document_number` varchar(20) NOT NULL,
-  `summary_object` varchar(100) NOT NULL,
+  `summary_object` varchar(100) DEFAULT NULL,
   `bidding_process_number` varchar(15) DEFAULT NULL,
   `document_value` float(9,4) NOT NULL,
   `oms_id` int(11) NOT NULL,
