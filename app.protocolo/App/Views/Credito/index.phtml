@@ -42,7 +42,6 @@ $pagination = Pagination::make($this);
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>OM</th>
                             <th>Nota</th>
                             <th>Valor</th>
                             <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
@@ -54,7 +53,6 @@ $pagination = Pagination::make($this);
                     <tbody>
                         <?php foreach ($this->view->result as $value) : ?>
                             <tr>
-                                <td><?= $value['naval_indicative']; ?></td>
                                 <td><?= $value['credit_note']; ?></td>
                                 <td><?= Utils::floatToMoney($value['value']); ?></td>
                                 <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>

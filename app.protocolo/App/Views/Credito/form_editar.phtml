@@ -22,7 +22,6 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) use ($id)
                 <h5>Detalhes do Crédito Provisionado</h5>
                 <div class="alert alert-info" role="alert">
                     Crédito Provisionado: <strong><?= $this->view->result['credit_note']; ?></strong><br>
-                    OM: <strong><?= $this->view->result['naval_indicative']; ?></strong><br>
                     Valor: <strong><?= Utils::floatToMoney($this->view->result['value']); ?></strong><br>
                 </div>
             </div>

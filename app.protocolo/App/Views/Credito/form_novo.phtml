@@ -39,21 +39,6 @@
                                                maxlength="10"
                                                required>
                                     </div>
-                                    <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
-                                    <div class="form-group">
-                                        <label>OM</label>
-                                        <select name="oms_id"
-                                                id="oms_id"
-                                                class="form-control"
-                                                required>
-                                                    <?php foreach ($this->view->resultOm as $value): ?>
-                                                <option value="<?= $value['id']; ?>">
-                                                    <?= $value['naval_indicative']; ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                    <?php endif; ?>
 
                                     <div class="form-group">
                                         <br>

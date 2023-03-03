@@ -33,23 +33,15 @@ class CreditoModel extends CRUD
 
     public function paginator($pagina, $user, $busca = null)
     {
-        $innerJoin = " AS credit INNER JOIN oms ON oms.id = credit.oms_id";
-
         $dados = [
-            'select' => 'credit.*, oms.naval_indicative',
-            'entidade' => $this->entidade . $innerJoin,
+            'select' => 'credit.*',
+            'entidade' => $this->entidade,
             'pagina' => $pagina,
             'maxResult' => 10,
             'orderBy' => ''
         ];
 
-        if (!in_array($user['level'], [1])) {
-            $dados['where'] = 'oms_id = :omsId ';
-            $dados['bindValue'] = [':omsId' => $user['oms_id']];
-        }
-
         if ($busca) {
-            $dados['where'] = " oms.naval_indicative LIKE :seach ";
             $dados['bindValue'][':seach'] = '%' . $busca . '%';
         }
         $paginator = new Paginator($dados);
@@ -67,11 +59,22 @@ class CreditoModel extends CRUD
         return $this->navPaginator;
     }
 
+    /**
+     * @return array Todos os resultados exceto os da lixeira
+     */
+    public function findActive()
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->entidade} "
+            . "WHERE isActive = :isActive;");
+        $stmt->bindValue(':isActive', 1);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function findById($id)
     {
         $query = "" .
-            " SELECT credit.*, oms.naval_indicative FROM {$this->entidade} AS credit " .
-            " INNER JOIN oms ON oms.id = credit.oms_id " .
+            " SELECT * FROM {$this->entidade} AS credit " .
             " WHERE credit.id = :id ";
 
         $stmt = $this->pdo->prepare($query);
@@ -80,28 +83,14 @@ class CreditoModel extends CRUD
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function findByOmId($omId)
-    {
-        $query = "" .
-            " SELECT * FROM {$this->entidade} " .
-            " WHERE oms_id = :omId ";
-
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute([
-            ':omId' => $omId
-        ]);
-
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
     public function saldoComprometidoLei2($omId, $enquadramento, $cnae)
     {
         $stmt = $this->pdo->prepare(""
             . " SELECT "
             . "     IFNULL(SUM(registers.document_value), 0) as registers_value, "
-            . "     IFNULL(credit.value, (SELECT credit.value FROM credit WHERE id = :creditId and oms_id = :omId)) as credit_value  "
+            . "     IFNULL(credit.value, (SELECT credit.value FROM credit WHERE id = :creditId)) as credit_value  "
             . " FROM registers "
-            . " INNER JOIN credit ON credit.id = registers.credit_id "          
+            . " INNER JOIN credit ON credit.id = registers.credit_id "
             . " WHERE "
             . "     registers.oms_id = :omId "
             . "     AND registers.credit_id = :creditId "
@@ -142,7 +131,6 @@ class CreditoModel extends CRUD
         $dados = [
             'credit_note' => $this->getCreditNote(),
             'value' => $this->getValue(),
-            'oms_id' => $this->getOmsId(),
             'created_at' => date('Y-m-d'),
             'updated_at' => date('Y-m-d')
         ];
@@ -183,8 +171,7 @@ class CreditoModel extends CRUD
         $this->setTime(time())
             ->setId(filter_input(INPUT_POST, 'id') ?? time())
             ->setCreditNote(filter_input(INPUT_POST, 'credit_note', FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setValue(filter_input(INPUT_POST, 'value', FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setOmsId(filter_input(INPUT_POST, 'oms_id'));
+            ->setValue(filter_input(INPUT_POST, 'value', FILTER_SANITIZE_SPECIAL_CHARS));
 
         $value = str_replace(".", "", $this->getValue());
         $value = str_replace(",", ".", $value);

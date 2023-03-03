@@ -107,7 +107,8 @@ class FornecedorModel extends CRUD
             . "     biddings_items as items ON "
             . "     items.suppliers_id = suppliers.id "
             . " WHERE "
-            . "     items.biddings_id = {$biddingId} ";
+            . "     items.biddings_id = {$biddingId} "
+            . " GROUP BY suppliers.id ";
         return $this->pdo->query($query)->fetchAll(\PDO::FETCH_ASSOC);
     }
 

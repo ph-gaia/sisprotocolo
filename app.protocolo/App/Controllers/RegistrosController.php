@@ -100,7 +100,7 @@ class RegistrosController extends Controller implements CtrlInterface
         $this->view->resultFornecedor = $fornecedorModel->findActive();
         $this->view->resultNatureExpense = $natureExpenseModel->findActive();
         $this->view->processType = $processTypeModel->findActive();
-        $this->view->credito = $creditoModel->findByOmId($this->view->userLoggedIn['oms_id']);
+        $this->view->credito = $creditoModel->findActive();
         // renderiza a página do formulário
         $this->render('form_novo');
     }

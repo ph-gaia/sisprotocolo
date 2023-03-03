@@ -30,12 +30,12 @@ use App\Helpers\View;
                         <div class="alerta-item" style="display: none;">
                             <div class="alert alert-warning" role="alert">
                                 <div class="listItem"></div>
-                                <strong>Você deseja continuar com essa solicitação?</strong><br>
+                                <strong>Verifique a possibilidade de remanejamento de quantidade</strong><br>
                                 <button class="btn btn-success btn-item-yes">
                                     <i class="fa fa-check"></i> Sim
                                 </button>
                                 <span class="btn btn-danger btn-item-no">
-                                    <i class="fa fa-ban"></i> Não
+                                    <i class="fa fa-ban"></i> Cancelar
                                 </span>
                             </div>
                         </div>
@@ -54,7 +54,7 @@ use App\Helpers\View;
                                         <label>Pregão</label>
                                         <select class="form-control" disabled>
                                             <option>
-                                                <?= $this->view->resultLicitacao['number']; ?> - <strong><?= $this->view->resultLicitacao['description']; ?>
+                                                <?= $this->view->resultLicitacao['number']; ?> - <strong><?= $this->view->resultLicitacao['description']; ?></strong>
                                             </option>
                                         </select>
                                     </div>
@@ -65,7 +65,7 @@ use App\Helpers\View;
                                         <label>OMAp</label>
                                         <select name="om" id="om" class="form-control" disabled>
                                             <option>
-                                                <?= $this->view->resultOm['id']; ?> - <strong><?= $this->view->resultOm['naval_indicative']; ?>
+                                                <strong><?= $this->view->resultOm['naval_indicative']; ?></strong>
                                             </option>
                                         </select>
                                     </div>
@@ -76,7 +76,7 @@ use App\Helpers\View;
                                         <label>Empresa</label>
                                         <select name="supplier" id="supplier" class="form-control supplier" disabled>
                                             <option>
-                                                <?= $this->view->resultFornecedor['id']; ?> - <strong><?= $this->view->resultFornecedor['name']; ?>
+                                                <strong><?= $this->view->resultFornecedor['name']; ?></strong>
                                             </option>
                                         </select>
                                     </div>
@@ -206,10 +206,12 @@ use App\Helpers\View;
             }
             $(this).prop("disabled", true);
         });
+        console.log(ItensPedidos);
         if (ItensPedidos.length > 0) {
             for (let i = 0; i < ItensPedidos.length; i++) {
                 addItemList(ItensPedidos[i].name, ItensPedidos[i].available, ItensPedidos[i].quantity);
             }
+            $('.btn-item-yes').hide()
         } else {
             $('.listItem').append("Todos os itens solicitados possuem saldo disponíveis para o pedido.");
         }
@@ -222,6 +224,10 @@ use App\Helpers\View;
     });
     $('.btn-item-no').click(function() {
         $('.alerta-item').hide()
+        $('.btn-save').show()
+        $('input[name="quantity[]"]').each(function() {
+            $(this).prop("disabled", false);
+        });
     });
     $('.btn-item-yes').click(function() {
         $('input[name="quantity[]"]').each(function() {

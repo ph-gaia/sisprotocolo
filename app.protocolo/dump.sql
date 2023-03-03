@@ -143,15 +143,12 @@ DROP TABLE IF EXISTS `sisprotocolo`.`credit`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sisprotocolo`.`credit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `oms_id` int(11) NOT NULL,
   `credit_note` varchar(50) NOT NULL,
   `value` float(9,2) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `isActive` tinyint(4) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_credit_oms_idx` (`oms_id`),
-  CONSTRAINT `fk_credit_oms` FOREIGN KEY (`oms_id`) REFERENCES `oms` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 --
