@@ -101,6 +101,7 @@ class ItemModel extends CRUD
             'name' => $this->getName(),
             'uf' => $this->getUf(),
             'value' => $this->getValue(),
+            'total_quantity' => $this->getTotalQuantity(),
             'active' => $this->getActive()
         ];
 
@@ -140,6 +141,7 @@ class ItemModel extends CRUD
             'name' => $this->getName(),
             'uf' => $this->getUf(),
             'value' => $this->getValue(),
+            'total_quantity' => $this->getTotalQuantity(),
             'active' => $this->getActive()
         ];
 
@@ -310,9 +312,11 @@ class ItemModel extends CRUD
             ->setIngredientsId(filter_input(INPUT_POST, 'ingredients_id', FILTER_VALIDATE_INT))
             ->setName(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setUf(filter_input(INPUT_POST, 'uf', FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setValue(filter_input(INPUT_POST, 'value', FILTER_SANITIZE_SPECIAL_CHARS));
+            ->setValue(filter_input(INPUT_POST, 'value', FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setTotalQuantity(filter_input(INPUT_POST, 'total_quantity', FILTER_SANITIZE_SPECIAL_CHARS));
 
         $this->setValue(Utils::moneyToFloat($this->getValue()));
+        $this->setTotalQuantity(Utils::moneyToFloat($this->getTotalQuantity()));
         // Inicia a Validação dos dados
         $this->validaId()
             ->validaBiddingsId()

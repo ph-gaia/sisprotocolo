@@ -87,6 +87,19 @@ use App\Helpers\View;
                                                required>
                                     </div>
 
+                                    <?php if (in_array($this->view->userLoggedIn['level'], [1])): ?>
+                                        <div class="form-group">
+                                            <label>OM Líder</label>
+                                            <select name="oms_id" id="oms_id" class="form-control" required>
+                                                <?php foreach ($this->view->resultOm as $value): ?>
+                                                    <option value="<?= $value['id']; ?>" <?= $this->view->result['oms_id'] == $value['id'] ? 'selected' : '' ?>>
+                                                        <?= $value['naval_indicative']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    <?php endif; ?>
+
                                     <div class="form-group">
                                         <button class="btn btn-primary">
                                             <i class="fa fa-check"></i> Alterar

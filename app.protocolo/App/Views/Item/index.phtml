@@ -61,8 +61,8 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) use ($idl
                         <?php foreach ($this->view->result as $value) : ?>
                             <tr>
                                 <td style='font-size: 11px'><?= $value['number']; ?></td>
-                                <td style='font-size: 11px'><?= Utils::floatToMoney($value['quantity'], ""); ?></td>
-                                <td style='font-size: 11px'><?= Utils::floatToMoney($value['quantity_available'], ""); ?></td>
+                                <td style='font-size: 11px'><?= Utils::normalizeFloat($value['quantity']); ?></td>
+                                <td style='font-size: 11px'><?= Utils::normalizeFloat($value['quantity_available']); ?></td>
                                 <td style='font-size: 11px'><?= Utils::floatToMoney($value['value']); ?></td>
                                 <td style='font-size: 11px'><?= $value['uf']; ?></td>
                                 <td style='font-size: 11px'><?= $value['name']; ?></td>

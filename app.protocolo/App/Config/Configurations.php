@@ -7,7 +7,7 @@ class Configurations extends InternalConfigurations
 {
 
     const DS = DIRECTORY_SEPARATOR;
-    const STR_SALT = 'Hcf5fe2581cae46bd79f5ef981dec1aa9cc188e29';
+    const STR_SALT = 'Hbfe800e491672b6451024f3e36aa18143b309689';
     const DOMAIN = 'localhost';
     const ADMIN_CONTACT = 'E-mail: bruno.monteirodg@gmail.com';
     const PATH_CORE = '/var/www/html/app.protocolo/';

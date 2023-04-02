@@ -97,7 +97,7 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) use ($idl
                     <br>
                     Valor do documento:
                     <strong>
-                        <?= Utils::normalizeFloat($this->view->resultSolicitacao['document_value']); ?>
+                        <?= Utils::floatToMoney($this->view->resultSolicitacao['document_value']); ?>
                     </strong>
                     <br>
                     Artigo:
@@ -141,7 +141,7 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) use ($idl
                         ?>
                             <tr>
                                 <td><?= $value['number'] ?: '-'; ?></td>
-                                <td><?= Utils::floatToMoney($value['quantity'], ''); ?></td>
+                                <td><?= Utils::normalizeFloat($value['quantity']); ?></td>
                                 <td><?= $value['uf']; ?></td>
                                 <td><?= $value['name']; ?></td>
                                 <td><?= Utils::floatToMoney($value['value']); ?></td>

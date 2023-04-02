@@ -27,40 +27,6 @@ CREATE TABLE `sisprotocolo`.`suppliers` (
 COMMENT='Fornecedores';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
-DROP TABLE IF EXISTS `sisprotocolo`.`biddings`;
-CREATE TABLE `sisprotocolo`.`biddings` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `number` varchar(10) NOT NULL,
-  `uasg` int(6) NOT NULL,
-  `uasg_name` varchar(100) NOT NULL,
-  `description` varchar(30) DEFAULT NULL,
-  `validate` date NOT NULL,
-  `created_at` date NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `number_UNIQUE` (`number`)
-);
---
--- Table structure for table `biddings_items`
---
-
-DROP TABLE IF EXISTS `sisprotocolo`.`biddings_items`;
-CREATE TABLE `sisprotocolo`.`biddings_items` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `biddings_id` int(11) NOT NULL,
-  `suppliers_id` int(11) NOT NULL,
-  `number` int(5) NOT NULL,
-  `name` varchar(256) NOT NULL,
-  `uf` varchar(4) NOT NULL,
-  `value` float(9,2) NOT NULL,
-  `active` varchar(3) NOT NULL DEFAULT 'yes',
-  PRIMARY KEY (`id`),
-  KEY `fk_biddings_items_biddings1_idx` (`biddings_id`),
-  KEY `fk_biddings_items_suppliers1_idx` (`suppliers_id`),
-  CONSTRAINT `fk_biddings_items_biddings1` FOREIGN KEY (`biddings_id`) REFERENCES `biddings` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_biddings_items_suppliers1` FOREIGN KEY (`suppliers_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE
-);
-
 --
 -- Table structure for table `oms`
 --
@@ -70,8 +36,8 @@ DROP TABLE IF EXISTS `sisprotocolo`.`oms`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sisprotocolo`.`oms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
-  `naval_indicative` varchar(6) DEFAULT NULL,
+  `name` varchar(150) DEFAULT NULL,
+  `naval_indicative` varchar(20) DEFAULT NULL,
   `isActive` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -86,6 +52,44 @@ LOCK TABLES `sisprotocolo`.`oms` WRITE;
 INSERT INTO `sisprotocolo`.`oms` VALUES (1,'OM PADRAO','OMPADR',1);
 /*!40000 ALTER TABLE `oms` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+DROP TABLE IF EXISTS `sisprotocolo`.`biddings`;
+CREATE TABLE `sisprotocolo`.`biddings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `number` varchar(10) NOT NULL,
+  `uasg` int(6) NOT NULL,
+  `uasg_name` varchar(100) NOT NULL,
+  `description` varchar(30) DEFAULT NULL,
+  `validate` date NOT NULL,
+  `oms_id` int(11) NOT NULL,
+  `created_at` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_biddings_items_has_oms_idx` (`oms_id`),
+  UNIQUE KEY `number_UNIQUE` (`number`),
+  CONSTRAINT `fk_biddings_has_oms` FOREIGN KEY (`oms_id`) REFERENCES `oms` (`id`)
+);
+--
+-- Table structure for table `biddings_items`
+--
+
+DROP TABLE IF EXISTS `sisprotocolo`.`biddings_items`;
+CREATE TABLE `sisprotocolo`.`biddings_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `biddings_id` int(11) NOT NULL,
+  `suppliers_id` int(11) NOT NULL,
+  `number` int(5) NOT NULL,
+  `name` varchar(256) NOT NULL,
+  `uf` varchar(4) NOT NULL,
+  `value` float(9,2) NOT NULL,
+  `total_quantity` FLOAT(9,2),
+  `active` varchar(3) NOT NULL DEFAULT 'yes',
+  PRIMARY KEY (`id`),
+  KEY `fk_biddings_items_biddings1_idx` (`biddings_id`),
+  KEY `fk_biddings_items_suppliers1_idx` (`suppliers_id`),
+  CONSTRAINT `fk_biddings_items_biddings1` FOREIGN KEY (`biddings_id`) REFERENCES `biddings` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_biddings_items_suppliers1` FOREIGN KEY (`suppliers_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE
+);
 
 --
 -- Table structure for table `biddings_items_oms`
@@ -295,7 +299,7 @@ CREATE TABLE `sisprotocolo`.`users_login` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(88) NOT NULL,
   `password` varchar(60) NOT NULL,
-  `name` varchar(13) NOT NULL,
+  `name` varchar(60) NOT NULL,
   `email` varchar(108) DEFAULT NULL,
   `level` tinyint(4) NOT NULL,
   `change_password` tinyint(4) DEFAULT '1',
@@ -328,7 +332,7 @@ CREATE TABLE `sisprotocolo`.`registers` (
   `document_number` varchar(20) NOT NULL,
   `summary_object` varchar(100) DEFAULT NULL,
   `bidding_process_number` varchar(15) DEFAULT NULL,
-  `document_value` float(9,4) NOT NULL,
+  `document_value` FLOAT(9,2) NOT NULL,
   `oms_id` int(11) NOT NULL,
   `modality_id` int(11) NOT NULL,
   `credit_id` int(11) DEFAULT NULL,

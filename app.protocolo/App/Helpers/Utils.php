@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 class Utils
@@ -36,11 +37,13 @@ class Utils
      * @param int|string $value The values to be converted
      * @return float
      */
-    public static function moneyToFloat($value): float
+    public static function moneyToFloat($value, $format = true): float
     {
         $value = str_replace(".", "", $value);
         $value = str_replace(",", ".", $value);
-        $value = $value ? number_format($value, 2) : '0.0';
+        if ($format) {
+            $value = $value ? number_format($value, 2) : '0.0';
+        }
         return floatval($value);
     }
 
@@ -87,5 +90,11 @@ class Utils
             return strlen($str) <= $lengthEnd;
         }
         return false;
+    }
+
+    public static function humanToDate($date): string
+    {
+        $date = date_create($date);
+        return date_format($date, 'Y-m-d H:i:s');
     }
 }

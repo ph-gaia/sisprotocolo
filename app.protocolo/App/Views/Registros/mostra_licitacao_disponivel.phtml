@@ -29,6 +29,7 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) {
                                 <div class="form-group">
                                     <label>Pregão</label>
                                     <select name="idList" id="idList" class="form-control">
+                                    <option value="">Selecione o Pregão</option>
                                         <?php foreach ($this->view->resultLicitacao as $value) : ?>
                                             <option value="<?= $value['id']; ?>" <?= $value['id'] == $this->getParam('idlista') ? 'selected' : '' ?>>
                                                 <?= $value['number']; ?> - <strong><?= $value['description']; ?>
@@ -85,6 +86,13 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) {
             window.location = 'registros/pregao/';
         });
     });
+    $('#idList').change(function link() {
+        var id = $('#idList').val();
+        if (id) {
+            window.location = '<?= $this->view->controller; ?>pregao/idlista/' + id;
+        }
+    });
+
     $('#om').change(function link() {
         var id = $('#idList').val();
         var selectOm = $('#om').val();

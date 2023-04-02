@@ -30,7 +30,7 @@ use App\Helpers\View;
                         <div class="alerta-item" style="display: none;">
                             <div class="alert alert-warning" role="alert">
                                 <div class="listItem"></div>
-                                <strong>Verifique a possibilidade de remanejamento de quantidade</strong><br>
+                                <strong id="alert-message"></strong><br>
                                 <button class="btn btn-success btn-item-yes">
                                     <i class="fa fa-check"></i> Sim
                                 </button>
@@ -159,7 +159,7 @@ use App\Helpers\View;
                                         </td>
                                         <td><?= $value['number']; ?></td>
                                         <td><?= View::floatToMoney($value['value']) ?></td>
-                                        <td><?= View::floatToMoney($value['quantity_available'], ''); ?></td>
+                                        <td><?= View::normalizeFloat($value['quantity_available']); ?></td>
                                         <td><?= $value['uf']; ?></td>
                                         <td><?= $value['name']; ?></td>
                                     </tr>
@@ -196,7 +196,7 @@ use App\Helpers\View;
                 var subTot = (quantity * price);
                 total += subTot;
 
-                if (qtdAvailable <= quantity) {
+                if (qtdAvailable < quantity) {
                     ItensPedidos.push({
                         "name": name,
                         "available": qtdAvailable,
@@ -206,13 +206,15 @@ use App\Helpers\View;
             }
             $(this).prop("disabled", true);
         });
-        console.log(ItensPedidos);
+
         if (ItensPedidos.length > 0) {
             for (let i = 0; i < ItensPedidos.length; i++) {
                 addItemList(ItensPedidos[i].name, ItensPedidos[i].available, ItensPedidos[i].quantity);
             }
             $('.btn-item-yes').hide()
+            $('#alert-message').text("Verifique a possibilidade de remanejamento de quantidade.")
         } else {
+            $('#alert-message').text("Deseja confirmar o registro?")
             $('.listItem').append("Todos os itens solicitados possuem saldo disponíveis para o pedido.");
         }
 
@@ -224,6 +226,7 @@ use App\Helpers\View;
     });
     $('.btn-item-no').click(function() {
         $('.alerta-item').hide()
+        $('.btn-item-yes').show()
         $('.btn-save').show()
         $('input[name="quantity[]"]').each(function() {
             $(this).prop("disabled", false);

@@ -141,6 +141,7 @@ class LicitacaoModel extends CRUD
             'description' => $this->getDescription(),
             'uasg_name' => $this->getUasgName(),
             'validate' => $this->getValidate(),
+            'oms_id' => $this->getOmsId(),
             'created_at' => date('Y-m-d')
         ];
 
@@ -166,6 +167,7 @@ class LicitacaoModel extends CRUD
             'uasg' => $this->getUasg(),
             'description' => $this->getDescription(),
             'uasg_name' => $this->getUasgName(),
+            'oms_id' => $this->getOmsId(),
             'validate' => $this->getValidate()
         ];
 
@@ -303,6 +305,7 @@ class LicitacaoModel extends CRUD
         $this->setId(filter_input(INPUT_POST, 'id') ?? time())
             ->setnumber(filter_input(INPUT_POST, 'number', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setUasg(filter_input(INPUT_POST, 'uasg', FILTER_VALIDATE_INT))
+            ->setOmsId(filter_input(INPUT_POST, 'oms_id', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setDescription(filter_input(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setUasgName(filter_input(INPUT_POST, 'uasg_name', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setValidate(filter_input(INPUT_POST, 'validate', FILTER_SANITIZE_SPECIAL_CHARS));

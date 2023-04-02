@@ -116,11 +116,13 @@ class RegistrosController extends Controller implements CtrlInterface
         $licitacao = new LicitacaoModel();
         $omModel = new Om;
         if ($this->view->userLoggedIn['level'] == 1) {
-            $this->view->resultOm = $omModel->findActive();
             $this->view->resultLicitacao = $licitacao->findActive(date("Y-m-d", time()));
         } else {
-            $this->view->resultOm[] = (new OmModel())->findById($this->view->userLoggedIn['oms_id']);
             $this->view->resultLicitacao = $licitacao->findActive(date("Y-m-d", time()), $this->view->userLoggedIn['oms_id']);
+        }
+
+        if ($this->getParam('idlista')) {
+            $this->view->resultOm = $omModel->findAllBybiddingId($this->getParam('idlista'));
         }
 
         if ($this->getParam('idlista')) {

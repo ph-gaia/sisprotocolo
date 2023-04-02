@@ -6,8 +6,8 @@ use HTR\System\ControllerAbstract as Controller;
 use HTR\Interfaces\ControllerInterface as CtrlInterface;
 use HTR\Helpers\Access\Access;
 use App\Models\LicitacaoModel;
-use App\Models\OmModel;
 use App\Config\Configurations as cfg;
+use App\Models\OmModel as Om;
 
 class LicitacaoController extends Controller implements CtrlInterface
 {
@@ -30,6 +30,8 @@ class LicitacaoController extends Controller implements CtrlInterface
     {
         $this->view->userLoggedIn = $this->access->authenticAccess([1,2]);
         $this->view->title = 'Novo Registro';
+        $omModel = new Om;
+        $this->view->resultOm = $omModel->findActive();
         $this->render('form_novo');
     }
 
@@ -39,6 +41,8 @@ class LicitacaoController extends Controller implements CtrlInterface
         $model = new LicitacaoModel();
         $this->view->title = 'Editando Registro';
         $result = $model->fetchDataToEdit((int) $this->getParam('id'));
+        $omModel = new Om;
+        $this->view->resultOm = $omModel->findActive();
         $this->view->result = $result['result'];
         $this->render('form_editar');
     }

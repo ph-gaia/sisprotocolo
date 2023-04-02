@@ -170,6 +170,28 @@ class OmModel extends CRUD
         }
     }
 
+    public function findAllBybiddingId(int $biddingId): array
+    {
+        $query = ""
+            . " SELECT "
+            . "     oms.* "
+            . " FROM "
+            . "     biddings "
+            . " INNER JOIN "
+            . "     biddings_items as items ON "
+            . "     items.biddings_id = biddings.id "
+            . " INNER JOIN "
+            . "     biddings_items_oms as items_om ON "
+            . "     items_om.biddings_items_id = items.id "
+            . " INNER JOIN "
+            . "     oms ON "
+            . "     oms.id = items_om.oms_id "
+            . " WHERE "
+            . "     biddings.id = {$biddingId} "
+            . " GROUP BY oms.id ";
+        return $this->pdo->query($query)->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     /*
      * Validação dos Dados enviados pelo formulário
      */

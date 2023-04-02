@@ -369,10 +369,15 @@ class RegistrosModel extends CRUD
         if (isset($values['quantity']) && is_array($values['quantity'])) {
             foreach ($values['quantity'] as $index => $value) {
                 $id = filter_var($values['ids'][$index], FILTER_VALIDATE_INT);
-                $result[$id] = [
-                    'quantity' => $this->validaQuantity($value),
-                    'value' => $this->validaValue($values['valueItem'][$index]),
-                ];
+                $quantidade = filter_var(Utils::normalizeFloat($value), FILTER_VALIDATE_FLOAT);
+
+                if ($id && $quantidade) {
+                    $result[$id] = [
+                        'quantity' => $this->validaQuantity($value),
+                        'value' => $this->validaValue($values['valueItem'][$index]),
+                    ];
+                }
+                
             }
         }
 
@@ -409,7 +414,7 @@ class RegistrosModel extends CRUD
         // Inicia a Validação dos dados
         if ($this->getModality() == 1) {
             $this->setDocumentValue(filter_input(INPUT_POST, 'document_value', FILTER_SANITIZE_SPECIAL_CHARS));
-            $this->setDocumentValue(Utils::moneyToFloat($this->getDocumentValue()));
+            $this->setDocumentValue(Utils::moneyToFloat($this->getDocumentValue(), false));
         }
         if ($this->getModality() == 2) {
             $this->validaItemsList();
