@@ -87,6 +87,21 @@
                         </li>
 
                         <li>
+                            <a href="#"><i class="fa fa-leaf"></i> CATMAT/CATSER<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="catmatcatser/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
+                                </li>
+                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                <li>
+                                    <a href="catmatcatser/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
+                                </li>
+                                <?php endif; ?>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
+                        <li>
                             <a href="#"><i class="fa fa-info"></i> Status<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
