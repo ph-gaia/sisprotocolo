@@ -16,7 +16,6 @@ class CatmatcatserController extends Controller implements CtrlInterface
     public function __construct($bootstrap)
     {
         parent::__construct($bootstrap);
-
         $this->view->controller = cfg::DEFAULT_URI . 'catmatcatser/';
         $this->access = new Access();
     }
@@ -24,6 +23,17 @@ class CatmatcatserController extends Controller implements CtrlInterface
     public function indexAction()
     {
         $this->verAction();
+    }
+
+    public function verAction()
+    {
+        $this->view->userLoggedIn = $this->access->authenticAccess([1, 2]);
+        $model = new CatmatcatserModel();
+        $this->view->title = 'Lista de todas as CATMAT/CATSER';
+        $model->paginator($this->getParam('pagina'));
+        $this->view->result = $model->getResultPaginator();
+        $this->view->btn = $model->getNavePaginator();
+        $this->render('home');
     }
 
     public function novoAction()
@@ -47,17 +57,6 @@ class CatmatcatserController extends Controller implements CtrlInterface
         $this->view->userLoggedIn = $this->access->authenticAccess([1,2]);
         $model = new CatmatcatserModel();
         $model->remover($this->getParam('id'));
-    }
-
-    public function verAction()
-    {
-        $this->view->userLoggedIn = $this->access->authenticAccess([1, 2]);
-        $model = new CatmatcatserModel();
-        $this->view->title = 'Lista de todas as CATMAT/CATSER';
-        $model->paginator($this->getParam('pagina'));
-        $this->view->result = $model->getResultPaginator();
-        $this->view->btn = $model->getNavePaginator();
-        $this->render('home');
     }
 
     public function registraAction()

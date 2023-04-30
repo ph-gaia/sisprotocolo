@@ -6,7 +6,137 @@
                         </li>
 
                         <li>
-                            <a href="#"><i class="fa fa-history"></i> Registros<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-history"></i> REGISTRO<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                <li>
+                                    <a href="#"><i class="fa fa-university"></i> OM<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="om/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
+                                        </li>
+                                        <li>
+                                            <a href="om/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
+                                        </li>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+                                <?php endif; ?>
+
+                                <li>
+                                    <a href="#"><i class="fa fa-users"></i> Usuário<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="acesso/"><i class="fa fa-cogs fa-fw"></i> Gerenciar Usuários</a>
+                                        </li>
+                                        <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                        <li>
+                                            <a href="acesso/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
+                                        </li>
+                                        <?php endif; ?>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+
+                                <li>
+                                    <a href="#"><i class="fa fa-suitcase fa-fw"></i> Fornecedor<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="fornecedor/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
+                                        </li>
+                                        <li>
+                                            <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                            <a class="collapse-item" href="fornecedor/novo/">
+                                                <i class="fa fa-plus-circle"></i> Novo Registro
+                                            </a>
+                                            <?php endif; ?>
+                                        </li>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+
+                                <li>
+                                    <a href="#"><i class="fa fa-leaf"></i> Natureza de Despesa<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="naturezaDespesa/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
+                                        </li>
+                                        <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                        <li>
+                                            <a href="naturezaDespesa/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
+                                        </li>
+                                        <?php endif; ?>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+
+                                <li>
+                                    <a href="#"><i class="fa fa-book fa-fw"></i> CNAE<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="cnae/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
+                                        </li>
+                                        <li>
+                                            <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                            <a class="collapse-item" href="cnae/novo/">
+                                                <i class="fa fa-plus-circle"></i> Novo Registro
+                                            </a>
+                                            <?php endif; ?>
+                                        </li>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+
+                                <li>
+                                    <a href="#"><i class="fa fa-leaf"></i> CATMAT/CATSER<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="catmatcatser/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
+                                        </li>
+                                        <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                        <li>
+                                            <a href="catmatcatser/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
+                                        </li>
+                                        <?php endif; ?>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+
+                                <li>
+                                    <a href="#"><i class="fa fa-info"></i> Status<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="status/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
+                                        </li>
+                                        <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                        <li>
+                                            <a href="status/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
+                                        </li>
+                                        <?php endif; ?>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+
+                                <li>
+                                    <a href="#"><i class="fa fa-list"></i> Processo Licitatório<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="licitacao/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
+                                        </li>
+                                        <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                        <li>
+                                            <a href="licitacao/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
+                                        </li>
+                                        <?php endif; ?>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
+                        <li>
+                            <a href="#"><i class="fa fa-history"></i> SOLEMP<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="registros/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
@@ -23,7 +153,7 @@
                             <!-- /.nav-second-level -->
                         </li>
 
-                        <li>
+                        <!--<li>
                             <a href="#"><i class="fa fa-credit-card"></i> Controle de Dispensa de Licitação<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
@@ -41,7 +171,22 @@
                         </li>
 
                         <li>
-                            <a href="#"><i class="fa fa-credit-card"></i> Relatórios<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-list"></i> ACOMPANHAMENTO<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="acompanhamento/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
+                                </li>
+                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
+                                <li>
+                                    <a href="acompanhamento/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
+                                </li>
+                                <?php endif; ?>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
+                        <li>
+                            <a href="#"><i class="fa fa-credit-card"></i> RELATÓRIO<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                                 <li>
@@ -51,129 +196,7 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-
-                        <li>
-                            <a href="#"><i class="fa fa-suitcase fa-fw"></i> Fornecedores<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="fornecedor/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
-                                </li>
-                                <li>
-                                    <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
-                                    <a class="collapse-item" href="fornecedor/novo/">
-                                        <i class="fa fa-plus-circle"></i> Novo Registro
-                                    </a>
-                                    <?php endif; ?>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-                        <li>
-                            <a href="#"><i class="fa fa-book fa-fw"></i> CNAE<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="cnae/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
-                                </li>
-                                <li>
-                                    <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
-                                    <a class="collapse-item" href="cnae/novo/">
-                                        <i class="fa fa-plus-circle"></i> Novo Registro
-                                    </a>
-                                    <?php endif; ?>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-                        <li>
-                            <a href="#"><i class="fa fa-leaf"></i> CATMAT/CATSER<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="catmatcatser/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
-                                </li>
-                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
-                                <li>
-                                    <a href="catmatcatser/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
-                                </li>
-                                <?php endif; ?>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-                        <li>
-                            <a href="#"><i class="fa fa-info"></i> Status<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="status/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
-                                </li>
-                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
-                                <li>
-                                    <a href="status/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
-                                </li>
-                                <?php endif; ?>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-                        <li>
-                            <a href="#"><i class="fa fa-leaf"></i> Natureza de Despesa<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="naturezaDespesa/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
-                                </li>
-                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
-                                <li>
-                                    <a href="naturezaDespesa/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
-                                </li>
-                                <?php endif; ?>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-                        <li>
-                            <a href="#"><i class="fa fa-list"></i> Licitações<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="licitacao/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
-                                </li>
-                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
-                                <li>
-                                    <a href="licitacao/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
-                                </li>
-                                <?php endif; ?>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
-                        <li>
-                            <a href="#"><i class="fa fa-university"></i> OM<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="om/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
-                                </li>
-                                <li>
-                                    <a href="om/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <?php endif; ?>
-                        <li>
-                            <a href="#"><i class="fa fa-users"></i> Usuários<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="acesso/"><i class="fa fa-cogs fa-fw"></i> Gerenciar Usuários</a>
-                                </li>
-                                <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
-                                <li>
-                                    <a href="acesso/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
-                                </li>
-                                <?php endif; ?>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
+                        
                         <li>
                             <a href="acesso/logout/"><i class="fa fa-power-off"></i> Sair</a>
                         </li>

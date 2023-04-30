@@ -14,7 +14,7 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <i class="fa fa-table fa-fw"></i> Formulário de Edição
+                        <i class="fa fa-table fa-fw"></i> Formulário de Edição de OM
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
@@ -47,6 +47,20 @@
                                         required>
                                     <p class="help-block">Ex.: QRTDIS; CITBEL.</p>
                                 </div>
+
+                                <div class="form-group">
+                                    <label>UASG</label>
+                                    <input type="text"
+                                        id="uasg"
+                                        name="uasg"
+                                        placeholder="UASG da OM"
+                                        class="form-control"
+                                        maxlength="6"
+                                        value="<?= $this->view->result['uasg']; ?>"
+                                        required>
+                                    <p class="help-block">Ex.: 771100.</p>
+                                </div>
+
 
                                 <div class="form-group">
                                     <br>

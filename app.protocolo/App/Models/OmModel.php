@@ -111,6 +111,7 @@ class OmModel extends CRUD
             'id' => $this->getId(),
             'name' => $this->getNome(),
             'naval_indicative' => $this->getIndicativoNaval(),
+            'uasg' => $this->getUasg(),
             'isActive' => 1
         ];
 
@@ -132,6 +133,7 @@ class OmModel extends CRUD
         $dados = [
             'name' => $this->getNome(),
             'naval_indicative' => $this->getIndicativoNaval(),
+            'uasg' => $this->getUasg(),
         ];
 
         if (parent::editar($dados, $this->getId())) {
@@ -158,10 +160,11 @@ class OmModel extends CRUD
      */
     private function notDuplicate()
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->entidade} WHERE id != ? AND naval_indicative = ? AND isActive = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->entidade} WHERE id != ? AND naval_indicative = ? AND uasg = ? AND isActive = ?");
         $stmt->bindValue(1, $this->getId());
         $stmt->bindValue(2, $this->getIndicativoNaval());
-        $stmt->bindValue(3, '1');
+        $stmt->bindValue(3, $this->getUasg());
+        $stmt->bindValue(4, '1');
         $stmt->execute();
         if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
             msg::showMsg('Já existe um registro com este(s) caractere(s) no campo '
@@ -200,12 +203,14 @@ class OmModel extends CRUD
         // Seta todos os valores
         $this->setId(filter_input(INPUT_POST, 'id'))
             ->setNome(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setIndicativoNaval(filter_input(INPUT_POST, 'naval_indicative'));
+            ->setIndicativoNaval(filter_input(INPUT_POST, 'naval_indicative'))
+            ->setUasg(filter_input(INPUT_POST, 'uasg', FILTER_SANITIZE_SPECIAL_CHARS));
 
         // Inicia a Validação dos dados
         $this->validateId();
         $this->validaNome();
         $this->validaIndicativoNaval();
+        $this->validaUasg();
     }
 
     private function setId($value)
@@ -241,6 +246,17 @@ class OmModel extends CRUD
             msg::showMsg('O campo Indicativo Naval deve ser preenchido '
                 . 'corretamente <strong>com 6 caracteres</strong>.'
                 . '<script>focusOn("naval_indicative");</script>', 'danger');
+        }
+        return $this;
+    }
+
+    private function validaUasg()
+    {
+        $value = v::stringType()->notEmpty()->length(1, 6)->validate($this->getUasg());
+        if (!$value) {
+            msg::showMsg('O campo UASG deve ser preenchido '
+                . 'corretamente <strong>com 6 caracteres</strong>.'
+                . '<script>focusOn("uasg");</script>', 'danger');
         }
         return $this;
     }
