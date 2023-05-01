@@ -52,7 +52,9 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) use ($bus
                         <tr>
                             <th>Nome</th>
                             <th>CNPJ/CPF</th>
-                            <th>Dados</th>
+                            <th>Telefone de Contato</th>
+                            <th>E-mail</th>
+                            <th>Endereço</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -61,7 +63,9 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) use ($bus
                             <tr>
                                 <td><?= View::limitString($value['name'], 35); ?></td>
                                 <td><?= $value['cnpj']; ?></td>
-                                <td><?= View::limitString($value['details'], 35); ?></td>
+                                <td><?= View::limitString($value['telcontato'], 15); ?></td>
+                                <td><?= View::limitString($value['email'], 20); ?></td>
+                                <td><?= View::limitString($value['endereco'], 40); ?></td>
                                 <td>
                                     <a href="<?= $this->view->controller; ?>editar/id/<?= $value['id']; ?>" class="btn btn-success btn-sm">
                                         <i class="fa fa-edit"></i>

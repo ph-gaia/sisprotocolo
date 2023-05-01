@@ -10,7 +10,7 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <i class="fa fa-table fa-fw"></i> Formulário de Cadastro
+                        <i class="fa fa-table fa-fw"></i> Formulário de Edição
                     </div>
                     <div class="panel-body">
                         <div id="resultado"></div>
@@ -46,14 +46,36 @@
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Dados da Empresa</label>
+                                        <label>Telefone de contato</label>
                                         <textarea
-                                            name="details"
-                                            id="details"
-                                            placeholder="Dados da Empresa do Fornecedor"
+                                            name="telcontato"
+                                            id="telcontato"
+                                            placeholder="Telefone de contato da empresa"
                                             class="form-control"
-                                            required><?= $this->view->result['details']; ?></textarea>
-                                        <p class="help-block">Endereço, Contato...</p>
+                                            required><?= $this->view->result['telcontato']; ?></textarea>
+                                        <p class="help-block">Telefone de contato</p>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>E-mail</label>
+                                        <textarea
+                                            name="email"
+                                            id="email"
+                                            placeholder="E-mail da empresa"
+                                            class="form-control"
+                                            required><?= $this->view->result['email']; ?></textarea>
+                                        <p class="help-block">E-mail da empresa</p>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Endereço</label>
+                                        <textarea
+                                            name="endereco"
+                                            id="endereco"
+                                            placeholder="Endereço da empresa"
+                                            class="form-control"
+                                            required><?= $this->view->result['endereco']; ?></textarea>
+                                        <p class="help-block">Endereço da empresa</p>
                                     </div>
 
                                     <div class="form-group">

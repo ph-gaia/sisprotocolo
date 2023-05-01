@@ -71,7 +71,9 @@ class FornecedorModel extends CRUD
         $dados = [
             'name' => $this->getName(),
             'cnpj' => $this->getCnpj(),
-            'details' => $this->getDetails()
+            'telcontato' => $this->getTelcontato(),
+            'email' => $this->getEmail(),
+            'endereco' => $this->getEndereco()
         ];
         if (parent::novo($dados)) {
             msg::showMsg('111', 'success');
@@ -88,7 +90,9 @@ class FornecedorModel extends CRUD
         $dados = [
             'name' => $this->getName(),
             'cnpj' => $this->getCnpj(),
-            'details' => $this->getDetails()
+            'telcontato' => $this->getTelcontato(),
+            'email' => $this->getEmail(),
+            'endereco' => $this->getEndereco()
         ];
 
         if (parent::editar($dados, $this->getId())) {
@@ -145,12 +149,16 @@ class FornecedorModel extends CRUD
         $this->setId(filter_input(INPUT_POST, 'id') ?? time())
             ->setCnpj(filter_input(INPUT_POST, 'cnpj', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setName(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setDetails(filter_input(INPUT_POST, 'details', FILTER_SANITIZE_SPECIAL_CHARS));
+            ->setTelcontato(filter_input(INPUT_POST, 'telcontato', FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setEmail(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setEndereco(filter_input(INPUT_POST, 'endereco', FILTER_SANITIZE_SPECIAL_CHARS));
 
         // Inicia a Validação dos dados
         $this->validaId()
             ->validaName()
-            ->validaDetails();
+            ->validaTelcontato()
+            ->validaEmail()
+            ->validaEndereco();
 
         if (strlen($this->getCnpj()) <= 14) {
             $this->validaCpf();
@@ -199,12 +207,32 @@ class FornecedorModel extends CRUD
         return $this;
     }
 
-    private function validaDetails()
+    private function validaTelcontato()
     {
-        $value = v::stringType()->validate($this->getDetails());
+        $value = v::stringType()->validate($this->getTelcontato());
         if (!$value) {
-            msg::showMsg('O campo Dados deve ser preenchido corretamente.'
-                . '<script>focusOn("datails");</script>', 'danger');
+            msg::showMsg('O campo telefone de contato deve ser preenchido corretamente.'
+                . '<script>focusOn("telcontato");</script>', 'danger');
+        }
+        return $this;
+    }
+
+    private function validaEmail()
+    {
+        $value = v::stringType()->validate($this->getEmail());
+        if (!$value) {
+            msg::showMsg('O campo e-mail deve ser preenchido corretamente.'
+                . '<script>focusOn("email");</script>', 'danger');
+        }
+        return $this;
+    }
+
+    private function validaEndereco()
+    {
+        $value = v::stringType()->validate($this->getEndereco());
+        if (!$value) {
+            msg::showMsg('O campo endereço deve ser preenchido corretamente.'
+                . '<script>focusOn("endereco");</script>', 'danger');
         }
         return $this;
     }
