@@ -67,7 +67,17 @@
                                             if ($this->view->result['level'] == 2) {
                                                 echo 'selected';
                                             }
-                                            ?>>2-Normal</option>
+                                            ?>>2-OMAp</option>
+                                        <option value="3" <?php
+                                            if ($this->view->result['level'] == 3) {
+                                                echo 'selected';
+                                            }
+                                            ?>>3-Cadastrador</option>
+                                        <option value="4" <?php
+                                            if ($this->view->result['level'] == 4) {
+                                                echo 'selected';
+                                            }
+                                            ?>>4-Operador</option>
                                     </select>
                                 </div>
 
