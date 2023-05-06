@@ -7,89 +7,83 @@ use HTR\Helpers\Mensagem\Mensagem as msg;
 use HTR\Helpers\Paginator\Paginator;
 use Respect\Validation\Validator as v;
 use App\Config\Configurations as cfg;
+use App\Helpers\Utils;
+use App\Helpers\View;
 
 class AcompanhamentoModel extends CRUD
 {
-
     protected $entidade = 'acompanhamento';
+    
+    private $resultPaginator;
+    private $navePaginator;
 
     /**
-     * @var \HTR\Helpers\Paginator\Paginator
+     * @return array Todos os resultados exceto os da lixeira
      */
-    protected $paginator;
-
     public function findActive()
     {
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->entidade} "
+            . "WHERE isActive = :isActive ORDER BY nup ASC;");
+        $stmt->bindValue(':isActive', 1);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /*
+     * Método uaso para retornar todos os dados da tabela.
+     */
+    public function returnAll()
+    {
+        /*
+         * Método padrão do sistema usado para retornar todos os dados da tabela
+         */
         return $this->findAll();
     }
 
-    /*public function findByCnpj($cnpj)
+    public function paginator($pagina)
     {
-        $query = "SELECT * FROM {$this->entidade} WHERE cnpj LIKE '%$cnpj%'";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
-
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
-    }*/
-
-    public function paginator($pagina, $busca = null)
-    {
+        /*
+         * Preparando as diretrizes da consulta
+         */
         $dados = [
+            'pdo' => $this->pdo,
             'entidade' => $this->entidade,
             'pagina' => $pagina,
-            'maxResult' => 100,
-            'orderBy' => 'nup ASC'
+            'maxResult' => 20,
+            // USAR QUANDO FOR PARA DEMONSTRAR O RESULTADO DE UMA PESQUISA
+            'orderBy' => 'number ASC',
+            'where' => 'isActive = ?',
+            'bindValue' => [0 => 1]
         ];
 
-        if ($busca) {
-            $dados['where'] = " "
-                . " acompanhamento.nup LIKE :seach"
-                . " OR acompanhamento.number LIKE :seach";
-            $dados['bindValue'][':seach'] = '%' . $busca . '%';
-        }
-
-        $this->paginator = new Paginator($dados);
+        // Instacia o Helper que auxilia na paginação de páginas
+        $paginator = new Paginator($dados);
+        // Resultado da consulta
+        $this->resultPaginator =  $paginator->getResultado();
+        // Links para criação do menu de navegação da paginação @return array
+        $this->navePaginator = $paginator->getNaveBtn();
     }
 
-    public function getResultadoPaginator()
+    // Acessivel para o Controller coletar os resultados
+    public function getResultPaginator()
     {
-        return $this->paginator->getResultado();
+        return $this->resultPaginator;
     }
-
+    // Acessivel para o Controller coletar os links da paginação
     public function getNavePaginator()
     {
-        return $this->paginator->getNaveBtn();
+        return $this->navePaginator;
     }
 
+    /*
+     * Método responsável por salvar os registros
+     */
     public function novoRegistro()
     {
         // Valida dados
-        $this->validaAll();
-        // Verifica se há registro igual
-        $this->evitarDuplicidade();
-
-        $dados = [
-            'nup' => $this->getNup(),
-            'modality_id' => $this->getModality(),
-            'number' => $this->getNumber(),
-            'uasg_id' => $this->getUasg(),
-            'objeto' => $this->getObjeto(),
-            'valor_estimado' => $this->getValorestimado(),
-            'status-id' => $this->getStatus(),
-            'observation' => $this->getObservation(),
-            'created_at' => date('Y-m-d H:i:s')
-        ];
-        if (parent::novo($dados)) {
-            msg::showMsg('111', 'success');
-        }
-    }
-
-    public function editarRegistro()
-    {
-        // Valida dados
-        $this->validaAll();
-        // Verifica se há registro igual
-        $this->evitarDuplicidade();
+        $this->validateAll();
+        // Verifica se há registro igual e evita a duplicação
+        $this->notDuplicate();
 
         $dados = [
             'nup' => $this->getNup(),
@@ -99,7 +93,35 @@ class AcompanhamentoModel extends CRUD
             'objeto' => $this->getObjeto(),
             'valor_estimado' => $this->getValorestimado(),
             'status_id' => $this->getStatus(),
-            'observation' => $this->getObservation()
+            'observation' => $this->getObservation(),
+            'created_at' => date('Y-m-d H:i:s'),
+            'isActive' => 1,
+        ];
+
+        if (parent::novo($dados)) {
+            msg::showMsg('111', 'success');
+        }
+    }
+
+    /*
+     * Método responsável por alterar os registros
+     */
+    public function editarRegistro()
+    {
+        // Valida dados
+        $this->validateAll();
+        // Verifica se há registro igual e evita a duplicação
+        $this->notDuplicate();
+
+        $dados = [
+            'nup' => $this->getNup(),
+            'modality_id' => $this->getModality(),
+            'number' => $this->getNumber(),
+            'uasg_id' => $this->getUasg(),
+            'objeto' => $this->getObjeto(),
+            'valor_estimado' => $this->getValorestimado(),
+            'status_id' => $this->getStatus(),
+            'observation' => $this->getObservation()            
         ];
 
         if (parent::editar($dados, $this->getId())) {
@@ -107,71 +129,85 @@ class AcompanhamentoModel extends CRUD
         }
     }
 
-    public function removerRegistro($id)
+    /*
+     * Método responsável por remover os registros do sistema
+     */
+    public function remover($id)
     {
-        if (parent::remover($id)) {
+        $dados = [
+            'isActive' => 0
+        ];
+
+        if (parent::editar($dados, $id)) {
             header('Location: ' . cfg::DEFAULT_URI . 'acompanhamento/ver/');
         }
     }
 
-    private function evitarDuplicidade()
+    /*
+     * Evita a duplicidade de registros no sistema
+     */
+    private function notDuplicate()
     {
-        /// Evita a duplicidade de registros
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->entidade} WHERE id != ? AND nup = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->entidade} WHERE id != ? AND nup = ? AND isActive = ?");
         $stmt->bindValue(1, $this->getId());
         $stmt->bindValue(2, $this->getNup());
+        $stmt->bindValue(3, '1');
         $stmt->execute();
         if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
-            msg::showMsg('Já existe um registro com este NUP.<script>focusOn("nup")</script>', 'warning');
-        }
-
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->entidade} WHERE id != ? AND objeto = ?");
-        $stmt->bindValue(1, $this->getId());
-        $stmt->bindValue(2, $this->getObjeto());
-        $stmt->execute();
-        if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
-            msg::showMsg('Já existe um registro com este objeto.<script>focusOn("objeto")</script>', 'warning');
+            msg::showMsg('Já existe um registro com este(s) caractere(s) no campo '
+                . '<strong>Sigla</strong>.'
+                . '<script>focusOn("initials")</script>', 'warning');
         }
     }
 
-    private function validaAll()
+    /*
+     * Validação dos Dados enviados pelo formulário
+     */
+    private function validateAll()
     {
         // Seta todos os valores
-        $this->setId(filter_input(INPUT_POST, 'id') ?? time())
-            ->setNup(filter_input(INPUT_POST, 'nup', FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setModality(filter_input(INPUT_POST, 'modality_id', FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setNumber(filter_input(INPUT_POST, 'number', FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setUasg(filter_input(INPUT_POST, 'uasg_id', FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setObjeto(filter_input(INPUT_POST, 'objeto', FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setValorestimado(filter_input(INPUT_POST, 'valor_estimado', FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setStatus(filter_input(INPUT_POST, 'status_id', FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setObservation(filter_input(INPUT_POST, 'observation', FILTER_SANITIZE_SPECIAL_CHARS));
+        $this->setId(filter_input(INPUT_POST, 'id'));
+        $this->setNup(filter_input(INPUT_POST, 'nup'));
+        $this->setModality(filter_input(INPUT_POST, 'modality_id'));
+        $this->setNumber(filter_input(INPUT_POST, 'number'));
+        $this->setUasg(filter_input(INPUT_POST, 'uasg_id'));
+        $this->setObjeto(filter_input(INPUT_POST, 'objeto'));
+        $this->setValorestimado(filter_input(INPUT_POST, 'valor_estimado'));
+        $this->setStatus(filter_input(INPUT_POST, 'status_id'));
+        $this->setObservation(filter_input(INPUT_POST, 'observation'));
 
         // Inicia a Validação dos dados
-        $this->validaId()
-            ->validaNup()
-            ->validaModality()
-            ->validaNumber()
-            ->validaUasg()
-            ->validaObjeto()
-            ->validaValorestimado()
-            ->validaStatus()
-            ->validaObservation();
+        $this->validateId();
+        $this->validateNup();
+        $this->validateModality();
+        $this->validateNumber();
+        $this->validateUasg();
+        $this->validateObjeto();
+        $this->validateValorestimado();
+        $this->validateStatus();
+        $this->validateObservation();
     }
 
-    // Validação
-    private function validaId()
+    private function setId($value)
+    {
+        $this->id = $value ?: time();
+        return $this;
+    }
+
+    private function validateId()
     {
         $value = v::intVal()->validate($this->getId());
         if (!$value) {
-            msg::showMsg('O campo ID deve ser um número inteiro válido.', 'danger');
+            msg::showMsg('O campo id deve ser preenchido corretamente.'
+                . '<script>focusOn("id");</script>', 'danger');
         }
         return $this;
     }
 
-    private function validaNup()
+
+    private function validateNup()
     {
-        $value = v::stringType()->notEmpty()->length(1, 90)->validate($this->getNup());
+        $value = v::stringType()->notEmpty()->length(1, 20)->validate($this->getNup());
         if (!$value) {
             msg::showMsg('O campo NUP deve ser preenchido corretamente.'
                 . '<script>focusOn("nup");</script>', 'danger');
@@ -179,9 +215,9 @@ class AcompanhamentoModel extends CRUD
         return $this;
     }
 
-    private function validaModality()
+    private function validateModality()
     {
-        $value = v::stringType()->notEmpty()->length(1, 90)->validate($this->getModality());
+        $value = v::intVal()->validate($this->getModality());
         if (!$value) {
             msg::showMsg('O campo modalidade deve ser preenchido corretamente.'
                 . '<script>focusOn("modality_id");</script>', 'danger');
@@ -189,9 +225,9 @@ class AcompanhamentoModel extends CRUD
         return $this;
     }
 
-    private function validaNumber()
+    private function validateNumber()
     {
-        $value = v::stringType()->notEmpty()->validate($this->getNumber());
+        $value = v::stringType()->notEmpty()->length(1, 20)->validate($this->getNumber());
         if (!$value) {
             msg::showMsg('O campo número deve ser preenchido corretamente.'
                 . '<script>focusOn("number");</script>', 'danger');
@@ -199,9 +235,9 @@ class AcompanhamentoModel extends CRUD
         return $this;
     }
 
-    private function validaUasg()
+    private function validateUasg()
     {
-        $value = v::stringType()->notEmpty()->length(1, 90)->validate($this->getUasg());
+        $value = v::intVal()->validate($this->getUasg());
         if (!$value) {
             msg::showMsg('O campo UASG deve ser preenchido corretamente.'
                 . '<script>focusOn("uasg_id");</script>', 'danger');
@@ -209,9 +245,9 @@ class AcompanhamentoModel extends CRUD
         return $this;
     }
 
-    private function validaObjeto()
+    private function validateObjeto()
     {
-        $value = v::stringType()->notEmpty()->length(1, 90)->validate($this->getObjeto());
+        $value = v::stringType()->notEmpty()->length(1, 150)->validate($this->getObjeto());
         if (!$value) {
             msg::showMsg('O campo objeto deve ser preenchido corretamente.'
                 . '<script>focusOn("objeto");</script>', 'danger');
@@ -219,29 +255,29 @@ class AcompanhamentoModel extends CRUD
         return $this;
     }
 
-    private function validaValorestimado()
+    private function validateValorestimado()
     {
-        $value = v::stringType()->notEmpty()->length(1, 90)->validate($this->getValorestimado());
+        $value = v::floatVal()->notEmpty()->validate($this->getValorestimado());
         if (!$value) {
             msg::showMsg('O campo valor estimado deve ser preenchido corretamente.'
                 . '<script>focusOn("valor_estimado");</script>', 'danger');
         }
         return $this;
     }
-
-    private function validaStatus()
+    
+    private function validateStatus()
     {
-        $value = v::stringType()->notEmpty()->length(1, 90)->validate($this->getStatus());
+        $value = v::stringType()->notEmpty()->length(1, 20)->validate($this->getStatus());
         if (!$value) {
-            msg::showMsg('O campo status deve ser preenchido corretamente.'
+            msg::showMsg('O campo Status deve ser preenchido corretamente.'
                 . '<script>focusOn("status_id");</script>', 'danger');
         }
         return $this;
     }
 
-    private function validaObservation()
+    private function validateObservation()
     {
-        $value = v::stringType()->notEmpty()->length(1, 90)->validate($this->getObservation());
+        $value = v::stringType()->notEmpty()->length(1, 150)->validate($this->getObservation());
         if (!$value) {
             msg::showMsg('O campo observação deve ser preenchido corretamente.'
                 . '<script>focusOn("observation");</script>', 'danger');
