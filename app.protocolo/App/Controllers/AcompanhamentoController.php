@@ -81,7 +81,7 @@ class AcompanhamentoController extends Controller implements CtrlInterface
         // instancia o Model Default deste controller
         $defaultModel = new $this->modelPath;
         // requisita a inserção dos dados
-        $defaultModel->novoRegistro($this->view->userLoggedIn);
+        $defaultModel->novoRegistro();
     }
 
     public function alteraAction()

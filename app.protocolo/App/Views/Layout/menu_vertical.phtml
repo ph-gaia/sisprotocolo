@@ -151,6 +151,9 @@
                                     <li>
                                         <a href="registros/pregao/"><i class="fa fa-gavel fa-fw"></i> Pregão Eletrônico</a>
                                     </li>
+                                    <li>
+                                        <a href="acompanhamento/novo/"><i class="fa fa-list"></i> Outras modalidades</a>
+                                    </li>
                                     <?php endif; ?>
                                 </ul>
                             <?php endif ?>
@@ -171,23 +174,6 @@
                                     <?php endif; ?>
                                 </li>
                             </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-                        <li>
-                            <?php if (in_array($this->view->userLoggedIn['level'], [1,2,4])) : ?>
-                                <a href="#"><i class="fa fa-list"></i> ACOMPANHAMENTO<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li>
-                                        <a href="acompanhamento/"><i class="fa fa-cogs fa-fw"></i> Gerenciar</a>
-                                    </li>
-                                    <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
-                                    <li>
-                                        <a href="acompanhamento/novo/"><i class="fa fa-plus-circle fa-fw"></i> Novo Registro</a>
-                                    </li>
-                                    <?php endif; ?>
-                                </ul>
-                            <?php endif ?>
                             <!-- /.nav-second-level -->
                         </li>
 

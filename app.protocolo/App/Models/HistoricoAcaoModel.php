@@ -14,11 +14,11 @@ class HistoricoAcaoModel extends CRUD
 
     /**
      * Process the historic request status.
-     * @param int $id Identification of Solicitação
-     * @param int $userId Identification of Usuários
-     * @param string $status The status to be executed
+     * @param $id Identification of Solicitação
+     * @param $userId Identification of Usuários
+     * @param $status The status to be executed
      */
-    public function novoRegistro(int $requestId, int $userId, string $status, string $observation = null, string $document)
+    public function novoRegistro(int $requestId, int $userId, $status, $observation = null, $document)
     {
         $date = new \DateTime('now', new DateTimeZone('America/Sao_Paulo'));
         $result = (new AcessoModel())->findById($userId);

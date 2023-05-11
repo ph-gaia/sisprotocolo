@@ -348,6 +348,7 @@ CREATE TABLE `sisprotocolo`.`registers` (
   `status_id` int(11) NOT NULL,
   `number_arp` varchar(50) DEFAULT NULL,
   `item_arp` varchar(50) DEFAULT NULL,
+  `nup` VARCHAR(60) NULL DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `isActive` tinyint(4) DEFAULT NULL,

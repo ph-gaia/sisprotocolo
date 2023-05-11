@@ -56,7 +56,7 @@ class RegistrosModel extends CRUD
             . " nature_expense.name AS natureExpense, "
             . " credit.credit_note AS credit "
             . " FROM {$this->entidade} AS sol "
-            . " INNER JOIN suppliers AS supp ON supp.id = sol.suppliers_id "
+            . " LEFT JOIN suppliers AS supp ON supp.id = sol.suppliers_id "
             . " INNER JOIN oms ON oms.id = sol.oms_id "
             . " INNER JOIN modality ON modality.id = sol.modality_id"
             . " LEFT JOIN nature_expense ON nature_expense.id = sol.nature_expense_id"

@@ -12,8 +12,8 @@ use App\Helpers\View;
 
 class AcompanhamentoModel extends CRUD
 {
-    protected $entidade = 'acompanhamento';
-    
+    protected $entidade = 'registers';
+
     private $resultPaginator;
     private $navePaginator;
 
@@ -86,12 +86,13 @@ class AcompanhamentoModel extends CRUD
         $this->notDuplicate();
 
         $dados = [
+            'suppliers_id' => null,
             'nup' => $this->getNup(),
             'modality_id' => $this->getModality(),
-            'number' => $this->getNumber(),
-            'uasg_id' => $this->getUasg(),
-            'objeto' => $this->getObjeto(),
-            'valor_estimado' => $this->getValorestimado(),
+            'document_number' => $this->getNumber(),
+            'oms_id' => $this->getUasg(),
+            'summary_object' => $this->getObjeto(),
+            'document_value' => $this->getValorestimado(),
             'status_id' => $this->getStatus(),
             'observation' => $this->getObservation(),
             'created_at' => date('Y-m-d H:i:s'),
@@ -114,14 +115,15 @@ class AcompanhamentoModel extends CRUD
         $this->notDuplicate();
 
         $dados = [
+            'suppliers_id' => null,
             'nup' => $this->getNup(),
             'modality_id' => $this->getModality(),
-            'number' => $this->getNumber(),
-            'uasg_id' => $this->getUasg(),
-            'objeto' => $this->getObjeto(),
-            'valor_estimado' => $this->getValorestimado(),
+            'document_number' => $this->getNumber(),
+            'oms_id' => $this->getUasg(),
+            'summary_object' => $this->getObjeto(),
+            'document_value' => $this->getValorestimado(),
             'status_id' => $this->getStatus(),
-            'observation' => $this->getObservation()            
+            'observation' => $this->getObservation()
         ];
 
         if (parent::editar($dados, $this->getId())) {
@@ -175,6 +177,9 @@ class AcompanhamentoModel extends CRUD
         $this->setValorestimado(filter_input(INPUT_POST, 'valor_estimado'));
         $this->setStatus(filter_input(INPUT_POST, 'status_id'));
         $this->setObservation(filter_input(INPUT_POST, 'observation'));
+
+        $this->setValorestimado(filter_input(INPUT_POST, 'valor_estimado', FILTER_SANITIZE_SPECIAL_CHARS));
+        $this->setValorestimado(Utils::moneyToFloat($this->getValorestimado(), false));
 
         // Inicia a Validação dos dados
         $this->validateId();
@@ -264,7 +269,7 @@ class AcompanhamentoModel extends CRUD
         }
         return $this;
     }
-    
+
     private function validateStatus()
     {
         $value = v::stringType()->notEmpty()->length(1, 20)->validate($this->getStatus());

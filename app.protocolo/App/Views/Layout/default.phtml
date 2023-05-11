@@ -120,6 +120,9 @@ $cfg = cfg::htrFileConfigs();
             $('#value').mask("#.##0,00", {
                 reverse: true
             });
+            $('#valor_estimado').mask("#.##0,00", {
+                reverse: true
+            });
             $('#number').mask("AAAAA/0000");
             $('#form').submit(function() {
                 var dados = $(this).serialize();
