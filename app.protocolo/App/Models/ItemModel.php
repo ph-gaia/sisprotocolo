@@ -100,6 +100,8 @@ class ItemModel extends CRUD
             'number' => $this->getNumber(),
             'name' => $this->getName(),
             'uf' => $this->getUf(),
+            'codpdm_items' => $this->getCodpdmitems(),
+            'coditem_items' => $this->getCoditemitems(),
             'value' => $this->getValue(),
             'total_quantity' => $this->getTotalQuantity(),
             'active' => $this->getActive()
@@ -140,6 +142,8 @@ class ItemModel extends CRUD
             'number' => $this->getNumber(),
             'name' => $this->getName(),
             'uf' => $this->getUf(),
+            'codpdm_items' => $this->getCodpdmitems(),
+            'coditem_items' => $this->getCoditemitems(),
             'value' => $this->getValue(),
             'total_quantity' => $this->getTotalQuantity(),
             'active' => $this->getActive()
@@ -312,15 +316,17 @@ class ItemModel extends CRUD
             ->setIngredientsId(filter_input(INPUT_POST, 'ingredients_id', FILTER_VALIDATE_INT))
             ->setName(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setUf(filter_input(INPUT_POST, 'uf', FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setCodpdmitems(filter_input(INPUT_POST, 'codpdm_items', FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setCoditemitems(filter_input(INPUT_POST, 'coditem_items', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setValue(filter_input(INPUT_POST, 'value', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setTotalQuantity(filter_input(INPUT_POST, 'total_quantity', FILTER_SANITIZE_SPECIAL_CHARS));
 
         $this->setValue(Utils::moneyToFloat($this->getValue()));
-        $this->setTotalQuantity(Utils::moneyToFloat($this->getTotalQuantity()));
+        $this->setTotalQuantity(Utils::normalizeFloat($this->getTotalQuantity()));
         // Inicia a Validação dos dados
         $this->validaId()
             ->validaBiddingsId()
-            ->validaSuppliersId()
+            ->validaSuppliersId()            
             ->validaNumber()
             ->validaName()
             ->validaUf();
@@ -350,6 +356,15 @@ class ItemModel extends CRUD
         $value = v::intVal()->validate($this->getSuppliersId());
         if (!$value) {
             msg::showMsg('O campo ID DO FORNECEDOR deve ser um número inteiro válido.', 'danger');
+        }
+        return $this;
+    }
+
+    private function validaCatmatcatserId()
+    {
+        $value = v::intVal()->validate($this->getCatmatcatserId());
+        if (!$value) {
+            msg::showMsg('O campo CATMAT/CATSER deve ser um número inteiro válido.', 'danger');
         }
         return $this;
     }

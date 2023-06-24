@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h3>Histórico do Documento Protocolado</h3>
+                <h3>Histórico do Documento Protocolado (Acompanhamento)</h3>
                 <i class="fa fa-list"></i> <?= $this->view->title; ?><br>
                 <?php
 
@@ -14,14 +14,17 @@ use App\Helpers\Utils;
                     <i class="fa fa-plus-square"></i> Adicionar Status
                 </a>
                 <?php endif ?>
-                <a href="<?=$this->view->controller;?>protocolado_acompanhamento/om/<?= $this->view->result[0]['oms_id'];?>" class="btn btn-warning pull-right"><i class="fa fa-arrow-left"></i> Voltar</a>
+                <a href="<?=$this->view->controller;?>protocolado/om/<?= $this->view->result[0]['oms_id'];?>" class="btn btn-warning pull-right"><i class="fa fa-arrow-left"></i> Voltar</a>
+                
                 <table class="table">
                     <thead>
                         <tr>
                             <th>NUP</th>
                             <th>Tipo</th>
+                            <th>OM</th>                            
+                            <th>Número</th>
+                            <th>Objeto</th>
                             <th>Valor (R$)</th>
-                            <th>OM</th>
                             <th>Status</th>
                             <th>Observação</th>
                             <th>Nº Doc</th>
@@ -33,12 +36,14 @@ use App\Helpers\Utils;
                         <?php foreach ($this->view->result as $value) : ?>
                             <tr>
                                 <td><?= $value['nup']; ?></td>
-                                <td><?= $value['modality_id']; ?></td>
-                                <td><?= 'R$ ' . number_format($value['valor_estimado'], 2, ',', '.'); ?></td>
+                                <td><?= $value['modality']; ?></td>
                                 <td><?= $value['naval_indicative']; ?></td>
-                                <td><?= $value['status_id']; ?></td>
+                                <td><?= $value['document_number']; ?></td>
+                                <td><?= $value['summary_object']; ?></td>
+                                <td><?= 'R$ ' . number_format($value['document_value'], 2, ',', '.'); ?></td>                                
+                                <td><?= $value['statusName']; ?></td>
                                 <td><?= $value['observation']; ?></td>
-                                <td><?= $value['number']; ?></td>
+                                <td><?= $value['resulting_document']; ?></td>
                                 <td><?= Utils::humanToDate($value['date_action']); ?></td>
                                 <td>
                                     <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>

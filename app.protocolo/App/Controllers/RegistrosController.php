@@ -15,6 +15,7 @@ use App\Config\Configurations as cfg;
 use App\Models\CnaeModel;
 use App\Models\CreditoModel;
 use App\Models\FornecedorModel;
+use App\Models\CatmatcatserModel;
 use App\Models\HistoricoAcaoModel;
 use App\Models\ItemModel;
 use App\Models\LicitacaoModel;
@@ -82,7 +83,7 @@ class RegistrosController extends Controller implements CtrlInterface
     public function novoAction()
     {
         // título da página
-        $this->view->title = 'Formulário de Cadastro de Documentos';
+        $this->view->title = 'Formulário de Cadastro de SOLEMP (Lei nº 8.666/93)';
         // instancia de models
         $omModel = new Om;
         $statusModel = new Status;
@@ -90,6 +91,7 @@ class RegistrosController extends Controller implements CtrlInterface
         $fornecedorModel = new FornecedorModel;
         $modalityModel = new ModalityModel;
         $natureExpenseModel = new NatureExpenseModel;
+        $catmatcatserModel = new CatmatcatserModel;
         $processTypeModel = new ProcessTypeModel;
         $creditoModel = new CreditoModel;
         // alimenta os dados na camada de View
@@ -98,6 +100,7 @@ class RegistrosController extends Controller implements CtrlInterface
         $this->view->resultCnae = $cnaeModel->findActive();
         $this->view->resultModality = $modalityModel->findActive();
         $this->view->resultFornecedor = $fornecedorModel->findActive();
+        $this->view->resultCatmatcatser = $catmatcatserModel->findActive();
         $this->view->resultNatureExpense = $natureExpenseModel->findActive();
         $this->view->processType = $processTypeModel->findActive();
         $this->view->credito = $creditoModel->findActive();
@@ -110,10 +113,12 @@ class RegistrosController extends Controller implements CtrlInterface
         $this->view->userLoggedIn = $this->access->setRedirect('solicitacao/')
             ->clearAccessList()
             ->authenticAccess([1, 2]);
-        $this->view->title = ' Licitações';
+        $this->view->title = ' Processos Licitatórios cadastrados';
 
         $fornecedorModel = new FornecedorModel;
         $licitacao = new LicitacaoModel();
+        $catmatcatserModel = new CatmatcatserModel;
+        $modalityModel = new ModalityModel;
         $omModel = new Om;
         if ($this->view->userLoggedIn['level'] == 1) {
             $this->view->resultLicitacao = $licitacao->findActive(date("Y-m-d", time()));
@@ -129,6 +134,8 @@ class RegistrosController extends Controller implements CtrlInterface
             $this->view->resultFornecedor = $fornecedorModel->findAllBybiddingId($this->getParam('idlista'));
         }
 
+        $this->view->resultModality = $modalityModel->findActive();
+
         $this->render('mostra_licitacao_disponivel');
     }
 
@@ -140,6 +147,7 @@ class RegistrosController extends Controller implements CtrlInterface
 
         $this->view->title = 'Lista dos Itens da Licitação';
         $fornecedorModel = new FornecedorModel;
+        $catmatcatserModel = new CatmatcatserModel;
         $licitacao = new LicitacaoModel();
         $item = new ItemModel();
         $omModel = new Om;
@@ -147,6 +155,8 @@ class RegistrosController extends Controller implements CtrlInterface
         $this->view->resultOm = $omModel->findById($this->getParam('om'));
         $this->view->resultLicitacao = $licitacao->findById($this->getParam('idlista'));
         $this->view->resultFornecedor = $fornecedorModel->findById($this->getParam('supplier'));
+        $this->view->resultCatMaterial = $catmatcatserModel->findMaterialActive();
+        $this->view->resultCatService = $catmatcatserModel->findServiceActive();
         $this->view->resultStatus = (new Status())->findActive();
 
         $this->view->result = $item->findByIdlista($this->getParam('idlista'), $this->getParam('om'), $this->getParam('supplier'));

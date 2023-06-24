@@ -72,4 +72,13 @@ class CatmatcatserController extends Controller implements CtrlInterface
         $model = new CatmatcatserModel();
         $model->editarRegistro();
     }
+
+    public function findByIdAction()
+    {
+        $this->view->userLoggedIn = $this->access->authenticAccess([1, 2]);
+        $model = new CatmatcatserModel();
+        $result = $model->findInformById($this->getParam('id'), $this->getParam('om'));
+
+        echo json_encode($result);
+    }
 }

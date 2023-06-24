@@ -12,7 +12,8 @@ class NatureExpenseModel extends CRUD
 {
     protected $entidade = 'nature_expense';
     protected $id;
-    protected $name;
+    protected $codigo;
+    protected $descricao;
 
     private $resultPaginator;
     private $navePaginator;
@@ -23,7 +24,7 @@ class NatureExpenseModel extends CRUD
     public function findActive()
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->entidade} "
-            . "WHERE isActive = :isActive ORDER BY name ASC;");
+            . "WHERE isActive = :isActive ORDER BY codigo ASC;");
         $stmt->bindValue(':isActive', 1);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -51,7 +52,7 @@ class NatureExpenseModel extends CRUD
             'pagina' => $pagina,
             'maxResult' => 20,
             // USAR QUANDO FOR PARA DEMONSTRAR O RESULTADO DE UMA PESQUISA
-            'orderBy' => 'name ASC',
+            'orderBy' => 'codigo ASC',
             'where' => 'isActive = ?',
             'bindValue' => [0 => 1]
         ];
@@ -87,7 +88,8 @@ class NatureExpenseModel extends CRUD
 
         $dados = [
             'id' => $this->getId(),
-            'name' => $this->getName(),
+            'codigo' => $this->getCodigo(),
+            'descricao' => $this->getDescricao(),
             'isActive' => 1
         ];
 
@@ -107,7 +109,8 @@ class NatureExpenseModel extends CRUD
         $this->notDuplicate();
 
         $dados = [
-            'name' => $this->getName(),
+            'codigo' => $this->getCodigo(),
+            'descricao' => $this->getDescricao(),
         ];
 
         if (parent::editar($dados, $this->getId())) {
@@ -134,9 +137,9 @@ class NatureExpenseModel extends CRUD
      */
     private function notDuplicate()
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->entidade} WHERE id != ? AND name = ? AND isActive = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->entidade} WHERE id != ? AND codigo = ? AND isActive = ?");
         $stmt->bindValue(1, $this->getId());
-        $stmt->bindValue(2, $this->getName());
+        $stmt->bindValue(2, $this->getCodigo());
         $stmt->bindValue(3, '1');
         $stmt->execute();
         if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
@@ -153,11 +156,13 @@ class NatureExpenseModel extends CRUD
     {
         // Seta todos os valores
         $this->setId(filter_input(INPUT_POST, 'id'));
-        $this->setName(filter_input(INPUT_POST, 'name'));
+        $this->setCodigo(filter_input(INPUT_POST, 'codigo'));
+        $this->setDescricao(filter_input(INPUT_POST, 'descricao'));
 
         // Inicia a Validação dos dados
         $this->validateId();
-        $this->validateName();
+        $this->validateCodigo();
+        $this->validateDescricao();
     }
 
     private function setId($value)
@@ -176,12 +181,22 @@ class NatureExpenseModel extends CRUD
         return $this;
     }
 
-    private function validateName()
+    private function validateCodigo()
     {
-        $value = v::stringType()->notEmpty()->length(1, 90)->validate($this->getName());
+        $value = v::stringType()->notEmpty()->length(1, 90)->validate($this->getCodigo());
         if (!$value) {
-            msg::showMsg('O campo sigla deve ser preenchido corretamente.'
-                . '<script>focusOn("name");</script>', 'danger');
+            msg::showMsg('O campo código deve ser preenchido corretamente.'
+                . '<script>focusOn("codigo");</script>', 'danger');
+        }
+        return $this;
+    }
+
+    private function validateDescricao()
+    {
+        $value = v::stringType()->notEmpty()->length(1, 90)->validate($this->getDescricao());
+        if (!$value) {
+            msg::showMsg('O campo descrição deve ser preenchido corretamente.'
+                . '<script>focusOn("descricao");</script>', 'danger');
         }
         return $this;
     }

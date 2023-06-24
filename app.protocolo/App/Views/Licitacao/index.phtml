@@ -10,7 +10,7 @@ $pagination = Pagination::make($this);
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h3>Licitações</h3>
+                <h3>Processos Licitatórios</h3>
                 <i class="fa fa-list"></i> <?= $this->view->title; ?><br>
                 <?php if (in_array($this->view->userLoggedIn['level'], [1])) : ?>
                     <a href="<?= $this->view->controller; ?>novo/" class="btn btn-info">
@@ -22,8 +22,10 @@ $pagination = Pagination::make($this);
                     <thead>
                         <tr>
                             <th>Número</th>
+                            <th>Modalidade</th>
                             <th>Descrição</th>
                             <th>UASG</th>
+                            <th>OM Líder</th>
                             <th>Validade</th>
                             <th></th>
                         </tr>
@@ -32,12 +34,10 @@ $pagination = Pagination::make($this);
                         <?php foreach ($this->view->result as $value) : ?>
                             <tr>
                                 <td><?= $value['number']; ?></td>
-                                <td>
-                                    <?= $value['description']; ?>
-                                </td>
-                                <td>
-                                    <?= $value['uasg']; ?>
-                                </td>
+                                <td><?= $value['modality_id']; ?></td>
+                                <td><?= $value['description']; ?></td>
+                                <td><?= $value['uasg']; ?></td>
+                                <td><?= $value['oms_id']; ?></td>
                                 <td>
                                     <span class="badge badge-danger">
                                         <?= View::humanDate($value['validate']); ?>

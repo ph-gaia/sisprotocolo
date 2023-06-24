@@ -50,16 +50,20 @@ class RegistrosModel extends CRUD
             . " sol.*, "
             . " supp.name AS suppliers_name, "
             . " supp.cnpj AS suppliers_cnpj, "
-            . " supp.details AS suppliers_details, "
+            . " supp.telcontato AS suppliers_telcontato, "
+            . " supp.email AS suppliers_email, "
+            . " supp.endereco AS suppliers_endereco, "
             . " oms.naval_indicative, "
             . " modality.name AS modality, "
-            . " nature_expense.name AS natureExpense, "
+            . " nature_expense.descricao AS natureExpense, "
+            . " cat_material_service.item_description AS catmatcatser, "
             . " credit.credit_note AS credit "
             . " FROM {$this->entidade} AS sol "
             . " LEFT JOIN suppliers AS supp ON supp.id = sol.suppliers_id "
             . " INNER JOIN oms ON oms.id = sol.oms_id "
             . " INNER JOIN modality ON modality.id = sol.modality_id"
             . " LEFT JOIN nature_expense ON nature_expense.id = sol.nature_expense_id"
+            . " LEFT JOIN cat_material_service as catmatcatser ON catmatcatser.id = sol.catmatcatser_id"
             . " LEFT JOIN credit ON credit.id = sol.credit_id"
             . " WHERE sol.id = :requestId ";
         $stmt = $this->pdo->prepare($query);
@@ -67,7 +71,7 @@ class RegistrosModel extends CRUD
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function consultaMultiplosParametros($omId, $modalidade, $enquadramento, $naturezaDespesa, $subItem, $cnae)
+    public function consultaMultiplosParametros($omId, $modalidade, $enquadramento, $naturezaDespesa, $catmatcatser, $subItem, $cnae)
     {
         $stmt = $this->pdo->prepare(""
             . " SELECT "
@@ -229,6 +233,7 @@ class RegistrosModel extends CRUD
 
             if ($this->getModality() == 2) {
                 (new RegistrosItemModel())->novoRegistro($this->getItemsList(), $lastId, $this->getOm());
+                (new RegistrosItemCatModel())->novoRegistro($this->getItemsMatServ(), $lastId);
             }
 
             if ($this->getModality() == 1) {
@@ -384,6 +389,26 @@ class RegistrosModel extends CRUD
         return $result;
     }
 
+    private function buildItemsCatMatServ(array $values): array
+    {
+        $result = [];
+        if (isset($values['value_cat_mat_serv']) && is_array($values['value_cat_mat_serv'])) {
+            foreach ($values['value_cat_mat_serv'] as $index => $value) {
+                $id = filter_var($values['cat_mat_serv_ids'][$index], FILTER_VALIDATE_INT);
+                $value = filter_var(Utils::normalizeFloat($value), FILTER_VALIDATE_FLOAT);
+
+                if ($id && $value) {
+                    $result[$id] = [
+                        'value' => $this->validaValue($value),
+                    ];
+                }
+                
+            }
+        }
+
+        return $result;
+    }
+
     /*
      * Validação dos Dados enviados pelo formulário
      */
@@ -396,6 +421,7 @@ class RegistrosModel extends CRUD
         $this->setNatureExpense(filter_input(INPUT_POST, 'nature_expense'));
         $this->setSubItem(filter_input(INPUT_POST, 'sub_item'));
         $this->setSupplier(filter_input(INPUT_POST, 'supplier'));
+        $this->setCatmatcatser(filter_input(INPUT_POST, 'catmatcatser'));
         $this->setCnpj(filter_input(INPUT_POST, 'cnpj'));
         $this->setCnae(filter_input(INPUT_POST, 'cnae'));
         $this->setUserId(filter_var($user['id']));
@@ -409,6 +435,7 @@ class RegistrosModel extends CRUD
         $this->setStatus(filter_input(INPUT_POST, 'status'));
         $this->setObservation(filter_input(INPUT_POST, 'observation'));
         $this->setItemsList($this->buildItemsBiddings($value));
+        $this->setItemsMatServ($this->buildItemsCatMatServ($value));
         $this->setBiddingsId(filter_input(INPUT_POST, 'biddings_id'));
 
         // Inicia a Validação dos dados

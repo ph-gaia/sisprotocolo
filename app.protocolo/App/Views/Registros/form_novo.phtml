@@ -22,19 +22,18 @@ use App\Helpers\View;
     .autocomplete-items div {
         padding: 10px;
         cursor: pointer;
-        background-color: #fff; 
-        border-bottom: 1px solid #d4d4d4; 
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
     }
 
     .autocomplete-items div:hover {
-        background-color: #e9e9e9; 
+        background-color: #e9e9e9;
     }
 
     .autocomplete-active {
-        background-color: DodgerBlue !important; 
-        color: #ffffff; 
+        background-color: DodgerBlue !important;
+        color: #ffffff;
     }
-
 </style>
 <!-- Page Content -->
 <div id="page-wrapper">
@@ -51,13 +50,13 @@ use App\Helpers\View;
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-cogs fa-fw"></i> Configuração inicial
+                            <i class="fa fa-cogs fa-fw"></i> Cadastro de nova SOLEMP (Lei nº 8.666/93)
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div id="resultado"></div>
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>OMAp</label>
                                         <select name="om" id="om" class="form-control" required>
@@ -69,49 +68,64 @@ use App\Helpers\View;
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-
+                                </div>
+                                <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Modalidade</label>
                                         <select name="modality" id="modality" class="form-control" required>
                                             <option value="1"> Dispensa de Licitação </option>
                                         </select>
                                     </div>
-
+                                </div>
+                                <div class="col-lg-2">
                                     <div class="form-group">
                                         <label>Enquadramento</label>
-                                        <select onchange="valorComprometido()" name="enquadramento" id="enquadramento" class="form-control" required>
+                                        <select name="enquadramento" id="enquadramento" class="form-control" required>
                                             <?php foreach ($this->view->credito as $key => $value) : ?>
-                                                <option value="<?= $value['id'] ?>" <?= $value['id'] == 2 ? 'selected' : '' ?>>
+                                                <option value="<?= $value['id'] ?>">
                                                     <?= $value['credit_note']; ?>
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-
+                                </div>
+                                <div class="col-lg-1">
                                     <div class="form-group">
-                                        <label>CNAE</label>
-                                        <div class="autocomplete">
-                                            <input type="hidden" id="cnae_value" name="cnae">
-                                            <input type="text" id="cnae" class="form-control" onchange="valorComprometido()" placeholder="Informe um CNAE da Empresa" required>
-                                        </div>
+                                        <label>Artigo</label>
+                                        <select name="article" id="article" class="form-control" required>
+                                            <option value="24" selected>24</option>
+                                            <option value="75">75</option>
+                                        </select>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-6">
+                                <div class="col-lg-1">
+                                    <div class="form-group">
+                                        <label>Inciso</label>
+                                        <select name="incisive" id="incisive" class="form-control" required>
+                                            <option value="I">I</option>
+                                            <option value="II" selected>II</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Natureza da Despesa</label>
                                         <select name="nature_expense" id="nature_expense" class="form-control" required>
+                                            <option> Selecione uma Natureza da Despesa </option>
                                             <?php foreach ($this->view->resultNatureExpense as $key => $value) : ?>
                                                 <option value="<?= $value['id']; ?>">
-                                                    <?= $value['name']; ?>
+                                                    <?= $value['codigo'] . ' - ' . $value['descricao']; ?>
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-
+                                </div>
+                                <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>SubItem</label>
-                                        <select name="sub_item" id="sub_item" class="form-control" required>
+                                        <select name="sub_item" id="sub_item" class="form-control sub_item" required>
                                             <option> Selecione um SubItem </option>
                                             <?php for ($i = 1; $i <= 99; $i++) : ?>
                                                 <option value="<?= $i; ?>">
@@ -120,29 +134,27 @@ use App\Helpers\View;
                                             <?php endfor; ?>
                                         </select>
                                     </div>
-
+                                </div>
+                                <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label>Artigo</label>
-                                        <select name="article" id="article" class="form-control" required>
-                                            <option value="24">24</option>
-                                            <option value="75" selected>75</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Inciso</label>
-                                        <select name="incisive" id="incisive" class="form-control" required>
-                                            <option value="1">I</option>
-                                            <option value="2" selected>II</option>
+                                        <label>CATMAT/CATSER</label>
+                                        <select name="catmatcatser" id="catmatcatser" class="form-control" required>
+                                            <option value="">Selecione um CATMAT/CATSER</option>
+                                            <?php foreach ($this->view->resultCatmatcatser as $key => $value) : ?>
+                                                <option value="<?= $value['id']; ?>">
+                                                    <?= $value['coditem']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Empresa</label>
-                                        <select onchange="valorComprometido()" name="supplier" id="supplier" class="form-control supplier" required>
+                                        <select name="supplier" id="supplier" class="form-control supplier" required>
                                             <option value="">Selecione uma empresa</option>
                                             <?php foreach ($this->view->resultFornecedor as $key => $value) : ?>
                                                 <option value="<?= $value['id']; ?>">
@@ -151,45 +163,35 @@ use App\Helpers\View;
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
+                                </div>
+                                <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label>Número do Documento</label>
+                                        <label>CNPJ/CPF</label>
+                                        <input type="text" id="cpfcnpj" name="cnpj" placeholder="CNPJ ou CPF do Fornecedor" class="form-control" maxlength="18" onchange="cpfCnpj()" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Número da SOLEMP</label>
                                         <input type="text" id="document_number" name="document_number" placeholder="Número do Documento" class="form-control" maxlength="10" autocomplete="off" required>
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4">
+                                <div class="col-lg-2">
                                     <div class="form-group">
-                                        <label>CNPJ/CPF</label>
-                                        <input type="text"
-                                               id="cpfcnpj"
-                                               name="cnpj"
-                                               placeholder="CNPJ ou CPF do Fornecedor"
-                                               class="form-control"
-                                               maxlength="18"
-                                               onchange="cpfCnpj()"
-                                               required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Valor do Documento (R$)</label>
-                                        <input type="text"
-                                            id="value"
-                                            name="document_value"
-                                            placeholder="Valor em Reais"
-                                            class="form-control"
-                                            required>
+                                        <label>Valor da SOLEMP (R$)</label>
+                                        <input type="text" id="value" name="document_value" placeholder="Valor em Reais" class="form-control" required>
                                     </div>
                                 </div>
-
+                            </div>
+                            <div class="row">
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Observações</label>
-                                        <input type="text"
-                                            name="observation"
-                                            id="observation"
-                                            placeholder="Observações"
-                                            class="form-control"/>
+                                        <input type="text" name="observation" id="observation" placeholder="Observações" class="form-control" />
                                     </div>
-
+                                </div>
+                                <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Status</label>
                                         <select name="status" id="status" class="form-control" required>
@@ -201,20 +203,6 @@ use App\Helpers\View;
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label>Valor Disponível</label>
-                                        <input type="text" class="form-control" id="saldoDisponivel" disabled>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label>Valor comprometido</label>
-                                        <input type="text" id="saldoComprometido" class="form-control" disabled>
-                                    </div>
-                                </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Data/Hora</label>
@@ -222,6 +210,122 @@ use App\Helpers\View;
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Valor Disponível (Subitem)</label>
+                                        <input type="text" class="form-control" id="saldoDisponivel" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Valor comprometido (Subitem)</label>
+                                        <input type="text" id="saldoComprometido" class="form-control" disabled>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <a class="btn btn-info pull-left add" id="add-row">
+                                        <i class="fa fa-plus-circle"></i> Adicionar PDM
+                                    </a>
+                                    <div class="col-lg-6">
+                                        <a class="btn btn-info pull-left add" id="add-row2">
+                                            <i class="fa fa-plus-circle"></i> Adicionar Cod item(CATSER)
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th width="10%">Código</th>
+                                                <th width="45%">Descrição</th>
+                                                <th width="10%">Valor total</th>
+                                                <th width="10%">Valor disponível</th>
+                                                <th width="10%">Valor comprometido</th>
+                                                <th width="8%"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="row-list">
+                                            <tr>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="hide">
+                                <table>
+                                    <tr class="table-values remove--X-">
+                                        <td>
+                                            <select name="catmatcatser" id="catmatcatser" class="form-control catmatcatser">
+                                                <option value="">PDM</option>
+                                                <?php foreach ($this->view->resultCatmatcatser as $key => $value) : ?>
+                                                    <option value="<?= $value['id']; ?>">
+                                                        <?= $value['codpdm']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" id="catmatecatser" name="descpdm" placeholder="Descrição do PDM" class="form-control" maxlength="50">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="value[]" class="form-control" data-mask="000.000.000,00" data-mask-reverse="true" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" id="saldoDisponivel1" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" id="saldoComprometido1" disabled>
+                                        </td>
+                                        <td>
+                                            <a class="remove btn btn-danger btn-sm" data-reference="-X-">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="hide">
+                                <table>
+                                    <tr class="table-values2 remove--X-">
+                                        <td>
+                                            <select name="catmatcatser" id="catmatcatser" class="form-control catmatcatser">
+                                                <option value="">CATSER</option>
+                                                <?php foreach ($this->view->resultCatmatcatser as $key => $value) : ?>
+                                                    <option value="<?= $value['id']; ?>"> <?= $value['coditem']; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" id="catmatecatser" name="descitem" placeholder="Descrição do serviço" class="form-control" maxlength="50">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="value[]" class="form-control" data-mask="000.000.000,00" data-mask-reverse="true">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" id="saldoDisponivel2" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" id="saldoComprometido2" disabled>
+                                        </td>
+                                        <td>
+                                            <a class="remove btn btn-danger btn-sm" data-reference="-X-">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -245,22 +349,32 @@ use App\Helpers\View;
     function valorComprometido() {
         var enquadramento = $('#enquadramento').val();
         var om = $('#om').val();
-        var cnae = $('#cnae_value').val();
+        var modalidade = $('#modality').val();
+        var naturezaDespesa = $('#nature_expense').val();
+        var subItem = $('#sub_item').val();
 
         $.ajax({
             type: "GET",
             url: `/app/protocolo/credito/findSaldoComprometido` +
-                `/om/${om}/enquadramento/${enquadramento}/cnae/${cnae}`,
+                `/om/${om}/modality/${modalidade}/enquadramento/${enquadramento}/natureExpense/${naturezaDespesa}/subItem/${subItem}`,
             dataType: 'json',
         }).done(function(res) {
             let credito = res.credit_value ?? 0;
             let saldo = res.registers_value ?? 0;
-            $("#saldoDisponivel").val('R$ ' + credito.toLocaleString('pt-BR', {minimumFractionDigits: 2}));
-            $("#saldoComprometido").val('R$ ' + saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2}));
+            $("#saldoDisponivel").val('R$ ' + credito.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2
+            }));
+            $("#saldoComprometido").val('R$ ' + saldo.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2
+            }));
         });
     }
 
     $(document).ready(function() {
+        $("select.sub_item").change(function() {
+            valorComprometido();
+        });
+
         $("select.supplier").change(function() {
             var id = $(this).children("option:selected").val();
             $.ajax({
@@ -271,6 +385,39 @@ use App\Helpers\View;
                 $("#cpfcnpj").val(res.cnpj);
                 console.log(res);
             });
+        });
+
+        var xRow = 1;
+
+        var getTemplate = function getTemplate(className, reference) {
+            return $('tr.' + className + '.remove--X-')
+                .get(0)
+                .outerHTML
+                .replace(className + ' ', '')
+                .replace(/-X-/g, reference);
+        };
+
+        /**
+         * Add a new row into table values
+         */
+        $('#add-row').click(function addRowItem(event) {
+            event.preventDefault();
+            var template = getTemplate('table-values', xRow);
+            $('#row-list').append(template);
+            xRow++;
+        });
+
+        $('#add-row2').click(function addRowItem(event) {
+            event.preventDefault();
+            var template = getTemplate('table-values2', xRow);
+            $('#row-list').append(template);
+            xRow++;
+        });
+
+        $('#row-list').on("click", ".remove", function removeRowItem(event) {
+            event.preventDefault();
+            var reference = $(this).attr('data-reference');
+            $('#row-list tr.remove-' + reference).remove();
         });
     });
 </script>

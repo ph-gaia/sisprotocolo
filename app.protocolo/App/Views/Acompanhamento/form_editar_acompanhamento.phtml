@@ -1,10 +1,14 @@
+<!-- Page Content -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h5 class="page-header"><?= $this->view->title ?></h5>
+                <h5 class="page-header"><?=$this->view->title?></h5>
+            
             </div>
+            <!-- /.col-lg-12 -->
         </div>
+        <!-- /.row -->
 
         <div class="row">
             <div class="col-lg-12">
@@ -12,13 +16,37 @@
                     <div class="panel-heading">
                         <i class="fa fa-table fa-fw"></i> Formulário de Edição de Documento (Acompanhamento)
                     </div>
+                    <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div id="resultado"></div>
                         <form action="<?=$this->view->controller;?>altera/" method="post" id="form">
                         <input type="hidden" name="id" value="<?=$this->view->result['id'];?>">
                         <div class="row">
-                            <div class="col-lg-6">
-
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label>UASG</label>
+                                    <select name="om" id="om" class="form-control" required>
+                                        <?php foreach ($this->view->resultOm as $value): ?>
+                                        <option value="<?= $value['id']; ?>" <?=($this->view->result['oms_id'] == $value['id']) ? 'selected' : ''; ?>>
+                                            <?= $value['naval_indicative']; ?>
+                                        </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label>Modalidade</label>
+                                    <select name="modality" id="modality" class="form-control" required>
+                                        <?php foreach ($this->view->resultModality as $value): ?>
+                                            <option value="<?= $value['id']; ?>" <?= $this->view->result['modality_id'] == $value['id'] ? 'selected' : '' ?>>
+                                                <?= $value['name']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
                                 <div class="form-group">
                                     <label>NUP</label>
                                     <input type="text"
@@ -29,65 +57,60 @@
                                            value="<?=$this->view->result['nup'];?>"
                                            required>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>Modalidade</label>
-                                    <input type="text"
-                                           id="modality_id"
-                                           name="modality_id"
-                                           placeholder="Modalidade"
-                                           class="form-control"
-                                           value="<?=$this->view->result['modality_id'];?>"
-                                           required>
-                                </div>
-
+                            </div>
+                            <div class="col-lg-2"> 
                                 <div class="form-group">
                                     <label>Número</label>
                                     <input type="text"
-                                           id="number"
-                                           name="number"
+                                           id="document_number"
+                                           name="document_number"
                                            placeholder="Número"
                                            class="form-control"
-                                           value="<?=$this->view->result['number'];?>"
+                                           value="<?=$this->view->result['document_number'];?>"
                                            required>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>UASG</label>
-                                    <select name="uasg_id"
-                                            id="uasg_id"
-                                            class="form-control"
-                                            required>
-                                        <?php foreach ($this->view->resultOm as $key => $value): ?>
-                                        <option value="<?= $value['naval_indicative']; ?>" <?=($this->view->result['id'] == $value['naval_indicative']) ? 'selected' : ''; ?>>
-                                            <?= $value['naval_indicative']; ?>
-                                        </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Objeto</label>
-                                    <input type="text"
-                                           id="objeto"
-                                           name="objeto"
-                                           placeholder="Objeto"
-                                           class="form-control"
-                                           value="<?=$this->view->result['objeto'];?>"
-                                           required>
-                                </div>
-
+                            </div>
+                            <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Valor estimado</label>
                                     <input type="text"
-                                           id="valor_estimado"
-                                           name="valor_estimado"
+                                           id="document_value"
+                                           name="document_value"
                                            placeholder="Valor estimado"
                                            class="form-control"
-                                           value="<?=$this->view->result['valor_estimado'];?>"
+                                           value="<?=$this->view->result['document_value'];?>"
                                            required>
                                 </div>
-
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label>Objeto</label>
+                                    <input type="text"
+                                           id="summary_object"
+                                           name="summary_object"
+                                           placeholder="Objeto"
+                                           class="form-control"
+                                           value="<?=$this->view->result['summary_object'];?>"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Observação</label>
+                                    <input type="text"
+                                           id="observation"
+                                           name="observation"
+                                           placeholder="Observação"
+                                           class="form-control"
+                                           value="<?=$this->view->result['observation'];?>"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Status</label>
                                     <select name="status_id"
@@ -101,19 +124,9 @@
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>Observação</label>
-                                    <input type="text"
-                                           id="observation"
-                                           name="observation"
-                                           placeholder="Observação"
-                                           class="form-control"
-                                           value="<?=$this->view->result['observation'];?>"
-                                           required>
-                                </div>
-                            </div>
-
+                            </div>                                
+                        </div>
+                        <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <br>

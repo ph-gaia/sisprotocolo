@@ -3,8 +3,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h5 class="page-header"><?=$this->view->title?></h5>
-                
+                <h5 class="page-header"><?= $this->view->title ?></h5>
+
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -19,34 +19,89 @@
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div id="resultado"></div>
-                        <form action="<?=$this->view->controller;?>registra/" method="post" id="form">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Código</label>
-                                    <input type="text"
-                                           id="codigo"
-                                           name="codigo" 
-                                           placeholder="Código"
-                                           class="form-control"
-                                           required>
+                        <form action="<?= $this->view->controller; ?>registra/" method="post" id="form">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Tipo</label>
+                                        <select name="tipo" id="tipo" class="form-control" required>
+                                            <option value="">Selecione o Tipo</option>
+                                            <option value="MATERIAL">Material</option>
+                                            <option value="SERVICO">Serviço</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Descrição</label>
-                                    <input type="text"
-                                           id="name"
-                                           name="name"
-                                           placeholder="Nome"
-                                           class="form-control"
-                                           required>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Situação atual</label>
+                                        <select name="sitatual" id="sitatual" class="form-control" required>
+                                            <option value="1" selected>Ativo</option>
+                                            <option value="0">Não ativo</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <br>
-                                    <button class="btn btn-primary"><i class="fa fa-check"></i> Registrar</button>
-                                    <a href="<?=$this->view->controller;?>" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Voltar</a>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Sustentabilidade</label>
+                                        <select name="sitsustentavel" id="sitsustentavel" class="form-control" required>
+                                            <option value="">Selecione quanto à sustentabilidade</option>
+                                            <option value="SUSTENTÁVEL">SUSTENTÁVEL</option>
+                                            <option value="NÃO SUSTENTÁVEL">NÃO SUSTENTÁVEL</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Código do grupo</label>
+                                        <input type="text" id="codgrupo" name="codgrupo" placeholder="Código do grupo" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Código da classe</label>
+                                        <input type="text" id="codclasse" name="codclasse" placeholder="Código da classe" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Código do PDM</label>
+                                        <input type="text" id="codpdm" name="codpdm" placeholder="Código do PDM" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Código do item</label>
+                                        <input type="text" id="coditem" name="coditem" placeholder="Código do item" class="form-control" required>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-10">
+                                    <div class="form-group">
+                                        <label>Descrição do grupo</label>
+                                        <input type="text" id="descgrupo" name="descgrupo" placeholder="Descrição do grupo" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Descrição da classe</label>
+                                        <input type="text" id="descclasse" name="descclasse" placeholder="Descrição da classe" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Descrição do PDM</label>
+                                        <input type="text" id="descpdm" name="descpdm" placeholder="Descrição do PDM" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Descrição do item</label>
+                                        <input type="text" id="descitem" name="descitem" placeholder="Descrição do item" class="form-control" required>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <br>
+                                        <button class="btn btn-primary"><i class="fa fa-check"></i> Registrar</button>
+                                        <a href="<?= $this->view->controller; ?>" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Voltar</a>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         </form>
                     </div>
                     <!-- /.panel-body -->

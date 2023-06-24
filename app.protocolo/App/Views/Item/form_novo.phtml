@@ -10,7 +10,7 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <i class="fa fa-table fa-fw"></i> Formulário de Cadastro
+                        <i class="fa fa-table fa-fw"></i> Formulário de cadastro de item no Processo Licitatório
                     </div>
                     <div class="panel-body">
                         <div id="resultado"></div>
@@ -18,7 +18,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label>Número do item na ARP</label>
+                                    <label>Número do item no Processo Licitatório</label>
                                     <input type="text"
                                             name="number"
                                             id="number"
@@ -28,30 +28,31 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Descrição do item na ARP</label>
-                                    <input type="text"
-                                            name="name"
-                                            id="name"
-                                            placeholder="Nome do Item na ARP"
-                                            class="form-control"
-                                            required>
+                                        <label>Empresa</label>
+                                        <select name="suppliers_id" id="suppliers_id" class="form-control supplier" required>
+                                            <option value="">Selecione uma empresa</option>
+                                            <?php foreach ($this->view->resultFornecedor as $key => $value) : ?>
+                                                <option value="<?= $value['id']; ?>">
+                                                    <?= $value['name']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Fornecedor</label>
-                                    <select name="suppliers_id" class="form-control" required>
-                                        <?php foreach ($this->view->resultFornecedor as $value): ?>
-                                            <option value="<?= $value['id']; ?>">
-                                                <?= $value['name']; ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                        <label>PDM</label>
+                                        <select name="codpdm_items" id="codpdm_items" class="form-control codpdm_items" required>
+                                            <option value="">Selecione um PDM</option>
+                                            <?php foreach ($this->view->resultCatmatcatser as $key => $value) : ?>
+                                                <option value="<?= $value['id']; ?>">
+                                                    <?= $value['codpdm']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
                                 </div>
-                            </div>
 
-                            <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label>UF</label>
+                                    <label>Unidade de Fornecimento</label>
                                     <input type="text"
                                             name="uf"
                                             id="uf"
@@ -62,22 +63,59 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Valor unitário</label>
-                                    <input type="text"
-                                            name="value"
-                                            id="value"
-                                            placeholder="Valor unitário do item"
-                                            class="form-control"
-                                            maxlength="12"
-                                            required>
-                                </div>
-
-                                <div class="form-group">
                                     <label>Quantidade total do item</label>
                                     <input type="text"
                                             name="total_quantity"
                                             id="total_quantity"
                                             placeholder="Quantidade total do item"
+                                            class="form-control"
+                                            maxlength="12"
+                                            required>
+                                </div>
+                                
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Descrição do item no Processo Licitatório</label>
+                                    <input type="text"
+                                            name="name"
+                                            id="name"
+                                            placeholder="Descrição do item"
+                                            class="form-control"
+                                            required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>CNPJ/CPF da empresa</label>
+                                    <input type="text"
+                                           id="cpfcnpj"
+                                           name="cnpj"
+                                           placeholder="CNPJ ou CPF do Fornecedor"
+                                           class="form-control"
+                                           maxlength="18"
+                                           onchange="cpfCnpj()"
+                                           disabled>
+                                </div>
+
+                                <div class="form-group">
+                                        <label>Código do item (CATMAT/CATSER)</label>
+                                        <select name="coditem_items" id="coditem_items" class="form-control coditem_items" required>
+                                            <option value="">Selecione um código do item (CATMAT/CATSER)</option>
+                                            <?php foreach ($this->view->resultCatmatcatser as $key => $value) : ?>
+                                                <option value="<?= $value['id']; ?>">
+                                                    <?= $value['coditem']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Valor unitário do item</label>
+                                    <input type="text"
+                                            name="value"
+                                            id="value"
+                                            placeholder="Valor unitário do item"
                                             class="form-control"
                                             maxlength="12"
                                             required>
@@ -104,7 +142,7 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <i class="fa fa-table fa-fw"></i> OMs Registradas para este item
+                        <i class="fa fa-table fa-fw"></i> OM Participantes deste item
                     </div>
                     <div class="panel-body">
                         <div class="row" style="margin-top: 10px;">
@@ -142,3 +180,21 @@
         </form>
     </div>
 </div>
+
+<script>
+    
+    $(document).ready(function() {
+        $("select.supplier").change(function() {
+            var id = $(this).children("option:selected").val();
+            $.ajax({
+                type: "GET",
+                url: `/app/protocolo28mai23/fornecedor/findById/id/${id}`,
+                dataType: 'json',
+            }).done(function(res) {
+                $("#cpfcnpj").val(res.cnpj);
+                console.log(res);
+            });
+        });
+    });
+    
+</script>

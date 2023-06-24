@@ -29,6 +29,7 @@ class LicitacaoModel extends CRUD
     {
         $innerJoin = " INNER JOIN biddings_items as items ON biddings.id = items.biddings_id ";
         $innerJoin .= " INNER JOIN biddings_items_oms as itemOm ON items.id = itemOm.biddings_items_id ";
+        $innerJoin = " INNER JOIN modality ON modality.id = biddings.modality_id";
 
         $dados = [
             'select' => 'biddings.*',
@@ -66,6 +67,8 @@ class LicitacaoModel extends CRUD
                 ON biddings.id = items.biddings_id
             INNER JOIN biddings_items_oms as itemOm 
                 ON items.id = itemOm.biddings_items_id
+            INNER JOIN modality as modality 
+                ON modality.id = biddings.modality_id    
             WHERE biddings.validate >= '" . $dateLimit . "'";
 
         $where = "";
@@ -142,6 +145,7 @@ class LicitacaoModel extends CRUD
             'uasg_name' => $this->getUasgName(),
             'validate' => $this->getValidate(),
             'oms_id' => $this->getOmsId(),
+            'modality_id' => $this->getModality(),
             'created_at' => date('Y-m-d')
         ];
 
@@ -168,6 +172,7 @@ class LicitacaoModel extends CRUD
             'description' => $this->getDescription(),
             'uasg_name' => $this->getUasgName(),
             'oms_id' => $this->getOmsId(),
+            'modality_id' => $this->getModality(),
             'validate' => $this->getValidate()
         ];
 
@@ -306,6 +311,7 @@ class LicitacaoModel extends CRUD
             ->setnumber(filter_input(INPUT_POST, 'number', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setUasg(filter_input(INPUT_POST, 'uasg', FILTER_VALIDATE_INT))
             ->setOmsId(filter_input(INPUT_POST, 'oms_id', FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setModality(filter_input(INPUT_POST, 'modality_id', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setDescription(filter_input(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setUasgName(filter_input(INPUT_POST, 'uasg_name', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setValidate(filter_input(INPUT_POST, 'validate', FILTER_SANITIZE_SPECIAL_CHARS));

@@ -11,8 +11,12 @@
                         <tr>
                             <th>Número</th>
                             <th>Tipo</th>
-                            <th>Valor (R$)</th>
                             <th>OM</th>
+                            <th>Código do item (CATMAT/CATSER)</th>
+                            <th>ND</th>
+                            <th>Subitem</th>                            
+                            <th>Valor (R$)</th>
+                            <th>Status atual</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -21,8 +25,12 @@
                             <tr>
                                 <td><?= $value['document_number']; ?></td>
                                 <td><?= $value['modality']; ?></td>
-                                <td><?= 'R$ ' . number_format($value['document_value'], 2, ',', '.'); ?></td>
                                 <td><?= $value['naval_indicative']; ?></td>
+                                <td><?= $value['catmatcatser_id']; ?></td>
+                                <td><?= $value['nature_expense_id']; ?></td>
+                                <td><?= $value['sub_item']; ?></td>                                
+                                <td><?= 'R$ ' . number_format($value['document_value'], 2, ',', '.'); ?></td>
+                                <td><?= $value['status_id']; ?></td>
                                 <td>
                                     <a href="<?= $this->view->controller; ?>detalhar/idlista/<?= $value['id']; ?>" class="btn btn-primary">
                                         <i class="fa fa-eye"></i> Detalhar

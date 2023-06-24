@@ -11,8 +11,11 @@
                         <tr>
                             <th>NUP</th>
                             <th>Modalidade</th>
-                            <th>Valor estimado (R$)</th>
                             <th>UASG</th>
+                            <th>Número</th>
+                            <th>Objeto</th>
+                            <th>Valor estimado (R$)</th>
+                            <th>Data/hora alteração (R$)</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -20,13 +23,14 @@
                         <?php foreach ($this->view->result as $value) : ?>
                             <tr>
                                 <td><?= $value['nup']; ?></td>
-                                <td><?= $value['modality_id']; ?></td>
-                                <td><?= 'R$ ' . number_format($value['valor_estimado'], 2, ',', '.'); ?></td>
-                                <td><?= $value['uasg_id']; ?></td>
+                                <td><?= $value['modality']; ?></td>
+                                <td><?= $value['naval_indicative']; ?></td>
+                                <td><?= $value['document_number']; ?></td>
+                                <td><?= $value['summary_object']; ?></td>
+                                <td><?= 'R$ ' . number_format($value['document_value'], 2, ',', '.'); ?></td>
+                                <td><?= $value['updated_at']; ?></td>  
+
                                 <td>
-                                    <a href="<?= $this->view->controller; ?>detalhar/idlista/<?= $value['id']; ?>" class="btn btn-primary">
-                                        <i class="fa fa-eye"></i> Detalhar
-                                    </a>
                                     <a href="<?= $this->view->controller; ?>historico/id/<?= $value['id']; ?>" class="btn btn-success">
                                         <i class="fa fa-eye"></i> Histórico do Documento
                                     </a>
@@ -34,7 +38,11 @@
                                     <a href="<?= $this->view->controller; ?>status/id/<?= $value['id']; ?>" class="btn btn-info">
                                         <i class="fa fa-plus-square"></i> Adicionar Status
                                     </a>
-                                    <?php endif ?>
+                                    <a href="<?= $this->view->controller; ?>editar/id/<?= $value['id']; ?>" class="btn btn-success btn-sm">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <?php endif ?>                                  
+
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -44,15 +52,15 @@
                 <nav>
                     <ul class="pagination">
                         <li>
-                            <a href="<?= $this->view->controller; ?>protocolado_acompanhamento/om/<?= $this->view->result[0]['om']; ?>/pagina/<?= $this->view->btn['previus']; ?>" aria-label="Previous">
+                            <a href="<?= $this->view->controller; ?>protocolado/om/<?= $this->view->result[0]['om']; ?>/pagina/<?= $this->view->btn['previus']; ?>" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
                         <?php foreach ($this->view->btn['link'] as $value) : ?>
-                            <li><a href="<?= $this->view->controller; ?>protocolado_acompanhamento/om/<?= $this->view->result[0]['om']; ?>/pagina/<?= $value; ?>"><?= $value; ?></a></li>
+                            <li><a href="<?= $this->view->controller; ?>protocolado/om/<?= $this->view->result[0]['om']; ?>/pagina/<?= $value; ?>"><?= $value; ?></a></li>
                         <?php endforeach; ?>
                         <li>
-                            <a href="<?= $this->view->controller; ?>protocolado_acompanhamento/om/<?= $this->view->result[0]['om']; ?>/pagina/<?= $this->view->btn['next']; ?>" aria-label="Next">
+                            <a href="<?= $this->view->controller; ?>protocolado/om/<?= $this->view->result[0]['om']; ?>/pagina/<?= $this->view->btn['next']; ?>" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>

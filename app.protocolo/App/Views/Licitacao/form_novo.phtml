@@ -12,7 +12,20 @@
                         <div id="resultado"></div>
                         <form action="<?= $this->view->controller; ?>registra/" method="post" id="form">
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Modalidade</label>
+                                        <select name="modality_id" id="modality_id" class="form-control" required>
+                                            <option value="">Selecione a modalidade</option>
+                                            <?php foreach ($this->view->resultModality as $key => $value) : ?>
+                                                <option value="<?= $value['id']; ?>">
+                                                    <?= $value['name']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>      
+                                <div class="col-lg-2">
                                     <div class="form-group">
                                         <label>Número</label>
                                         <input type="text"
@@ -20,10 +33,65 @@
                                                id="number"
                                                placeholder="Número da Licitação"
                                                class="form-control"
+                                               number-mask="#######/####"
+                                               number-mask-reverse="true"
                                                maxlength="10"
                                                required>
                                     </div>
-
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label>Descrição</label>
+                                        <input type="text"
+                                               name="description"
+                                               id="description"
+                                               placeholder="Descrição da Licitação"
+                                               class="form-control"
+                                               maxlength="30"
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>UASG</label>
+                                        <input type="text"
+                                               name="uasg"
+                                               id="uasg"
+                                               placeholder="Número da UASG da Licitação"
+                                               class="form-control"
+                                               maxlength="6"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-10">
+                                    <div class="form-group">
+                                        <label>Órgão Responsável</label>
+                                        <input type="text"
+                                               name="uasg_name"
+                                               id="uasg_name"
+                                               placeholder="Nome do Órgão Responsável pela Licitação"
+                                               class="form-control"
+                                               maxlength="50"
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>OM Líder</label>
+                                        <select name="oms_id" id="oms_id" class="form-control" required>
+                                            <?php foreach ($this->view->resultOm as $value): ?>
+                                                <option value="<?= $value['id']; ?>">
+                                                    <?= $value['naval_indicative']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Validade</label>
                                         <input type="text"
@@ -36,53 +104,10 @@
                                                maxlength="10"
                                                required>
                                     </div>
-
-                                    <div class="form-group">
-                                        <label>Órgão Resposável</label>
-                                        <input type="text"
-                                               name="uasg_name"
-                                               id="uasg_name"
-                                               placeholder="Nome do Órgão Resposável pela Licitação"
-                                               class="form-control"
-                                               maxlength="50"
-                                               required>
-                                    </div>
                                 </div>
-
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label>Descrição</label>
-                                        <input type="text"
-                                               name="description"
-                                               id="description"
-                                               placeholder="Descrição da Licitação"
-                                               class="form-control"
-                                               maxlength="30"
-                                               required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>UASG</label>
-                                        <input type="text"
-                                               name="uasg"
-                                               id="uasg"
-                                               placeholder="Número da UASG da Licitação"
-                                               class="form-control"
-                                               maxlength="6"
-                                               required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>OM Líder</label>
-                                        <select name="oms_id" id="oms_id" class="form-control" required>
-                                            <?php foreach ($this->view->resultOm as $value): ?>
-                                                <option value="<?= $value['id']; ?>">
-                                                    <?= $value['naval_indicative']; ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-
+                            </div>                        
+                            <div class="row">
+                                <div class="col-lg-6">                                    
                                     <div class="form-group">
                                         <button class="btn btn-primary">
                                             <i class="fa fa-check"></i> Registrar

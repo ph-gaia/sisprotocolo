@@ -9,6 +9,7 @@ use App\Models\LicitacaoModel as Licitacao;
 use App\Models\ItemModel;
 use App\Config\Configurations as cfg;
 use App\Models\LicitacaoModel;
+use App\Models\CatmatcatserModel;
 use App\Models\OmModel;
 
 class ItemController extends Controller implements CtrlInterface
@@ -35,9 +36,11 @@ class ItemController extends Controller implements CtrlInterface
     public function novoAction()
     {
         $this->view->userLoggedIn = $this->access->authenticAccess([1,2]);
-        $this->view->title = 'Novo Registro';
+        $this->view->title = 'Cadastro de item no Processo Licitatório';
         $fornecedor = new Fornecedor();
         $this->view->resultFornecedor = $fornecedor->findAll();
+        $catmatcatser = new CatmatcatserModel();
+        $this->view->resultCatmatcatser = $catmatcatser->findAll();
         $this->view->resultOms = (new OmModel())->findAll();
         $this->render('form_novo');
     }
@@ -46,9 +49,11 @@ class ItemController extends Controller implements CtrlInterface
     {
         $this->view->userLoggedIn = $this->access->authenticAccess([1,2]);
         $model = new ItemModel();
-        $this->view->title = 'Editando Registro';
+        $this->view->title = 'Editando item do Processo Licitatório';
         $fornecedor = new Fornecedor();
         $this->view->resultFornecedor = $fornecedor->findAll();
+        $catmatcatser = new CatmatcatserModel();
+        $this->view->resultCatmatcatser = $catmatcatser->findAll();
         $result = $model->fetchDataToEdit((int) $this->getParam('id'));
         $this->view->result = $result['result'];
         $this->view->resultOms = $result['oms'];
@@ -66,7 +71,7 @@ class ItemController extends Controller implements CtrlInterface
     {
         $this->view->userLoggedIn = $this->access->authenticAccess([1,2]);
         $model = new ItemModel();
-        $this->view->title = 'Lista de Itens da Licitação';
+        $this->view->title = 'Lista de itens do Processo Licitatório';
         $model->paginator($this->getParam('pagina'), $this->view->idlista);
         $this->view->result = $model->getResultadoPaginator();
         $this->view->btn = $model->getNavePaginator();
@@ -93,6 +98,8 @@ class ItemController extends Controller implements CtrlInterface
         $model = new ItemModel();
         $fornecedor = new Fornecedor();
         $this->view->resultFornecedor = $fornecedor->findAll();
+        $catmatcatser = new CatmatcatserModel();
+        $this->view->resultCatmatcatser = $catmatcatser->findAll();
         $this->view->resultOms = (new OmModel())->findAll();
         $this->view->resultLicitacao = (new LicitacaoModel())->findAll();
         $this->view->result = $model->findById($this->getParam('id'));

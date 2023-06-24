@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Models;
+
+use HTR\System\ModelCRUD as CRUD;
+use App\Models\AcessoModel;
+use DateTimeZone;
+use App\Config\Configurations as cfg;
+
+class HistoricoAcompanhamentoAcaoModel extends CRUD
+{
+
+    protected $entidade = 'historic_status_acompanhamento';
+
+    /**
+     * Process the historic request status.
+     * @param $id Identification of Solicitação
+     * @param $userId Identification of Usuários
+     * @param $status The status to be executed
+     */
+    public function novoRegistro(int $requestId, int $userId, $status, $observation = null, $document)
+    {
+        $date = new \DateTime('now', new DateTimeZone('America/Sao_Paulo'));
+        $result = (new AcessoModel())->findById($userId);
+
+        $dados = [
+            'acompanhamento_id' => $requestId,
+            'users_id' => $userId,
+            'status_id' => $status,
+            'user_name' => $result['name'],
+            'resulting_document' => $document,
+            'observation' => $observation,
+            'date_action' => $date->format('Y-m-d H:i:s')
+        ];
+        parent::novo($dados);
+    }
+
+    public function allHistoricByRequestId($registerId)
+    {
+        $query = "" .
+            " SELECT  sol.id as registerId, historic.id as historicId, " .
+            " sol.*, historic.*, modality.name as modality, " . 
+            " oms.naval_indicative, status.name as statusName " .
+            " FROM {$this->entidade} as historic " .
+            " INNER JOIN acompanhamento as sol ON sol.id = historic.acompanhamento_id " .
+            " INNER JOIN modality ON modality.id = sol.modality_id " .
+            " INNER JOIN oms ON oms.id = sol.oms_id " .
+            " INNER JOIN status ON status.id = historic.status_id " .
+            " WHERE historic.acompanhamento_id = :registerId ";
+
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([':registerId' => $registerId]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function removerStatus($id)
+    {
+        $status = $this->findById($id);
+        if (parent::remover($id)) {
+            header('Location: ' . cfg::DEFAULT_URI . 'acompanhamennto/historico/id/' . $status['acompanhamento_id']);
+        }
+    }
+}

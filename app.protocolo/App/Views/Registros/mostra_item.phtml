@@ -7,7 +7,7 @@ use App\Helpers\View;
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h5 class="page-header">Cadastro</h5>
+                <h5 class="page-header">Formulário de Cadastro de SOLEMP (Lei nº 14.133/21)</h5>
             </div>
         </div>
         <div class="row">
@@ -19,11 +19,11 @@ use App\Helpers\View;
                     <strong><?= $this->view->resultLicitacao['uasg']; ?></strong>
                     -
                     <strong><?= $this->view->resultLicitacao['uasg_name']; ?></strong><br>
-                    Modalidade: <strong>Pregão Eletrônico</strong>
+                    Modalidade: <strong><?= $this->view->resultLicitacao['modality_id']; ?></strong><br>
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <i class="fa fa-cogs fa-fw"></i> Formulário de cadastro
+                        <i class="fa fa-cogs fa-fw"></i> Cadastro de nova SOLEMP (Lei nº 14.133/21)
                     </div>
                     <div id="resultado"></div>
                     <form action="<?= $this->view->controller; ?>registra" method="post" id="form">
@@ -43,15 +43,16 @@ use App\Helpers\View;
                         <input type="hidden" name="biddings_id" value="<?= $this->view->resultLicitacao['id'] ?>">
                         <input type="hidden" name="omName" id="omName" value="<?= $this->view->resultOm['name'] ?>">
                         <input type="hidden" name="modality" value="2">
-                        <input type="hidden" name="om" value="<?= $this->view->resultOm['id'] ?>">
+                        <input type="hidden" id="omId" name="om" value="<?= $this->view->resultOm['id'] ?>">
                         <input type="hidden" name="supplier" value="<?= $this->view->resultFornecedor['id'] ?>">
+                        <input type="hidden" name="catmatcatser" value="<?= $this->view->resultCatmatcatser['id'] ?>">
                         <input type="hidden" name="cnpj" value="<?= $this->view->resultFornecedor['cnpj'] ?>">
 
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <label>Pregão</label>
+                                        <label>Processo Licitatório</label>
                                         <select class="form-control" disabled>
                                             <option>
                                                 <?= $this->view->resultLicitacao['number']; ?> - <strong><?= $this->view->resultLicitacao['description']; ?></strong>
@@ -89,31 +90,19 @@ use App\Helpers\View;
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <label>Número do Documento</label>
-                                        <input type="text" id="document_number" name="document_number" placeholder="Número do Documento" class="form-control" maxlength="10" autocomplete="off" required>
+                                        <label>Número da SOLEMP</label>
+                                        <input type="text" id="document_number" name="document_number" placeholder="Número da SOLEMP" class="form-control" maxlength="10" autocomplete="off" required>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Objeto Resumido</label>
-                                        <input type="text" id="summary_object" name="summary_object" placeholder="Número do Documento Resultante (Ex.: NE, NF, OB, PF)" class="form-control" required>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Status</label>
-                                        <select name="status" id="status" class="form-control" required>
-                                            <?php foreach ($this->view->resultStatus as $key => $value) : ?>
-                                                <option value="<?= $value['id']; ?>">
-                                                    <?= $value['name']; ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
+                                        <input type="text" id="summary_object" name="summary_object" placeholder="Objeto Resumido" class="form-control" required>
                                     </div>
                                 </div>
 
@@ -123,7 +112,163 @@ use App\Helpers\View;
                                         <input type="text" name="observation" id="observation" placeholder="Observações" class="form-control" />
                                     </div>
                                 </div>
+
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select name="status" id="status" class="form-control status" required>
+                                            <?php foreach ($this->view->resultStatus as $key => $value) : ?>
+                                                <option value="<?= $value['id']; ?>">
+                                                    <?= $value['name']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
+
+                            <div class="row">
+                                <?php if ($this->view->result) : ?>
+                                    <table class="table table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th width="8%">Quantidade</th>
+                                                <th>Item</th>
+                                                <th width="20%">Quantidade Disponível</th>
+                                                <th>Valor Unitário</th>
+                                                <th>UF</th>
+                                                <th>Descrição do item</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($this->view->result as $value) : ?>
+                                                <tr>
+                                                    <td>
+                                                        <input type="hidden" name="ids[]" value="<?= $value['id']; ?>">
+                                                        <input type="hidden" id="valueItem" class="valueItem" name="valueItem[]" value="<?= $value['value']; ?>">
+                                                        <input type="hidden" id="qtdAvailable" class="qtdAvailable" name="qtdAvailable[]" value="<?= $value['quantity_available']; ?>">
+                                                        <input type="hidden" id="itemName" class="itemName" name="itemName[]" value="<?= $value['name']; ?>">
+                                                        <input type="text" name="quantity[]" id="quantity" class="form-control">
+                                                    </td>
+                                                    <td><?= $value['number']; ?></td>
+                                                    <td><?= View::normalizeFloat($value['quantity_available']); ?></td>
+                                                    <td><?= View::floatToMoney($value['value']) ?></td>
+                                                    <td><?= $value['uf']; ?></td>
+                                                    <td><?= $value['name']; ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                <?php else : ?>
+                                    <div class="alert alert-info" role="alert">
+                                        <strong>Essa OM não participa dessa licitação.</strong>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <a class="btn btn-info pull-left add" id="add-row">
+                                        <i class="fa fa-plus-circle"></i> Adicionar PDM
+                                    </a>
+                                    <div class="col-lg-6">
+                                        <a class="btn btn-info pull-left add" id="add-row2">
+                                            <i class="fa fa-plus-circle"></i> Adicionar Cod item(CATSER)
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th width="10%">Código</th>
+                                                <th width="45%">Descrição</th>
+                                                <th width="10%">Valor total</th>
+                                                <th width="10%">Valor disponível</th>
+                                                <th width="10%">Valor comprometido</th>
+                                                <th width="8%"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="row-list">
+                                            <tr>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="hide">
+                                <table>
+                                    <tr class="table-values remove--X-">
+                                        <td>
+                                            <select name="cat_material" id="cat_material" class="form-control" onchange="findCatMaterialService(this, 'cat_material')" data-reference="-X-">
+                                                <option>PDM</option>
+                                                <?php foreach ($this->view->resultCatMaterial as $key => $value) : ?>
+                                                    <option value="<?= $value['id']; ?>">
+                                                        <?= $value['pdm_id']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" id="cat_material_ids--X-" name="cat_mat_serv_ids[]" value="">
+                                            <input type="text" id="cat_material_desc--X-" name="descpdm" placeholder="Descrição do PDM" class="form-control" maxlength="50" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="text" id="value" name="value_cat_mat_serv[]" class="form-control" data-mask="000.000.000,00" data-mask-reverse="true">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" id="cat_material_disponivel--X-" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" id="cat_material_comprometido--X-" disabled>
+                                        </td>
+                                        <td>
+                                            <a class="remove btn btn-danger btn-sm" data-reference="-X-">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="hide">
+                                <table>
+                                    <tr class="table-values2 remove--X-">
+                                        <td>
+                                            <select name="cat_service" id="cat_service" class="form-control" onchange="findCatMaterialService(this, 'cat_service')" data-reference="-X-">
+                                                <option value="">CATSER</option>
+                                                <?php foreach ($this->view->resultCatService as $key => $value) : ?>
+                                                    <option value="<?= $value['id']; ?>"> <?= $value['pdm_id']; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" id="cat_service_ids--X-" name="cat_mat_serv_ids[]" value="">
+                                            <input type="text" id="cat_service_desc--X-" name="descitem" placeholder="Descrição do Serviço" class="form-control" maxlength="50" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="text" id="value" name="value_cat_mat_serv[]" class="form-control" data-mask="000.000.000,00" data-mask-reverse="true">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" id="cat_service_disponivel--X-" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" id="cat_service_comprometido--X-" disabled>
+                                        </td>
+                                        <td>
+                                            <a class="remove btn btn-danger btn-sm" data-reference="-X-">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
                             <div class="row">
                                 <div class="col-lg-4">
                                     <span class="btn btn-success btn-save">
@@ -135,42 +280,6 @@ use App\Helpers\View;
                                 </div>
                             </div>
                         </div>
-                        <?php if ($this->view->result): ?>
-                        <table class="table table-responsive">
-                            <thead>
-                                <tr>
-                                    <th width="8%">Quantidade</th>
-                                    <th>Item</th>
-                                    <th>Valor Unitário</th>
-                                    <th width="20%">Quantidade Disponível</th>
-                                    <th>UF</th>
-                                    <th>Nome</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($this->view->result as $value) : ?>
-                                    <tr>
-                                        <td>
-                                            <input type="hidden" name="ids[]" value="<?= $value['id']; ?>">
-                                            <input type="hidden" id="valueItem" class="valueItem" name="valueItem[]" value="<?= $value['value']; ?>">
-                                            <input type="hidden" id="qtdAvailable" class="qtdAvailable" name="qtdAvailable[]" value="<?= $value['quantity_available']; ?>">
-                                            <input type="hidden" id="itemName" class="itemName" name="itemName[]" value="<?= $value['name']; ?>">
-                                            <input type="text" name="quantity[]" id="quantity" class="form-control">
-                                        </td>
-                                        <td><?= $value['number']; ?></td>
-                                        <td><?= View::floatToMoney($value['value']) ?></td>
-                                        <td><?= View::normalizeFloat($value['quantity_available']); ?></td>
-                                        <td><?= $value['uf']; ?></td>
-                                        <td><?= $value['name']; ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                        <?php else: ?>
-                            <div class="alert alert-info" role="alert">
-                                <strong>Essa OM não participa dessa licitação.</strong>
-                            </div>
-                        <?php endif; ?>
                     </form>
                 </div>
             </div>
@@ -240,22 +349,64 @@ use App\Helpers\View;
         $('.btn-save').show()
     });
 
-    $(document).ready(function() {
-        $("select.supplier").change(function() {
-            var id = $(this).children("option:selected").val();
-            $.ajax({
-                type: "GET",
-                url: `http://localhost/app/protocolo/fornecedor/findById/id/${id}`,
-                dataType: 'json',
-            }).done(function(res) {
-                $("#cpfcnpj").val(res.cnpj);
-                console.log(res);
-            });
-        });
-    });
-
     function addItemList(name, available, requested) {
         var html = `A quantidade de ${name} <strong>disponível</strong> atualmente é de <strong>${available}</strong>.<br>A quantidade <strong>solicitada</strong> é de <strong>${requested}</strong>.<br><br>`;
         $('.listItem').append(html);
     }
+
+    function findCatMaterialService(element, className) {
+        let id = element.value;
+        let om = $('#omId').val();
+        var reference = element.getAttribute('data-reference');
+
+        $.ajax({
+            type: "GET",
+            url: `/app/protocolo/catmatcatser/findById/id/${id}/om/${om}/`,
+            dataType: 'json',
+        }).done(function(res) {
+            console.log('#' + className + '_ids');
+            $('#' + className + '_ids-' + reference).val(id);
+            $('#' + className + '_desc-' + reference).val(res.item_desc);
+            $('#' + className + '_disponivel-' + reference).val(res.credit_value);
+            $('#' + className + '_comprometido-' + reference).val(res.registers_value);
+        });
+    }
+
+    $(document).ready(function() {
+        var xRow = 1;
+
+        var getTemplate = function getTemplate(className, reference) {
+            return $('tr.' + className + '.remove--X-')
+                .get(0)
+                .outerHTML
+                .replace(className + ' ', '')
+                .replace(/-X-/g, reference);
+        };
+
+        /**
+         * Add a new row into table values
+         */
+        $('#add-row').click(function addRowItem(event) {
+            event.preventDefault();
+            var template = getTemplate('table-values', xRow);
+            $('#row-list').append(template);
+            xRow++;
+        });
+
+        $('#add-row2').click(function addRowItem(event) {
+            event.preventDefault();
+            var template = getTemplate('table-values2', xRow);
+            $('#row-list').append(template);
+            xRow++;
+        });
+
+        /**
+         * Remove a row from table values
+         */
+        $('#row-list').on("click", ".remove", function removeRowItem(event) {
+            event.preventDefault();
+            var reference = $(this).attr('data-reference');
+            $('#row-list tr.remove-' + reference).remove();
+        });
+    });
 </script>

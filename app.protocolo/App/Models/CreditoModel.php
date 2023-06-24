@@ -105,6 +105,30 @@ class CreditoModel extends CRUD
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+    public function saldoComprometidoLei1($omId, $creditId, $naturezaDespesa, $subItem)
+    {
+        $stmt = $this->pdo->prepare(""
+            . " SELECT "
+            . "     IFNULL(SUM(registers.document_value), 0) as registers_value, "
+            . "     IFNULL(credit.value, (SELECT credit.value FROM credit WHERE id = :creditId)) as credit_value   "
+            . " FROM registers "
+            . " INNER JOIN credit ON credit.id = registers.credit_id "
+            . " WHERE "
+            . "     registers.oms_id = :omId "
+            . "     AND registers.credit_id = :creditId "
+            . "     AND registers.nature_expense_id = :natureExpenseId "
+            . "     AND registers.sub_item = :subItem; ");
+
+        $stmt->execute([
+            ':omId' => $omId,
+            ':creditId' => $creditId,
+            ':natureExpenseId' => $naturezaDespesa,
+            ':subItem' => $subItem,
+        ]);
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
     public function saldoComprometido($omId, $id)
     {
         $stmt = $this->pdo->prepare(""

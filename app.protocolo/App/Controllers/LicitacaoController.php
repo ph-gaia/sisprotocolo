@@ -6,6 +6,7 @@ use HTR\System\ControllerAbstract as Controller;
 use HTR\Interfaces\ControllerInterface as CtrlInterface;
 use HTR\Helpers\Access\Access;
 use App\Models\LicitacaoModel;
+use App\Models\ModalityModel;
 use App\Config\Configurations as cfg;
 use App\Models\OmModel as Om;
 
@@ -29,9 +30,15 @@ class LicitacaoController extends Controller implements CtrlInterface
     public function novoAction()
     {
         $this->view->userLoggedIn = $this->access->authenticAccess([1,2]);
-        $this->view->title = 'Novo Registro';
+        $this->view->title = 'Cadastro de novo Processo Licitatório';
+        
         $omModel = new Om;
+        $modalityModel = new ModalityModel;
+        
+        // alimenta os dados na camada de View
         $this->view->resultOm = $omModel->findActive();
+        $this->view->resultModality = $modalityModel->findActive();
+
         $this->render('form_novo');
     }
 
@@ -43,6 +50,8 @@ class LicitacaoController extends Controller implements CtrlInterface
         $result = $model->fetchDataToEdit((int) $this->getParam('id'));
         $omModel = new Om;
         $this->view->resultOm = $omModel->findActive();
+        $modalityModel = new ModalityModel;
+        $this->view->resultModality = $modalityModel->findActive();
         $this->view->result = $result['result'];
         $this->render('form_editar');
     }
@@ -58,7 +67,7 @@ class LicitacaoController extends Controller implements CtrlInterface
     {
         $this->view->userLoggedIn = $this->access->authenticAccess([1,2]);
         $model = new LicitacaoModel();
-        $this->view->title = 'Lista de Todas as Licitações';
+        $this->view->title = 'Lista de todos os Processos Licitatórios';
         $model->paginator($this->getParam('pagina'), null);
         $this->view->result = $model->getResultadoPaginator();
         $this->view->btn = $model->getNavePaginator();
