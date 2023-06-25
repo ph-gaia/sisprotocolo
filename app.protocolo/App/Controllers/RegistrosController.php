@@ -148,6 +148,7 @@ class RegistrosController extends Controller implements CtrlInterface
         $this->view->title = 'Lista dos Itens da Licitação';
         $fornecedorModel = new FornecedorModel;
         $catmatcatserModel = new CatmatcatserModel;
+        $modalityModel = new ModalityModel;
         $licitacao = new LicitacaoModel();
         $item = new ItemModel();
         $omModel = new Om;
@@ -155,6 +156,7 @@ class RegistrosController extends Controller implements CtrlInterface
         $this->view->resultOm = $omModel->findById($this->getParam('om'));
         $this->view->resultLicitacao = $licitacao->findById($this->getParam('idlista'));
         $this->view->resultFornecedor = $fornecedorModel->findById($this->getParam('supplier'));
+        $this->view->resultModality = $modalityModel->findById($this->getParam('modality'));
         $this->view->resultCatMaterial = $catmatcatserModel->findMaterialActive();
         $this->view->resultCatService = $catmatcatserModel->findServiceActive();
         $this->view->resultStatus = (new Status())->findActive();

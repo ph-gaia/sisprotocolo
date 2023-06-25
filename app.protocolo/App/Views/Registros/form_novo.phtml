@@ -142,7 +142,7 @@ use App\Helpers\View;
                                             <option value="">Selecione um CATMAT/CATSER</option>
                                             <?php foreach ($this->view->resultCatmatcatser as $key => $value) : ?>
                                                 <option value="<?= $value['id']; ?>">
-                                                    <?= $value['coditem']; ?>
+                                                    <?= $value['item_id']; ?>
                                                 </option>
                                             <?php endforeach; ?>
                                         </select>
@@ -223,107 +223,6 @@ use App\Helpers\View;
                                         <input type="text" id="saldoComprometido" class="form-control" disabled>
                                     </div>
                                 </div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <a class="btn btn-info pull-left add" id="add-row">
-                                        <i class="fa fa-plus-circle"></i> Adicionar PDM
-                                    </a>
-                                    <div class="col-lg-6">
-                                        <a class="btn btn-info pull-left add" id="add-row2">
-                                            <i class="fa fa-plus-circle"></i> Adicionar Cod item(CATSER)
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th width="10%">Código</th>
-                                                <th width="45%">Descrição</th>
-                                                <th width="10%">Valor total</th>
-                                                <th width="10%">Valor disponível</th>
-                                                <th width="10%">Valor comprometido</th>
-                                                <th width="8%"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="row-list">
-                                            <tr>
-
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="hide">
-                                <table>
-                                    <tr class="table-values remove--X-">
-                                        <td>
-                                            <select name="catmatcatser" id="catmatcatser" class="form-control catmatcatser">
-                                                <option value="">PDM</option>
-                                                <?php foreach ($this->view->resultCatmatcatser as $key => $value) : ?>
-                                                    <option value="<?= $value['id']; ?>">
-                                                        <?= $value['codpdm']; ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" id="catmatecatser" name="descpdm" placeholder="Descrição do PDM" class="form-control" maxlength="50">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="value[]" class="form-control" data-mask="000.000.000,00" data-mask-reverse="true" disabled>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" id="saldoDisponivel1" disabled>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" id="saldoComprometido1" disabled>
-                                        </td>
-                                        <td>
-                                            <a class="remove btn btn-danger btn-sm" data-reference="-X-">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                            <div class="hide">
-                                <table>
-                                    <tr class="table-values2 remove--X-">
-                                        <td>
-                                            <select name="catmatcatser" id="catmatcatser" class="form-control catmatcatser">
-                                                <option value="">CATSER</option>
-                                                <?php foreach ($this->view->resultCatmatcatser as $key => $value) : ?>
-                                                    <option value="<?= $value['id']; ?>"> <?= $value['coditem']; ?></option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" id="catmatecatser" name="descitem" placeholder="Descrição do serviço" class="form-control" maxlength="50">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="value[]" class="form-control" data-mask="000.000.000,00" data-mask-reverse="true">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" id="saldoDisponivel2" disabled>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" id="saldoComprometido2" disabled>
-                                        </td>
-                                        <td>
-                                            <a class="remove btn btn-danger btn-sm" data-reference="-X-">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </table>
                             </div>
 
                             <div class="row">
@@ -385,39 +284,6 @@ use App\Helpers\View;
                 $("#cpfcnpj").val(res.cnpj);
                 console.log(res);
             });
-        });
-
-        var xRow = 1;
-
-        var getTemplate = function getTemplate(className, reference) {
-            return $('tr.' + className + '.remove--X-')
-                .get(0)
-                .outerHTML
-                .replace(className + ' ', '')
-                .replace(/-X-/g, reference);
-        };
-
-        /**
-         * Add a new row into table values
-         */
-        $('#add-row').click(function addRowItem(event) {
-            event.preventDefault();
-            var template = getTemplate('table-values', xRow);
-            $('#row-list').append(template);
-            xRow++;
-        });
-
-        $('#add-row2').click(function addRowItem(event) {
-            event.preventDefault();
-            var template = getTemplate('table-values2', xRow);
-            $('#row-list').append(template);
-            xRow++;
-        });
-
-        $('#row-list').on("click", ".remove", function removeRowItem(event) {
-            event.preventDefault();
-            var reference = $(this).attr('data-reference');
-            $('#row-list tr.remove-' + reference).remove();
         });
     });
 </script>

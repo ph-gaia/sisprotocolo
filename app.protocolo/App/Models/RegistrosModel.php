@@ -210,7 +210,7 @@ class RegistrosModel extends CRUD
                 'biddings_id' => $this->getBiddingsId(),
                 'modality_id' => $this->getModality(),
                 'cnae' => null,
-                'credit_id' => null,
+                'credit_id' => 2,
                 'article' => null,
                 'sub_item' => null,
                 'number_arp' => null,

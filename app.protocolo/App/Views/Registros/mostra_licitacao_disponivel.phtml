@@ -31,7 +31,7 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) {
                                     <select name="modality" id="modality" class="form-control" required>
                                         <option value="">Selecione a modalidade</option>
                                         <?php foreach ($this->view->resultModality as $key => $value) : ?>
-                                            <option value="<?= $value['id']; ?>">
+                                            <option value="<?= $value['id']; ?>" <?= $value['id'] == $this->getParam('modality') ? 'selected' : '' ?>>
                                                 <?= $value['name']; ?>
                                             </option>
                                         <?php endforeach; ?>
@@ -98,18 +98,28 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) {
             window.location = 'registros/pregao/';
         });
     });
+
+    $('#modality').change(function link() {
+        var id = $('#modality').val();
+        if (id) {
+            window.location = '<?= $this->view->controller; ?>pregao/modality/' + id;
+        }
+    });
+
     $('#idList').change(function link() {
         var id = $('#idList').val();
+        var modalityId = $('#modality').val();
         if (id) {
-            window.location = '<?= $this->view->controller; ?>pregao/idlista/' + id;
+            window.location = '<?= $this->view->controller; ?>pregao/modality/' + modalityId + '/idlista/' + id;
         }
     });
 
     $('#om').change(function link() {
         var id = $('#idList').val();
         var selectOm = $('#om').val();
+        var modalityId = $('#modality').val();
         if (id) {
-            window.location = '<?= $this->view->controller; ?>pregao/idlista/' + id + '/om/' + selectOm;
+            window.location = '<?= $this->view->controller; ?>pregao/modality/' + modalityId + '/idlista/' + id + '/om/' + selectOm;
         }
     });
 
@@ -117,49 +127,13 @@ $pagination = Pagination::make($this, function ($btn, $controllerName) {
         var id = $('#idList').val();
         var selectOm = $('#om').val();
         var selectSupplier = $('#supplier').val();
-        if (id && selectOm && selectSupplier) {
-            window.location = '<?= $this->view->controller; ?>item/idlista/' + id + '/om/' + selectOm + '/supplier/' + selectSupplier;
-        }
-    });
-    /*$(document).ready(function() {
-        var btnApplyClear = $('.btn-apply-clean');
+        var selectModality = $('#modality').val();
 
-        btnApplyClear.click(function() {
-            window.location = 'registros/novo/';
-        });
-    });
-    $('#idList').change(function link() {
-        var id = $('#idList').val();
-        if (id) {
-            window.location = '<?= $this->view->controller; ?>pregao/idlista/' + id;
+        if (id && selectOm && selectSupplier && selectModality) {
+            console.log(id, selectOm, selectSupplier, selectModality);
+            window.location = '<?= $this->view->controller; ?>item/modality/' + selectModality + '/idlista/' + id + '/om/' + selectOm + '/supplier/' + selectSupplier;
         }
     });
-    $('#licit').change(function link() {
-        var id = $('#idList').val();
-        var selectLicit = $('#licit').val();
-        if (id) {
-            window.location = '<?= $this->view->controller; ?>pregao/idlista/' + id + '/licit/' + selectLicit;
-        }
-    });
-
-    $('#om').change(function link() {
-        var id = $('#idList').val();
-        var selectLicit = $('#licit').val();
-        var selectOm = $('#om').val();
-        if (id && selectLicit && selectOm) {
-            window.location = '<?= $this->view->controller; ?>pregao/idlista/' + id + '/licit/' + selectLicit + '/om/' + selectOm;
-        }
-    });
-
-    $('#supplier').change(function link() {
-        var id = $('#idList').val();
-        var selectLicit = $('#licit').val();
-        var selectOm = $('#om').val();
-        var selectSupplier = $('#supplier').val();
-        if (id && selectLicit && selectOm && selectSupplier) {
-            window.location = '<?= $this->view->controller; ?>item/idlista/' + id + '/licit/' + selectLicit + '/om/' + selectOm + '/supplier/' + selectSupplier;
-        }
-    });*/
 </script>
 <style>
     .table-licitacao:hover {
