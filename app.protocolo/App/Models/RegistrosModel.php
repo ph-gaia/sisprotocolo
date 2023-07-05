@@ -169,8 +169,8 @@ class RegistrosModel extends CRUD
         $this->notDuplicate();
 
         if ($this->getModality() == 1) {
-            // valida se estiver usando a Lei nº 14.133/2021
-            if ($this->getCredit() == 2) {
+            // valida se estiver usando a Lei nº 8.666/93
+            if ($this->getCredit() == 1) {
                 $this->validaCredito();
             }
 
@@ -180,12 +180,9 @@ class RegistrosModel extends CRUD
                 'nature_expense_id' => $this->getNatureExpense(),
                 'suppliers_id' => $this->getSupplier(),
                 'modality_id' => $this->getModality(),
-                'cnae' => $this->getCnae(),
-                'article' => null,
-                'sub_item' => null,
+                'cnae' => null,
                 'number_arp' => null,
                 'item_arp' => null,
-                'incisive' => null,
                 'summary_object' => null,
                 'credit_id' => $this->getCredit(),
                 'article' => $this->getArticle(),
@@ -292,10 +289,11 @@ class RegistrosModel extends CRUD
 
     public function validaCredito()
     {
-        $credito = (new CreditoModel())->saldoComprometidoLei2(
+        $credito = (new CreditoModel())->saldoComprometidoLei1(
             $this->getOm(),
             $this->getCredit(),
-            $this->getCnae()
+            $this->getNatureExpense(),
+            $this->getSubItem(),
         );
 
         if ($this->getDocumentValue() > ($credito['credit_value'] - $credito['registers_value'])) {

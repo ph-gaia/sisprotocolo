@@ -331,7 +331,7 @@ CREATE TABLE `sisprotocolo`.`registers` (
   `biddings_id` int(11) DEFAULT NULL,
   `sub_item` int(11) DEFAULT NULL,
   `article` int(11) DEFAULT NULL,
-  `incisive` int(11) DEFAULT NULL,
+  `incisive` varchar(10) DEFAULT NULL,
   `observation` varchar(250) DEFAULT NULL,
   `cnae` varchar(30) DEFAULT NULL,
   `cnpj` varchar(20) DEFAULT NULL,
